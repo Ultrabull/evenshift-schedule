@@ -546,7 +546,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <div class="sub" style="margin:16px 0 8px;color:var(--muted);text-align:center">— or sign in as staff —</div>
     <input id="loginSearch" class="selbox" placeholder="🔍 Type your name…" autocomplete="off" autocapitalize="words">
     <div id="loginList" class="loginlist"></div>
-    <div class="sub" style="margin:10px 2px 0;color:var(--faint);text-align:center">Tap your name to sign in. This phone remembers you next time.</div>
+    <div class="sub" style="margin:10px 2px 0;color:var(--faint);text-align:center">Tap your name to sign in.</div>
   </div>
 </div>
 
@@ -1311,7 +1311,7 @@ document.querySelectorAll('.tabbar [data-screen]').forEach(b=>b.onclick=()=>show
 $('buildBtn').onclick=()=>{if(!staff.length){toast('Add some people first 🙂');return;}staff.forEach(p=>{if(!p.imported)genPicks(p);});build();built=true;curDay=0;openPicker=null;renderSched();toast('Schedule built!');};
 $('exportBtn').onclick=exportCSV;
 $('helpBtn').onclick=()=>$('welcomeOverlay').classList.add('show');
-$('welcomeGo').onclick=()=>{$('welcomeOverlay').classList.remove('show');if(currentUser&&currentUser.role==='manager'&&!settings.mgrPin)$('pinSetupOverlay').classList.add('show');};
+$('welcomeGo').onclick=()=>{$('welcomeOverlay').classList.remove('show');};
 
 /* person sheet */
 const ROLE_OPTS=[['RN','Nurse'],['PCT','PCT'],['HUC','HUC']];
@@ -1504,12 +1504,9 @@ function meUser(){return currentUser&&currentUser.id!=null?staff.find(p=>p.id===
 function hrsBetween(a,b){if(!a||!b)return '';let m=Math.round((b-a)/60000);const h=Math.floor(m/60);m=m%60;return h+'h'+(m?' '+m+'m':'');}
 function recentStaff(){try{const r=localStorage.getItem(KEY_DEV);return r?JSON.parse(r):[];}catch(e){return [];}}
 function rememberStaff(id){let r=recentStaff().filter(x=>x!=id);r.unshift(id);r=r.slice(0,3);try{localStorage.setItem(KEY_DEV,JSON.stringify(r));}catch(e){}}
-function signInStaff(id){currentUser={role:'staff',id:+id};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser));}catch(e){}rememberStaff(+id);$('loginOverlay').classList.remove('show');applyRole();}
+function signInStaff(id){currentUser={role:'staff',id:+id};$('loginOverlay').classList.remove('show');applyRole();}
 function subLine(p){return p.role+(p.role!=='HUC'?' · '+(p.line==='day'?'Day':'Night'):'');}
-function renderLoginRecent(){
-  const r=recentStaff().map(byId).filter(Boolean);
-  $('loginRecent').innerHTML=r.length?`<div class="recentlbl">Tap to sign in</div>`+r.map(p=>`<button class="recentbtn" data-rec="${p.id}"><span class="ava ${p.role.toLowerCase()}">${initials(p.name)||'?'}</span><span><b>${p.name}</b><span class="rsub">${subLine(p)}</span></span></button>`).join(''):'';
-}
+function renderLoginRecent(){$('loginRecent').innerHTML='';}
 function renderLoginList(filter){
   const f=(filter||'').toLowerCase().trim();
   let list=staff.slice().sort((a,b)=>a.name.localeCompare(b.name));
@@ -1535,7 +1532,7 @@ function applyRole(){
 }
 function renderStaff(){
   const p=meUser();
-  if(!p){currentUser=null;try{localStorage.removeItem(KEY_U)}catch(e){}populateLogin();$('loginOverlay').classList.add('show');return;}
+  if(!p){currentUser=null;openLogin(false);return;}
   $('staffHi').textContent='Hi, '+p.name.split(' ')[0];
   $('staffSub').textContent=p.role+(p.role!=='HUC'?' · '+(p.line==='day'?'Days':'Nights'):'')+' · '+(settings.unitName||'10G');
   const tkOn=settings.useTimekeeping!==false;
@@ -1780,7 +1777,7 @@ $('switchBtn').onclick=()=>openLogin(false);
 $('lockBtn').onclick=()=>openLogin(true);
 $('pinSetGo').onclick=()=>{const a=($('pinSet1').value||'').trim(),b=($('pinSet2').value||'').trim();if(a.length<4){toast('Use at least 4 characters');return;}if(a!==b){toast('The two codes don\u2019t match');return;}settings.mgrPin=a;save();$('pinSetupOverlay').classList.remove('show');$('pinSet1').value='';$('pinSet2').value='';renderClockSetup();toast('Manager code set — keep it safe');if(!(currentUser&&currentUser.role==='manager'))enterManager();if(!settings.setupDone)openSetup();};
 $('pinSet2').addEventListener('keydown',e=>{if(e.key==='Enter')$('pinSetGo').onclick();});
-function enterManager(){currentUser={role:'manager'};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser))}catch(e){}$('loginOverlay').classList.remove('show');applyRole();}
+function enterManager(){currentUser={role:'manager'};$('loginOverlay').classList.remove('show');applyRole();}
 $('loginMgr').onclick=()=>{
   if(!settings.mgrPin){if($('pinSet1'))$('pinSet1').value='';if($('pinSet2'))$('pinSet2').value='';$('pinSetupOverlay').classList.add('show');}
   else{$('pinEntry').value='';$('pinEntryOverlay').classList.add('show');setTimeout(()=>{try{$('pinEntry').focus();}catch(e){}},50);}
@@ -1830,9 +1827,8 @@ $('clockSetupCard').addEventListener('change',e=>{
 
 /* ============ init ============ */
 const hadData=load();applyPeriod();picksSource=staff.some(p=>p.imported)?'imported':'sample';
-try{const u=localStorage.getItem(KEY_U);if(u)currentUser=JSON.parse(u);}catch(e){}
-if(!hadData){$('welcomeOverlay').classList.add('show');currentUser={role:'manager'};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser));}catch(e){}}
-if(!currentUser){show('people');openLogin();}else applyRole();
+if(!hadData){$('welcomeOverlay').classList.add('show');}
+show('people');openLogin(false);
 </script>
 </body>
 </html>

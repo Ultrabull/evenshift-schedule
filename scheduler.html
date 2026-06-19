@@ -825,7 +825,7 @@ const REAL_ROSTER=[
 let staff=[];let built=false;
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1';
 let currentUser=null,swaps=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;return p;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.name)p.name=shortenName(p.name);return p;}
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
@@ -860,6 +860,7 @@ function show(s){screen=s;['people','rules','sched'].forEach(x=>$('screen-'+x).c
 const ROLE_FILTERS=[['all','All'],['RN','Nurses'],['PCT','PCTs'],['HUC','HUCs']];
 function renderFilters(){$('filters').innerHTML=ROLE_FILTERS.map(([k,l])=>`<button class="fchip${filterRole===k?' on':''}" data-f="${k}">${l}</button>`).join('');}
 function initials(n){const p=n.trim().split(/\s+/);return ((p[0]||'')[0]||'')+((p[1]||'')[0]||'');}
+function shortenName(n){if(!n)return n;const w=n.trim().split(/\s+/);if(w.length<2)return n;const last=w[w.length-1];const m=last.match(/[A-Za-z]/);const li=(m?m[0]:(last[0]||'')).toUpperCase();return w.slice(0,-1).join(' ')+' '+li+'.';}
 function renderPeople(){
   renderFilters();
   let list=staff.filter(p=>filterRole==='all'||p.role===filterRole);
@@ -1363,7 +1364,7 @@ $('personSave').onclick=()=>{
   const name=$('f_name').value.trim();if(!name){toast('Please type a name');return;}
   if(editId==null){const id=staff.length?Math.max(...staff.map(p=>p.id))+1:0;
     staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0}));toast('Added '+firstName(name));}
-  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor});toast('Saved');}
+  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor});toast('Saved');}
   $('personOverlay').classList.remove('show');rosterChanged();
 };
 $('personDelete').onclick=()=>{if(editId==null)return;if(!confirm('Remove this person? Their shifts will be reassigned.'))return;staff=staff.filter(p=>p.id!==editId);$('personOverlay').classList.remove('show');rosterChanged();toast('Removed — schedule updated');};

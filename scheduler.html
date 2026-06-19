@@ -248,6 +248,50 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .rqb.on.want{background:#0a7d3c;border-color:#0a7d3c;color:#fff}
 .rqb.on.off{background:#b45309;border-color:#b45309;color:#fff}
 .rqb.on.pto{background:#6d28d9;border-color:#6d28d9;color:#fff}
+.brushrow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.brush{flex:1;min-width:70px;padding:9px 6px;border:2px solid var(--line);background:#fff;border-radius:11px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.brush.on.off{background:#b45309;border-color:#b45309;color:#fff}
+.brush.on.want{background:#0a7d3c;border-color:#0a7d3c;color:#fff}
+.brush.on.pto{background:#6d28d9;border-color:#6d28d9;color:#fff}
+.brush.on.clear{background:#475569;border-color:#475569;color:#fff}
+.quickrow{display:flex;gap:6px}
+.qbtn{flex:1;padding:8px;border:1px dashed var(--line-strong);background:#fff;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--teal-deep)}
+.reqgrid{touch-action:none;user-select:none}
+.calcell.req{touch-action:none}
+.calcell.req.want{background:#e7f6ec;border-color:#0a7d3c}
+.calcell.req.off{background:#fdf0e0;border-color:#b45309}
+.calcell.req.pto{background:#efe9fb;border-color:#6d28d9}
+.calcell.req .cmark{font-size:9px;font-weight:800}
+.swapbtn{margin-left:auto;padding:8px 12px;border:1.5px solid var(--teal);background:#fff;color:var(--teal-deep);border-radius:11px;font-size:13px;font-weight:700;flex:0 0 auto}
+.swcard{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.4}
+.swcard:last-child{border-bottom:none}
+.swbtns{display:flex;gap:8px}
+.swbtns .bigaction{flex:1;padding:10px;min-height:auto;font-size:14px;margin:0}
+.swapreview{margin-bottom:12px;border:2px solid var(--violet)}
+.swlbl{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:14px 0 6px}
+.loginlist{max-height:42vh;overflow-y:auto;margin-top:8px;border:1px solid var(--line);border-radius:12px}
+.loginrow{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.loginrow:last-child{border-bottom:none}
+.loginrow:active{background:var(--teal-soft)}
+.loginrow .lrtxt{display:flex;flex-direction:column;line-height:1.25}
+.loginrow .lrtxt b{font-size:15px}
+.loginrow .lrtxt span{font-size:12.5px;color:var(--muted)}
+.recentbtn{display:flex;align-items:center;gap:11px;width:100%;padding:11px 14px;border:2px solid var(--teal);background:var(--teal-soft);border-radius:13px;margin-bottom:8px;text-align:left}
+.recentbtn b{display:block;font-size:15px;color:var(--ink)}
+.recentbtn .rsub{display:block;font-size:12.5px;color:var(--muted);font-weight:400}
+.recentlbl{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:2px 2px 7px}
+.viewtabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+.viewtabs button{flex:0 0 auto;padding:9px 13px;border:1px solid var(--line-strong);background:#fff;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.viewtabs button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.viewtabs button.hide{display:none}
+.hourshero{display:flex;gap:10px;padding:6px 16px 14px}
+.hourshero>div{flex:1;background:var(--teal-soft);border-radius:14px;padding:12px 8px;text-align:center}
+.hourshero.mgr>div{background:#f1f5f9}
+.hourshero .sub{margin:0 0 2px;font-size:11.5px}
+.hnum{font-size:25px;font-weight:800;color:var(--teal-deep);line-height:1.1}
+.hnum2{font-size:21px;font-weight:800;color:var(--ink);line-height:1.1}
+.hnum2.ot,.hrsbig.ot{color:#b45309}
+.hrsbig{font-size:17px;font-weight:800;color:var(--teal-deep);font-variant-numeric:tabular-nums}
 .reqrow{padding:12px 16px;border-top:1px solid var(--line)}
 .reqhd{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .reqbadge{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
@@ -328,8 +372,9 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <button class="bigaction grey hide" id="exportBtn" style="flex:0 0 auto;width:auto;padding:17px 18px">↓ Save</button>
   </div>
   <div id="schedResult" class="hide">
+    <div id="swapReview"></div>
     <div id="healthBanner" class="health ok"></div>
-    <div class="viewtabs" id="schedViewTabs" style="margin-bottom:14px"><button data-sv="month" class="on">📅 Month</button><button data-sv="day">📋 Day</button><button data-sv="req">📝 Requests</button><button data-sv="today">🕐 Today</button></div>
+    <div class="viewtabs" id="schedViewTabs" style="margin-bottom:14px"><button data-sv="month" class="on">📅 Month</button><button data-sv="day">📋 Day</button><button data-sv="req">📝 Requests</button><button data-sv="today">🕐 Today</button><button data-sv="hours">⏱ Hours</button></div>
     <div id="dayWrap">
     <div class="card ribbon-card">
       <div class="ribbon-wrap"><div class="ribbon-inner"><div class="rlabels"><span class="sp"></span><span>Day</span><span>Night</span><span class="aide">aides</span></div><div class="ribbon" id="ribbon"></div></div></div>
@@ -355,6 +400,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <div class="card hide" id="calCard"></div>
     <div class="card hide" id="reqCard"></div>
     <div class="card hide" id="todayCard"></div>
+    <div class="card hide" id="hoursCard"></div>
     <div class="card flagcard">
       <div class="card-h"><h2>Things to fix</h2><span class="tag2" id="flagCount"></span></div>
       <div id="flags"></div>
@@ -371,24 +417,44 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 <div class="screen hide" id="screen-staff">
   <div class="screen-h"><h1 id="staffHi">Hi</h1><p id="staffSub">Your shifts and time clock.</p></div>
   <div class="card" id="clockCard"></div>
+  <div class="sect">Your hours</div>
+  <div class="card" id="myHoursCard"></div>
   <div class="sect">Your next shifts</div>
   <div class="card" id="myShiftsCard"></div>
   <div class="sect">Ask for days</div>
   <div class="card" id="myReqCard"></div>
+  <div class="sect">Shift swaps</div>
+  <div class="card" id="mySwapCard"></div>
   <button class="bigaction grey" id="staffSwitch" style="margin-top:16px">⇄ Switch user / sign out</button>
   <p style="font-size:13px;color:var(--faint);margin:12px 4px 30px">You can only clock in when you’re inside your unit.</p>
 </div>
 
+<!-- SWAP -->
+<div class="overlay" id="swapOverlay">
+  <div class="sheet">
+    <h2 id="swapTitle">Swap a shift</h2>
+    <div class="lead" id="swapLead"></div>
+    <label class="swlbl">Trade with</label>
+    <select id="swapWho" class="selbox"></select>
+    <label class="swlbl">Take their shift</label>
+    <select id="swapTheir" class="selbox"></select>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="bigaction" id="swapSend" style="flex:1">Send request</button>
+      <button class="bigaction grey" id="swapCancel" style="flex:1">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- LOGIN -->
 <div class="overlay welcome" id="loginOverlay">
-  <div class="sheet" style="text-align:center">
-    <div class="wel-badge">🔑</div>
-    <h2>Who are you?</h2>
-    <div class="lead">Choose how you’ll use EvenShift on this phone.</div>
+  <div class="sheet">
+    <div style="text-align:center"><div class="wel-badge">🔑</div><h2 style="margin-bottom:2px">Who are you?</h2></div>
+    <div id="loginRecent"></div>
     <button class="bigaction" id="loginMgr" style="margin-top:4px">🗂️ I’m the manager</button>
-    <div class="sub" style="margin:16px 0 8px;color:var(--muted)">— or sign in as staff —</div>
-    <select id="loginStaff" class="selbox"><option value="">Choose your name…</option></select>
-    <button class="bigaction grey" id="loginStaffGo" style="margin-top:10px">Sign in for duty</button>
+    <div class="sub" style="margin:16px 0 8px;color:var(--muted);text-align:center">— or sign in as staff —</div>
+    <input id="loginSearch" class="selbox" placeholder="🔍 Type your name…" autocomplete="off" autocapitalize="words">
+    <div id="loginList" class="loginlist"></div>
+    <div class="sub" style="margin:10px 2px 0;color:var(--faint);text-align:center">Tap your name to sign in. This phone remembers you next time.</div>
   </div>
 </div>
 
@@ -490,9 +556,18 @@ function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMo
 function cycleDayToday(){const t=todayISO();for(let d=0;d<DAYS;d++)if(isoOf(d)===t)return d;return -1;}
 function haversine(la1,lo1,la2,lo2){const R=6371000,rad=x=>x*Math.PI/180;const dLa=rad(la2-la1),dLo=rad(lo2-lo1);const s=Math.sin(dLa/2)**2+Math.cos(rad(la1))*Math.cos(rad(la2))*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(s));}
 function fmtClock(ts){if(!ts)return '';const d=new Date(ts);let h=d.getHours(),m=d.getMinutes();const ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+String(m).padStart(2,'0')+' '+ap;}
+function fmtHrs(h){if(!h)return '0h';const r=Math.round(h*10)/10;return (Number.isInteger(r)?r:r.toFixed(1))+'h';}
+function recHours(r){if(!r||!r.in)return 0;const end=r.out||Date.now();return Math.max(0,(end-r.in)/3600000);}
+function clockHoursInRange(p,sISO,eISO){let h=0;const c=p.clock||{};for(const iso in c){if(iso>=sISO&&iso<=eISO)h+=recHours(c[iso]);}return h;}
+function weekRanges(){const out=[],wks=Math.ceil(DAYS/7);for(let w=0;w<wks;w++){const s=w*7,e=Math.min(DAYS-1,w*7+6);out.push({w,startD:s,endD:e,startISO:isoOf(s),endISO:isoOf(e)});}return out;}
+function schedHoursWeek(p,r){let n=0;for(let d=r.startD;d<=r.endD;d++)if(p.asn.has(d))n++;return n*12;}
+function workedHoursWeek(p,r){return clockHoursInRange(p,r.startISO,r.endISO);}
+function schedHoursTotal(p){return p.asn.size*12;}
+function workedHoursTotal(p){let h=0;const c=p.clock||{};for(const iso in c)h+=recHours(c[iso]);return h;}
+function otTotal(p){return weekRanges().reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-40),0);}
 
 /* ============ settings ============ */
-let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctIdeal:4,pctMin:3,usePCT:true,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',selfSchedule:true};
+let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctIdeal:4,pctMin:3,usePCT:true,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true};
 function req(role,line){const cm=(settings.useCharge===false?0:(settings.chargeMin||0));if(role==='RN')return line==='day'?{ideal:settings.rnDayIdeal+cm,min:settings.rnDayMin+cm}:{ideal:settings.rnNightIdeal+cm,min:settings.rnNightMin+cm};if(role==='PCT')return{ideal:settings.pctIdeal,min:settings.pctMin};return{ideal:settings.hucNeed,min:settings.hucNeed};}
 function roleOn(role){if(role==='PCT')return settings.usePCT!==false;if(role==='HUC')return settings.useHUC!==false;return true;}
 function isoOf(d){const dt=dateOf(d);return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
@@ -561,6 +636,7 @@ function build(){
   // orientees: extra on the floor, shadowing their preceptor (only on days the preceptor works)
   staff.filter(p=>p.orientee).forEach(o=>{const cap=targetShifts(o);const prec=staff.find(x=>x.id===o.preceptor);if(!prec)return;
     [...prec.asn].sort((a,b)=>a-b).forEach(d=>{if(o.oriDays.size>=cap)return;if(o.pto.has(d))return;o.oriDays.add(d);});});
+  applyApprovedSwaps();
   computeCoverage();
 }
 const shiftCount=(role,line,d)=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
@@ -652,13 +728,14 @@ const REAL_ROSTER=[
   {n:'Imelda Flores',role:'HUC',line:'day',fte:'FT',charge:false,precept:false}
 ];
 let staff=[];let built=false;
-const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1';
-let currentUser=null;
+const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1';
+let currentUser=null,swaps=[],reqBrush='off',swapFromDay=null,reqPainting=false;
 function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;return p;}
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{}}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
     if(c)settings=Object.assign(settings,JSON.parse(c));
+    const w=localStorage.getItem(KEY_SW);if(w)swaps=JSON.parse(w)||[];
     if(s){const arr=JSON.parse(s);staff=arr.map(p=>blankSets(p));return true;}
   }catch(e){}
   staff=seed();return false;
@@ -666,6 +743,7 @@ function load(){
 function save(){try{
   localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{}}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
+  localStorage.setItem(KEY_SW,JSON.stringify(swaps));
 }catch(e){}}
 
 /* ============ app state ============ */
@@ -839,10 +917,12 @@ function renderSched(){
   $('calCard').classList.toggle('hide',v!=='month');
   $('reqCard').classList.toggle('hide',v!=='req');
   $('todayCard').classList.toggle('hide',v!=='today');
+  $('hoursCard').classList.toggle('hide',v!=='hours');
   const ssOff=!settings.selfSchedule;
   $('picksCard').classList.toggle('hide',ssOff);
   const reqTab=$('schedViewTabs').querySelector('[data-sv=\"req\"]');if(reqTab)reqTab.classList.toggle('hide',ssOff);
-  if(v==='month')renderCalendar();else if(v==='req')renderRequests();else if(v==='today')renderToday();else{renderRibbon();renderDay();}
+  if(v==='month')renderCalendar();else if(v==='req')renderRequests();else if(v==='today')renderToday();else if(v==='hours')renderHoursMgr();else{renderRibbon();renderDay();}
+  renderSwapReview();
   renderHealth();
   renderFlags();
 }
@@ -1248,9 +1328,28 @@ $('fileInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)ret
   e.target.value='';});
 
 /* ============ staff / clock / attendance ============ */
+function byId(id){return staff.find(p=>p.id==id);}
+function applySwap(s){const A=byId(s.aId),B=byId(s.bId);if(!A||!B)return;A.asn.delete(s.aDay);A.asn.add(s.bDay);B.asn.delete(s.bDay);B.asn.add(s.aDay);}
+function applyApprovedSwaps(){swaps.filter(s=>s.status==='approved').forEach(applySwap);}
+function swapEligible(A,d){return staff.filter(b=>b.id!==A.id&&b.role===A.role&&b.line===A.line&&!b.asn.has(d)&&[...b.asn].some(bd=>bd!==d&&!A.asn.has(bd)&&!A.pto.has(bd)));}
 function meUser(){return currentUser&&currentUser.id!=null?staff.find(p=>p.id===currentUser.id):null;}
 function hrsBetween(a,b){if(!a||!b)return '';let m=Math.round((b-a)/60000);const h=Math.floor(m/60);m=m%60;return h+'h'+(m?' '+m+'m':'');}
-function populateLogin(){const sel=$('loginStaff');if(!sel)return;sel.innerHTML='<option value="">Choose your name…</option>'+staff.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}">${p.name} · ${p.role}${p.line&&p.role!=='HUC'?' '+p.line:''}</option>`).join('');}
+function recentStaff(){try{const r=localStorage.getItem(KEY_DEV);return r?JSON.parse(r):[];}catch(e){return [];}}
+function rememberStaff(id){let r=recentStaff().filter(x=>x!=id);r.unshift(id);r=r.slice(0,3);try{localStorage.setItem(KEY_DEV,JSON.stringify(r));}catch(e){}}
+function signInStaff(id){currentUser={role:'staff',id:+id};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser));}catch(e){}rememberStaff(+id);$('loginOverlay').classList.remove('show');applyRole();}
+function subLine(p){return p.role+(p.role!=='HUC'?' · '+(p.line==='day'?'Day':'Night'):'');}
+function renderLoginRecent(){
+  const r=recentStaff().map(byId).filter(Boolean);
+  $('loginRecent').innerHTML=r.length?`<div class="recentlbl">Tap to sign in</div>`+r.map(p=>`<button class="recentbtn" data-rec="${p.id}"><span class="ava ${p.role.toLowerCase()}">${initials(p.name)||'?'}</span><span><b>${p.name}</b><span class="rsub">${subLine(p)}</span></span></button>`).join(''):'';
+}
+function renderLoginList(filter){
+  const f=(filter||'').toLowerCase().trim();
+  let list=staff.slice().sort((a,b)=>a.name.localeCompare(b.name));
+  if(f)list=list.filter(p=>p.name.toLowerCase().includes(f));
+  list=list.slice(0,40);
+  $('loginList').innerHTML=list.map(p=>`<div class="loginrow" data-lid="${p.id}"><span class="ava ${p.role.toLowerCase()}">${initials(p.name)||'?'}</span><div class="lrtxt"><b>${p.name}</b><span>${subLine(p)}</span></div></div>`).join('')||`<div style="padding:16px;color:var(--muted)">No match — check spelling or ask your manager.</div>`;
+}
+function openLogin(){renderLoginRecent();renderLoginList('');if($('loginSearch'))$('loginSearch').value='';$('loginOverlay').classList.add('show');}
 function applyRole(){
   const sm=currentUser&&currentUser.role==='staff';
   $('tabbar').classList.toggle('hide',sm);
@@ -1277,21 +1376,108 @@ function renderStaff(){
   if(onDuty)cl+=`<button class="clk-btn out" id="clockBtn">Clock out</button>`;
   else if(rec.out)cl+=`<div class="clk-note">Have a good rest — see you next shift.</div>`;
   else cl+=`<button class="clk-btn in" id="clockBtn">Clock in for duty</button>`;
-  if(settings.unitLat==null&&!settings.unitCode)cl+=`<div class="clk-note warn">Your manager hasn’t set the unit location yet, so clock-in isn’t locked to the unit.</div>`;
+  if(settings.unitLat==null&&!activeCode())cl+=`<div class="clk-note warn">Your manager hasn’t set the unit location yet, so clock-in isn’t locked to the unit.</div>`;
   $('clockCard').innerHTML=cl;
   const start=Math.max(0,dT);
   const days=[...p.asn].filter(d=>d>=start).sort((a,b)=>a-b).slice(0,8);
-  $('myShiftsCard').innerHTML=days.length?days.map(d=>{const dt=dateOf(d);return `<div class="rule"><div class="rl"><b>${dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</b><span>${p.line==='day'?'Day 7a–7p':'Night 7p–7a'}${isHoliday(d)?' · ★ holiday':''}</span></div></div>`;}).join(''):`<div style="padding:16px;color:var(--faint)">No upcoming shifts yet. Your manager builds the schedule.</div>`;
+  $('myShiftsCard').innerHTML=days.length?days.map(d=>{const dt=dateOf(d);return `<div class="rule"><div class="rl"><b>${dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</b><span>${p.line==='day'?'Day 7a–7p':'Night 7p–7a'}${isHoliday(d)?' · ★ holiday':''}</span></div><button class="swapbtn" data-swap="${d}">⇄ Swap</button></div>`;}).join(''):`<div style="padding:16px;color:var(--faint)">No upcoming shifts yet. Your manager builds the schedule.</div>`;
   const ssect=$('myReqCard').previousElementSibling;
   if(!settings.selfSchedule){$('myReqCard').classList.add('hide');if(ssect&&ssect.classList.contains('sect'))ssect.classList.add('hide');}
   else{$('myReqCard').classList.remove('hide');if(ssect&&ssect.classList.contains('sect'))ssect.classList.remove('hide');renderMyReq(p);}
+  renderMyHours(p);
+  renderMySwaps(p);
 }
+function reqState(p,d){return p.pto.has(d)?'pto':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';}
+function setReqState(p,d,k){p.pto.delete(d);if(p.avoid)p.avoid.delete(d);p.picks.delete(d);if(k==='want')p.picks.add(d);else if(k==='off')(p.avoid=p.avoid||new Set()).add(d);else if(k==='pto')p.pto.add(d);p.imported=true;}
 function renderMyReq(p){
-  const start=Math.max(0,cycleDayToday());let h='';
-  for(let d=start;d<Math.min(DAYS,start+14);d++){const dt=dateOf(d);const st=p.pto.has(d)?'pto':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';
-    h+=`<div class="dayreq"><div class="rl"><b>${dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</b></div><div class="reqbtns"><button class="rqb want${st==='want'?' on':''}" data-rq="want" data-d="${d}">Work</button><button class="rqb off${st==='off'?' on':''}" data-rq="off" data-d="${d}">Off</button><button class="rqb pto${st==='pto'?' on':''}" data-rq="pto" data-d="${d}">PTO</button></div></div>`;}
-  $('myReqCard').innerHTML=h||`<div style="padding:16px;color:var(--faint)">No dates in this schedule period.</div>`;
+  const WDh=['S','M','T','W','T','F','S'],head=WDh.map(w=>`<div class="calhd">${w}</div>`).join('');
+  const lead=START_DOW,trail=(7-((lead+DAYS)%7))%7;
+  let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
+  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(p,d);cells+=`<div class="calcell req ${st}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':''}</div></div>`;}
+  const brushes=[['off','Prefer off'],['want','Want to work'],['pto','Time off'],['clear','Clear']];
+  let h=`<div style="padding:12px 14px 4px"><div class="sub" style="margin-bottom:8px">Pick a tag, then tap or swipe across days — mark your whole schedule in seconds.</div>`;
+  h+=`<div class="brushrow">${brushes.map(([k,l])=>`<button class="brush ${k}${reqBrush===k?' on':''}" data-brush="${k}">${l}</button>`).join('')}</div>`;
+  h+=`<div class="quickrow"><button class="qbtn" data-quick="weoff">Weekends off</button><button class="qbtn" data-quick="clearall">Clear all</button></div></div>`;
+  h+=`<div class="calgrid reqgrid">${head}${pad}${cells}${padT}</div>`;
+  $('myReqCard').innerHTML=h;
 }
+function reqApply(d){const p=meUser();if(!p)return;setReqState(p,d,reqBrush==='clear'?'':reqBrush);
+  const cell=$('myReqCard').querySelector('.calcell.req[data-d="'+d+'"]');
+  if(cell){cell.classList.remove('want','off','pto');const st=reqState(p,d);if(st)cell.classList.add(st);const mk=cell.querySelector('.cmark');if(mk)mk.textContent=st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':'';}}
+function renderMySwaps(p){
+  const incoming=swaps.filter(s=>s.bId==p.id&&s.status==='peer');
+  const others=swaps.filter(s=>(s.aId==p.id||s.bId==p.id)&&!(s.bId==p.id&&s.status==='peer'));
+  let h='';
+  if(incoming.length){h+=`<div style="padding:12px 16px 2px"><b>Incoming</b></div>`+incoming.map(s=>{const A=byId(s.aId);return `<div class="swcard"><div>${A?firstName(A.name):'A coworker'} wants to take your <b>${fmtDate(s.bDay)}</b> and give you their <b>${fmtDate(s.aDay)}</b>.</div><div class="swbtns"><button class="bigaction" data-acc="${s.id}">Accept</button><button class="bigaction grey" data-dec="${s.id}">Decline</button></div></div>`;}).join('');}
+  if(others.length){h+=`<div style="padding:12px 16px 2px"><b>Your requests</b></div>`+others.slice(-6).reverse().map(s=>{const A=byId(s.aId),B=byId(s.bId),mate=s.aId==p.id?B:A;const lab=s.status==='peer'?'Waiting on '+(B?firstName(B.name):'them'):s.status==='mgr'?'Waiting on manager':s.status==='approved'?'Approved ✓':s.status==='denied'?'Denied':s.status==='declined'?'Declined':s.status;const cls=s.status==='approved'?'good':(s.status==='denied'||s.status==='declined')?'low':'mid';return `<div class="rule"><div class="rl"><b>${fmtDate(s.aDay)} ⇄ ${fmtDate(s.bDay)}</b><span>with ${mate?firstName(mate.name):'—'}</span></div><span class="reqbadge ${cls}">${lab}</span></div>`;}).join('');}
+  $('mySwapCard').innerHTML=h||`<div style="padding:16px;color:var(--faint)">No swaps yet. Tap <b>⇄ Swap</b> on a shift above to trade with a coworker.</div>`;
+}
+function openSwap(d){
+  const A=meUser();if(!A)return;swapFromDay=d;
+  const elig=swapEligible(A,d);
+  $('swapTitle').textContent='Swap your '+fmtDate(d)+' shift';
+  $('swapLead').textContent=elig.length?'They take your shift; you take one of theirs. Same role, so coverage stays equal.':'No same-role coworker is free on '+fmtDate(d)+' to take this shift right now.';
+  $('swapWho').innerHTML='<option value="">Choose a coworker…</option>'+elig.sort((a,b)=>a.name.localeCompare(b.name)).map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+  $('swapTheir').innerHTML='<option value="">Pick their shift…</option>';
+  $('swapOverlay').classList.add('show');
+}
+function fillSwapTheir(){
+  const A=meUser(),B=byId(+$('swapWho').value);
+  if(!A||!B){$('swapTheir').innerHTML='<option value="">Pick their shift…</option>';return;}
+  const days=[...B.asn].filter(bd=>bd!==swapFromDay&&!A.asn.has(bd)&&!A.pto.has(bd)).sort((a,b)=>a-b);
+  $('swapTheir').innerHTML='<option value="">Pick their shift…</option>'+days.map(bd=>`<option value="${bd}">${fmtDate(bd)}</option>`).join('');
+}
+function sendSwap(){
+  const A=meUser(),bId=+$('swapWho').value;
+  if(!A||!bId||!$('swapTheir').value){toast('Pick a coworker and their shift');return;}
+  swaps.push({id:'s'+Date.now().toString(36)+Math.floor(Math.random()*1000),aId:A.id,aDay:swapFromDay,bId:bId,bDay:+$('swapTheir').value,status:'peer',ts:Date.now()});
+  save();$('swapOverlay').classList.remove('show');renderStaff();
+  toast('Swap sent to '+firstName(byId(bId).name));
+}
+function renderSwapReview(){
+  if(!$('swapReview'))return;
+  const pend=swaps.filter(s=>s.status==='mgr');
+  if(!pend.length){$('swapReview').innerHTML='';return;}
+  let h=`<div class="card swapreview"><div style="padding:12px 16px"><b>🔁 ${pend.length} swap ${pend.length>1?'requests':'request'} to review</b></div>`;
+  h+=pend.map(s=>{const A=byId(s.aId),B=byId(s.bId);if(!A||!B)return '';return `<div class="swcard"><div><b>${firstName(A.name)}</b> → works <b>${fmtDate(s.bDay)}</b>; <b>${firstName(B.name)}</b> → works <b>${fmtDate(s.aDay)}</b>. Same role — coverage stays equal.</div><div class="swbtns"><button class="bigaction" data-swapok="${s.id}">Approve</button><button class="bigaction grey" data-swapno="${s.id}">Deny</button></div></div>`;}).join('');
+  h+='</div>';$('swapReview').innerHTML=h;
+}
+function renderMyHours(p){
+  const rs=weekRanges();let totS=0,totW=0,totOT=0;
+  const rows=rs.map(r=>{const s=schedHoursWeek(p,r),w=workedHoursWeek(p,r),ot=Math.max(0,w-40);totS+=s;totW+=w;totOT+=ot;
+    return `<div class="rule"><div class="rl"><b>Week of ${dateOf(r.startD).toLocaleDateString(undefined,{month:'short',day:'numeric'})}</b><span>Scheduled ${fmtHrs(s)}${ot>0?' · OT '+fmtHrs(ot):''}</span></div><span class="hrsbig${ot>0?' ot':''}">${fmtHrs(w)}</span></div>`;}).join('');
+  let h=`<div class="hourshero"><div><div class="sub">Worked this period</div><div class="hnum">${fmtHrs(totW)}</div></div><div><div class="sub">Scheduled</div><div class="hnum2">${fmtHrs(totS)}</div></div>${totOT>0?`<div><div class="sub">Overtime</div><div class="hnum2 ot">${fmtHrs(totOT)}</div></div>`:''}</div>`;
+  h+=rows;
+  const entries=Object.keys(p.clock||{}).sort().reverse().slice(0,8);
+  if(entries.length){h+=`<div class="sect" style="margin:14px 16px 4px">Recent clock-ins</div>`+entries.map(iso=>{const r=p.clock[iso],open=r.in&&!r.out,dt=new Date(iso+'T00:00');return `<div class="rule"><div class="rl"><b>${dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</b><span>${r.in?fmtClock(r.in):'—'} – ${r.out?fmtClock(r.out):'in progress'}</span></div><span class="hrsbig${open?' ot':''}">${r.in?fmtHrs(recHours(r)):'—'}</span></div>`;}).join('');}
+  else h+=`<div style="padding:10px 16px 16px;color:var(--faint);font-size:14px">No clock-ins yet. Use <b>Clock in for duty</b> above and your hours will add up here.</div>`;
+  $('myHoursCard').innerHTML=h;
+}
+function renderHoursMgr(){
+  const rs=weekRanges();
+  let data=staff.map(p=>{const w=workedHoursTotal(p),s=schedHoursTotal(p),ot=rs.reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-40),0);return{p,w,s,ot};}).filter(x=>x.s>0||x.w>0);
+  data.sort((a,b)=>b.w-a.w||b.s-a.s||a.p.name.localeCompare(b.p.name));
+  const TW=data.reduce((a,x)=>a+x.w,0),TS=data.reduce((a,x)=>a+x.s,0),TO=data.reduce((a,x)=>a+x.ot,0);
+  let h=`<div style="padding:14px 16px 6px;display:flex;align-items:center;gap:8px"><b style="font-size:15px;flex:1">Hours worked</b><button class="bigaction grey" id="hoursCsv" style="width:auto;padding:9px 12px;min-height:auto;font-size:13px">↓ CSV</button></div>`;
+  h+=`<div class="hourshero mgr"><div><div class="sub">Worked</div><div class="hnum">${fmtHrs(TW)}</div></div><div><div class="sub">Scheduled</div><div class="hnum2">${fmtHrs(TS)}</div></div><div><div class="sub">Overtime</div><div class="hnum2 ${TO>0?'ot':''}">${fmtHrs(TO)}</div></div></div>`;
+  if(!data.length)h+=`<div style="padding:6px 16px 18px;color:var(--muted)">No hours yet. Each person’s hours appear here as they clock in and out.</div>`;
+  else h+=data.map(x=>`<div class="rule"><div class="rl"><b>${x.p.name}</b><span>${x.p.role}${x.p.role!=='HUC'?' · '+(x.p.line==='day'?'Day':'Night'):''} · scheduled ${fmtHrs(x.s)}${x.ot>0?' · OT '+fmtHrs(x.ot):''}</span></div><span class="hrsbig${x.ot>0?' ot':''}">${fmtHrs(x.w)}</span></div>`).join('');
+  $('hoursCard').innerHTML=h;
+}
+function exportHoursCSV(){
+  const rs=weekRanges();let rows=[['Name','Role','Shift','Scheduled hours','Worked hours','Overtime hours']];
+  staff.forEach(p=>{const w=workedHoursTotal(p),s=schedHoursTotal(p);if(s<=0&&w<=0)return;const ot=rs.reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-40),0);rows.push([p.name,p.role,p.role==='HUC'?'Day':(p.line==='day'?'Day':'Night'),s.toFixed(1),w.toFixed(1),ot.toFixed(1)]);});
+  const csv=rows.map(r=>r.map(c=>/[",\n]/.test(String(c))?'"'+String(c).replace(/"/g,'""')+'"':c).join(',')).join('\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));const a=document.createElement('a');a.href=url;a.download='evenshift-hours.csv';a.click();URL.revokeObjectURL(url);toast('Hours saved to your files.');
+}
+$('hoursCard').addEventListener('click',e=>{if(e.target.closest('#hoursCsv'))exportHoursCSV();});
+$('swapWho').addEventListener('change',fillSwapTheir);
+$('swapSend').onclick=sendSwap;
+$('swapCancel').onclick=()=>$('swapOverlay').classList.remove('show');
+$('swapReview').addEventListener('click',e=>{
+  const ok=e.target.closest('[data-swapok]');if(ok){const s=swaps.find(x=>x.id===ok.dataset.swapok);if(s){s.status='approved';applySwap(s);computeCoverage();save();renderSched();toast('Swap approved — schedule updated');}return;}
+  const no=e.target.closest('[data-swapno]');if(no){const s=swaps.find(x=>x.id===no.dataset.swapno);if(s){s.status='denied';save();renderSwapReview();toast('Swap denied');}return;}
+});
 function setReq(p,d,k){
   const was=p.pto.has(d)?'pto':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';
   p.pto.delete(d);if(p.avoid)p.avoid.delete(d);p.picks.delete(d);
@@ -1301,18 +1487,21 @@ function setReq(p,d,k){
 }
 function doClockIn(p){
   const finish=()=>{const iso=todayISO();p.clock[iso]=p.clock[iso]||{};p.clock[iso].in=Date.now();save();renderStaff();toast('Clocked in — have a great shift');};
-  const code=(d)=>{const c=prompt((d?('You seem about '+d+'m away. '):'')+'Enter the unit code posted at the nurses’ station:');if(c==null)return;if(String(c).trim().toUpperCase()===String(settings.unitCode).trim().toUpperCase())finish();else toast('That code doesn’t match. Ask your charge nurse.');};
+  const code=(d)=>{const c=prompt((d?('You seem about '+d+'m away. '):'')+'Enter today’s unit code posted at the station:');if(c==null)return;if(String(c).trim().toUpperCase()===String(activeCode()).trim().toUpperCase())finish();else toast('That code doesn’t match. Ask your charge nurse.');};
   if(settings.unitLat!=null&&typeof navigator!=='undefined'&&navigator.geolocation){
     toast('Checking you’re on the unit…');
-    navigator.geolocation.getCurrentPosition(pos=>{
+    getPos(pos=>{
       const dist=haversine(pos.coords.latitude,pos.coords.longitude,settings.unitLat,settings.unitLng);
       if(dist<=(settings.unitRadius||150)+(pos.coords.accuracy||0))finish();
-      else if(settings.unitCode)code(Math.round(dist));
+      else if(activeCode())code(Math.round(dist));
       else toast('You’re about '+Math.round(dist)+'m from the unit. Clock in once you’re there.');
-    },err=>{if(settings.unitCode)code();else toast('Couldn’t check your location. Turn on location access, or ask your manager for a unit code.');},{enableHighAccuracy:true,timeout:8000});
-  }else if(settings.unitCode){code();}
+    },err=>{if(activeCode())code();else toast(geoMsg(err));});
+  }else if(activeCode()){code();}
   else finish();
 }
+function makeSeed(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);}
+function dailyCode(iso){if(!settings.codeSeed)return '';let s=settings.codeSeed+'|'+iso,h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}let c=(h>>>0).toString(36).toUpperCase().replace(/[^A-Z0-9]/g,'');return (c+'0000').slice(0,4);}
+function activeCode(){return settings.dailyCodeOn&&settings.codeSeed?dailyCode(todayISO()):(settings.unitCode||'');}
 function renderClockSetup(){
   const s=settings,locSet=s.unitLat!=null;
   let h=`<div style="padding:14px 16px 4px"><b style="font-size:15px">Clock-in & location</b><div class="sub">Staff can only clock in when they’re at the unit. Set the unit’s spot, or give a code posted at the station.</div></div>`;
@@ -1320,14 +1509,34 @@ function renderClockSetup(){
   h+=`<div class="rule"><div class="rl"><b>Unit name</b></div><input id="unitNameInp" value="${(s.unitName||'').replace(/"/g,'&quot;')}" style="${INP};max-width:130px"></div>`;
   h+=`<div class="rule"><div class="rl"><b>Unit location</b><span>${locSet?('Set ✓ · staff must be within '+(s.unitRadius||150)+'m'):'Not set yet'}</span></div><button class="bigaction grey" id="useLoc" style="width:auto;padding:11px 13px;min-height:auto;font-size:13px">📍 Use current</button></div>`;
   h+=`<div class="rule"><div class="rl"><b>How close (meters)</b><span>Bigger = more forgiving indoors</span></div><div class="stepper"><button data-rad="-1">−</button><div class="val">${s.unitRadius||150}</div><button data-rad="1">+</button></div></div>`;
-  h+=`<div class="rule"><div class="rl"><b>Unit code</b><span>Optional backup if phone location is off</span></div><input id="unitCodeInp" value="${(s.unitCode||'').replace(/"/g,'&quot;')}" placeholder="e.g. 10G24" style="${INP};max-width:120px"></div>`;
+  h+=`<div class="toggle" style="padding:10px 16px"><div><b>Daily code</b><span>Changes every day — a shared code dies at midnight</span></div><button class="sw-toggle ${s.dailyCodeOn?'on':''}" data-tog="daily"><i></i></button></div>`;
+  if(s.dailyCodeOn){const dc=dailyCode(todayISO());
+    h+=`<div style="padding:4px 16px 14px"><div style="background:var(--teal-soft);border-radius:14px;padding:16px;text-align:center">
+      <div class="sub" style="margin:0">Today’s code · ${new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'})}</div>
+      <div style="font-size:38px;font-weight:800;letter-spacing:5px;color:var(--teal-deep);margin:3px 0">${dc||'—'}</div>
+      <div class="sub" style="margin:0">Post this at the station. A new code appears each morning.</div>
+      <button class="bigaction ghost" id="newSeed" style="margin-top:10px">↻ New code now</button></div></div>`;
+  }else{
+    h+=`<div class="rule"><div class="rl"><b>Fixed code</b><span>Optional backup if phone location is off</span></div><input id="unitCodeInp" value="${(s.unitCode||'').replace(/"/g,'&quot;')}" placeholder="e.g. 10G24" style="${INP};max-width:120px"></div>`;
+  }
   if(locSet)h+=`<div style="padding:10px 16px"><button class="bigaction ghost" id="clearLoc">Clear saved location</button></div>`;
   $('clockSetupCard').innerHTML=h;
 }
+function geoMsg(err){
+  if(err&&err.code===1)return 'Location is blocked. On iPhone: Settings → Privacy → Location Services → on, then Safari → While Using. Or just set a unit code.';
+  if(err&&err.code===3)return 'Location timed out (common indoors). Try near a window — or just set a unit code instead.';
+  return 'Couldn’t get a location fix. Set a unit code instead — it works anywhere.';
+}
+function getPos(onOk,onErr){
+  if(typeof navigator==='undefined'||!navigator.geolocation){onErr({code:0});return;}
+  if(typeof window!=='undefined'&&window.isSecureContext===false){onErr({code:9});return;}
+  const lo=()=>navigator.geolocation.getCurrentPosition(onOk,onErr,{enableHighAccuracy:false,timeout:15000,maximumAge:60000});
+  navigator.geolocation.getCurrentPosition(onOk,e=>{if(e&&e.code===1)onErr(e);else lo();},{enableHighAccuracy:true,timeout:10000,maximumAge:0});
+}
 function grabLocation(){
-  if(typeof navigator==='undefined'||!navigator.geolocation){toast('This phone can’t share location. Use a unit code instead.');return;}
+  if(typeof window!=='undefined'&&window.isSecureContext===false){toast('Location needs the secure web link. Open your GitHub Pages (https) link, or set a unit code.');return;}
   toast('Getting the unit’s location…');
-  navigator.geolocation.getCurrentPosition(pos=>{settings.unitLat=pos.coords.latitude;settings.unitLng=pos.coords.longitude;save();renderClockSetup();toast('Unit location saved ✓');},err=>{toast('Couldn’t get location. Allow location access, or use a unit code.');},{enableHighAccuracy:true,timeout:8000});
+  getPos(pos=>{settings.unitLat=pos.coords.latitude;settings.unitLng=pos.coords.longitude;save();renderClockSetup();toast('Unit location saved ✓');},err=>toast(err&&err.code===9?'Location needs the https web link. Open your GitHub Pages link, or set a unit code.':geoMsg(err)));
 }
 function renderToday(){
   const d=cycleDayToday(),iso=todayISO();
@@ -1344,17 +1553,37 @@ function renderToday(){
   $('todayCard').innerHTML=h;
 }
 /* listeners */
-$('switchBtn').onclick=()=>{populateLogin();$('loginOverlay').classList.add('show');};
+$('switchBtn').onclick=openLogin;
 $('loginMgr').onclick=()=>{currentUser={role:'manager'};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser))}catch(e){}$('loginOverlay').classList.remove('show');applyRole();};
-$('loginStaffGo').onclick=()=>{const id=+$('loginStaff').value;if(!id){toast('Pick your name first');return;}currentUser={role:'staff',id};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser))}catch(e){}$('loginOverlay').classList.remove('show');applyRole();};
+$('loginSearch').addEventListener('input',e=>renderLoginList(e.target.value));
+$('loginOverlay').addEventListener('click',e=>{const rec=e.target.closest('[data-rec]');if(rec){signInStaff(rec.dataset.rec);return;}const li=e.target.closest('[data-lid]');if(li){signInStaff(li.dataset.lid);return;}});
 $('screen-staff').addEventListener('click',e=>{
   const p=meUser();if(!p)return;
   if(e.target.closest('#clockBtn')){const iso=todayISO(),rec=p.clock[iso]||{};if(rec.in&&!rec.out){p.clock[iso].out=Date.now();save();renderStaff();toast('Clocked out — '+hrsBetween(rec.in,p.clock[iso].out));}else if(!rec.in){doClockIn(p);}return;}
-  if(e.target.closest('#staffSwitch')){populateLogin();$('loginOverlay').classList.add('show');return;}
+  if(e.target.closest('#staffSwitch')){openLogin();return;}
+  const sw=e.target.closest('[data-swap]');if(sw){openSwap(+sw.dataset.swap);return;}
+  const ac=e.target.closest('[data-acc]');if(ac){const s=swaps.find(x=>x.id===ac.dataset.acc);if(s){s.status='mgr';save();renderStaff();toast('Accepted — sent to your manager');}return;}
+  const dc2=e.target.closest('[data-dec]');if(dc2){const s=swaps.find(x=>x.id===dc2.dataset.dec);if(s){s.status='declined';save();renderStaff();toast('Declined');}return;}
   const rq=e.target.closest('.rqb');if(rq){setReq(p,+rq.dataset.d,rq.dataset.rq);return;}
 });
+$('myReqCard').addEventListener('pointerdown',e=>{const c=e.target.closest('.calcell.req');if(!c)return;reqPainting=true;reqApply(+c.dataset.d);e.preventDefault();});
+$('myReqCard').addEventListener('pointermove',e=>{if(!reqPainting)return;const t=document.elementFromPoint(e.clientX,e.clientY);const c=t&&t.closest&&t.closest('.calcell.req');if(c)reqApply(+c.dataset.d);e.preventDefault();});
+function endReqPaint(){if(reqPainting){reqPainting=false;save();}}
+['pointerup','pointercancel','pointerleave'].forEach(ev=>$('myReqCard').addEventListener(ev,endReqPaint));
+$('myReqCard').addEventListener('click',e=>{
+  const b=e.target.closest('[data-brush]');if(b){reqBrush=b.dataset.brush;renderMyReq(meUser());return;}
+  const q=e.target.closest('[data-quick]');if(q){const p=meUser();if(!p)return;
+    if(q.dataset.quick==='clearall'){for(let d=0;d<DAYS;d++)setReqState(p,d,'');toast('Cleared all');}
+    else if(q.dataset.quick==='weoff'){for(let d=0;d<DAYS;d++)if(isColWE(d))setReqState(p,d,'off');toast('Weekends marked off');}
+    save();renderMyReq(p);return;}
+});
 $('clockSetupCard').addEventListener('click',e=>{
-  if(e.target.closest('[data-tog]')){settings.selfSchedule=!settings.selfSchedule;renderClockSetup();save();toast(settings.selfSchedule?'Staff can submit requests':'Manager-built schedule');return;}
+  const tg=e.target.closest('[data-tog]');
+  if(tg){const k=tg.dataset.tog;
+    if(k==='self'){settings.selfSchedule=!settings.selfSchedule;toast(settings.selfSchedule?'Staff can submit requests':'Manager-built schedule');}
+    else if(k==='daily'){settings.dailyCodeOn=!settings.dailyCodeOn;if(settings.dailyCodeOn&&!settings.codeSeed)settings.codeSeed=makeSeed();toast(settings.dailyCodeOn?'Daily code on — post today’s code':'Daily code off');}
+    renderClockSetup();save();return;}
+  if(e.target.closest('#newSeed')){settings.codeSeed=makeSeed();renderClockSetup();save();toast('New code generated');return;}
   if(e.target.closest('#useLoc')){grabLocation();return;}
   if(e.target.closest('#clearLoc')){settings.unitLat=null;settings.unitLng=null;save();renderClockSetup();toast('Location cleared');return;}
   const r=e.target.closest('[data-rad]');if(r){settings.unitRadius=Math.max(25,(settings.unitRadius||150)+(+r.dataset.rad)*25);renderClockSetup();save();return;}
@@ -1367,9 +1596,8 @@ $('clockSetupCard').addEventListener('change',e=>{
 /* ============ init ============ */
 const hadData=load();applyPeriod();picksSource=staff.some(p=>p.imported)?'imported':'sample';
 try{const u=localStorage.getItem(KEY_U);if(u)currentUser=JSON.parse(u);}catch(e){}
-populateLogin();
 if(!hadData){$('welcomeOverlay').classList.add('show');currentUser={role:'manager'};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser));}catch(e){}}
-if(!currentUser){$('loginOverlay').classList.add('show');show('people');}else applyRole();
+if(!currentUser){show('people');openLogin();}else applyRole();
 </script>
 </body>
 </html>

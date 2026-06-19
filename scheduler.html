@@ -162,6 +162,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 /* MODAL */
 .overlay{position:fixed;inset:0;background:rgba(16,32,46,.45);z-index:60;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:.2s}
 #welcomeOverlay,#pinSetupOverlay,#pinEntryOverlay,#unitCodeOverlay{z-index:72}
+.staffexit{flex-shrink:0;background:#fff;border:1.5px solid var(--teal);color:var(--teal);border-radius:20px;padding:8px 14px;font-size:13px;font-weight:700;margin-top:6px;white-space:nowrap}
 .overlay.show{opacity:1;pointer-events:auto}
 .sheet{background:#fff;width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto;transform:translateY(20px);transition:.2s}
 .overlay.show .sheet{transform:translateY(0)}
@@ -444,7 +445,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 <!-- FLOAT -->
 <!-- STAFF -->
 <div class="screen hide" id="screen-staff">
-  <div class="screen-h"><h1 id="staffHi">Hi</h1><p id="staffSub">Your shifts and time clock.</p></div>
+  <div class="screen-h" style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px"><div><h1 id="staffHi">Hi</h1><p id="staffSub">Your shifts and time clock.</p></div><button class="staffexit" id="staffExit">⇄ Switch</button></div>
   <div class="card" id="clockCard"></div>
   <div class="sect">Your hours</div>
   <div class="card" id="myHoursCard"></div>
@@ -1791,7 +1792,7 @@ $('loginOverlay').addEventListener('click',e=>{const rec=e.target.closest('[data
 $('screen-staff').addEventListener('click',e=>{
   const p=meUser();if(!p)return;
   if(e.target.closest('#clockBtn')){const iso=todayISO(),rec=p.clock[iso]||{};if(rec.in&&!rec.out){p.clock[iso].out=Date.now();save();renderStaff();toast('Clocked out — '+hrsBetween(rec.in,p.clock[iso].out));}else if(!rec.in){doClockIn(p);}return;}
-  if(e.target.closest('#staffSwitch')){openLogin();return;}
+  if(e.target.closest('#staffSwitch')||e.target.closest('#staffExit')){openLogin(false);return;}
   const sw=e.target.closest('[data-swap]');if(sw){openSwap(+sw.dataset.swap);return;}
   const ac=e.target.closest('[data-acc]');if(ac){const s=swaps.find(x=>x.id===ac.dataset.acc);if(s){s.status='mgr';save();renderStaff();toast('Accepted — sent to your manager');}return;}
   const dc2=e.target.closest('[data-dec]');if(dc2){const s=swaps.find(x=>x.id===dc2.dataset.dec);if(s){s.status='declined';save();renderStaff();toast('Declined');}return;}

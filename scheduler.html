@@ -195,8 +195,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .calsel{margin-left:auto;padding:9px 10px;border:1px solid var(--line-strong);border-radius:9px;font-size:13px;background:#fff;max-width:55%}
 .calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:10px}
 .calhd{text-align:center;font-size:10px;color:var(--faint);font-weight:700;padding:2px 0;text-transform:uppercase}
-.calcell{min-height:54px;border:1px solid var(--line);border-radius:9px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;position:relative;cursor:pointer;font-family:inherit}
-.calcell .cdate{position:absolute;top:4px;left:6px;font-size:10px;color:var(--faint);font-family:'IBM Plex Mono',monospace}
+.calcell{min-height:72px;border:1px solid var(--line);border-radius:9px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:5px 3px 4px;position:relative;cursor:pointer;font-family:inherit}
+.calcell .cdate{font-size:11.5px;color:var(--ink);font-weight:700;font-family:'IBM Plex Mono',ui-monospace,monospace;align-self:flex-start;margin:0 0 2px 4px;line-height:1.1}
 .calcell.we{background:#f6faf9}
 .calcell .ccnt{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;margin-top:7px}
 .calcell .ccnt span{color:var(--faint);font-weight:400;margin:0 1px}
@@ -214,7 +214,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .crole.sv1{background:#fbf1da;color:var(--amber)}
 .crole.sv2{background:#f6e2cf;color:#cf6a1a}
 .crole.sv3{background:#fae8e6;color:var(--red)}
-.calblank{min-height:66px;border:none;background:transparent}
+.calblank{min-height:72px;border:none;background:transparent}
 .calcell.hol{border-color:#d9b8e0;box-shadow:inset 0 0 0 1px #e8d3ee}
 .holstar{position:absolute;top:3px;right:5px;font-size:10px;color:#9b59b6}
 .rule.off{opacity:.5}
@@ -223,6 +223,46 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .flagfix{margin-left:auto;background:var(--teal);color:#fff;border:none;border-radius:8px;padding:8px 13px;font-size:12.5px;font-weight:600;white-space:nowrap}
 .flagpick{border-top:1px solid var(--line);background:#fbfcfd}
 .flagpick .pklist{padding:10px 16px}
+.flag{align-items:flex-start}
+.flagopts{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.health{border-radius:12px;padding:12px 14px;font-size:13.5px;margin-bottom:14px;line-height:1.45}
+.health.ok{background:#e7f5ec;color:#1f7a48;border:1px solid #bfe2cd}
+.health.warn{background:#fbf3e0;color:#8a6411;border:1px solid #ecd8a8}
+.health.bad{background:#fbe9e7;color:#9a352f;border:1px solid #e7c4c1}
+.health b{color:inherit}
+.sect{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:22px 4px 9px}
+.sect:first-of-type{margin-top:4px}
+.selbox{width:100%;padding:13px 14px;border:2px solid var(--line);border-radius:14px;font-size:16px;background:#fff;-webkit-appearance:none;appearance:none}
+.clk-head{padding:18px 18px 4px}
+.clk-when{font-size:13px;color:var(--muted);font-weight:600}
+.clk-stat{font-size:19px;font-weight:800;margin-top:3px;color:var(--ink)}
+.clk-stat.on{color:#0a7d3c}.clk-stat.done{color:var(--muted)}
+.clk-btn{display:block;width:calc(100% - 28px);margin:10px 14px 16px;padding:18px;border:none;border-radius:16px;font-size:18px;font-weight:800;color:#fff}
+.clk-btn.in{background:#0a7d3c}.clk-btn.out{background:#c0392b}
+.clk-note{padding:0 18px 16px;color:var(--muted);font-size:14px}
+.clk-note.warn{color:#b45309}
+.dayreq{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line)}
+.dayreq:last-child{border-bottom:none}
+.reqbtns{display:flex;gap:6px}
+.rqb{padding:8px 11px;border:2px solid var(--line);background:#fff;border-radius:11px;font-size:13px;font-weight:700;color:var(--muted)}
+.rqb.on.want{background:#0a7d3c;border-color:#0a7d3c;color:#fff}
+.rqb.on.off{background:#b45309;border-color:#b45309;color:#fff}
+.rqb.on.pto{background:#6d28d9;border-color:#6d28d9;color:#fff}
+.reqrow{padding:12px 16px;border-top:1px solid var(--line)}
+.reqhd{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.reqbadge{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.reqbadge.good{background:#e7f5ec;color:#1f7a48}
+.reqbadge.mid{background:#fbf3e0;color:#8a6411}
+.reqbadge.low{background:#fbe9e7;color:#9a352f}
+.reqline{margin-top:7px;display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.reqlbl{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;margin-right:2px}
+.reqchip{display:inline-block;padding:2px 7px;border-radius:6px;font-size:12px;font-family:ui-monospace,Menlo,monospace;white-space:nowrap}
+.reqchip.ok{background:#e7f5ec;color:#1f7a48}
+.reqchip.no{background:#fbe9e7;color:#9a352f}
+.reqchip.off{background:#eef1f4;color:var(--muted)}
+.optbtn{background:var(--teal);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.optbtn.ot{background:var(--amber)}
+.optbtn.ghost{background:#eef1f4;color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:calc(var(--tabh) + 20px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:13px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:80;box-shadow:var(--shadow);max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
@@ -234,6 +274,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
   <div><b>EvenShift</b><span class="sub" id="unitSub">10G · 32 beds</span></div>
   <div class="spacer"></div>
   <button class="helpbtn" id="helpBtn">?</button>
+  <button class="helpbtn" id="switchBtn" style="margin-left:8px">⇄</button>
 </div>
 
 <!-- PEOPLE -->
@@ -248,14 +289,31 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 
 <!-- RULES -->
 <div class="screen hide" id="screen-rules">
-  <div class="screen-h"><h1>Rules</h1><p>How many people do you need on each shift? Use ➖ and ➕.</p></div>
+  <div class="screen-h"><h1>Rules</h1><p>Set up your unit once — everything saves automatically.</p></div>
+
+  <div class="sect">1 · Schedule period</div>
   <div class="card" id="periodCard"></div>
-  <div class="card" id="rulesCard" style="margin-top:12px"></div>
-  <div class="card" id="customCard" style="margin-top:12px"></div>
-  <div class="card" id="holidaysCard" style="margin-top:12px"></div>
-  <button class="bigaction grey" id="advToggle" style="margin-top:12px">⚙️ More rules (advanced)</button>
-  <div class="card hide" id="advCard" style="margin-top:12px"></div>
-  <p style="font-size:13px;color:var(--faint);margin:14px 4px">These are saved automatically. When you’re happy, go to <b>Schedule</b> and tap Build.</p>
+
+  <div class="sect">2 · Coverage per shift</div>
+  <div class="card" id="rulesCard"></div>
+
+  <div class="sect">3 · Fairness &amp; limits</div>
+  <button class="bigaction grey" id="advToggle">⚙️ Show fairness &amp; limits</button>
+  <div class="card hide" id="advCard" style="margin-top:10px"></div>
+
+  <div class="sect">4 · Holidays</div>
+  <div class="card" id="holidaysCard"></div>
+
+  <div class="sect">5 · Your own rules</div>
+  <div class="card" id="customCard"></div>
+
+  <div class="sect">6 · Request codes (for imports)</div>
+  <div class="card" id="codesCard"></div>
+
+  <div class="sect">7 · Clock-in &amp; location</div>
+  <div class="card" id="clockSetupCard"></div>
+
+  <p style="font-size:13px;color:var(--faint);margin:18px 4px">All saved automatically. When you’re happy, go to <b>Schedule</b> and tap Build.</p>
 </div>
 
 <!-- SCHEDULE -->
@@ -270,7 +328,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <button class="bigaction grey hide" id="exportBtn" style="flex:0 0 auto;width:auto;padding:17px 18px">↓ Save</button>
   </div>
   <div id="schedResult" class="hide">
-    <div class="viewtabs" id="schedViewTabs" style="margin-bottom:14px"><button data-sv="month" class="on">📅 Month</button><button data-sv="day">📋 Day</button></div>
+    <div id="healthBanner" class="health ok"></div>
+    <div class="viewtabs" id="schedViewTabs" style="margin-bottom:14px"><button data-sv="month" class="on">📅 Month</button><button data-sv="day">📋 Day</button><button data-sv="req">📝 Requests</button><button data-sv="today">🕐 Today</button></div>
     <div id="dayWrap">
     <div class="card ribbon-card">
       <div class="ribbon-wrap"><div class="ribbon-inner"><div class="rlabels"><span class="sp"></span><span>Day</span><span>Night</span><span class="aide">aides</span></div><div class="ribbon" id="ribbon"></div></div></div>
@@ -294,6 +353,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     </div>
     </div>
     <div class="card hide" id="calCard"></div>
+    <div class="card hide" id="reqCard"></div>
+    <div class="card hide" id="todayCard"></div>
     <div class="card flagcard">
       <div class="card-h"><h2>Things to fix</h2><span class="tag2" id="flagCount"></span></div>
       <div id="flags"></div>
@@ -306,8 +367,33 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 </div>
 
 <!-- FLOAT -->
+<!-- STAFF -->
+<div class="screen hide" id="screen-staff">
+  <div class="screen-h"><h1 id="staffHi">Hi</h1><p id="staffSub">Your shifts and time clock.</p></div>
+  <div class="card" id="clockCard"></div>
+  <div class="sect">Your next shifts</div>
+  <div class="card" id="myShiftsCard"></div>
+  <div class="sect">Ask for days</div>
+  <div class="card" id="myReqCard"></div>
+  <button class="bigaction grey" id="staffSwitch" style="margin-top:16px">⇄ Switch user / sign out</button>
+  <p style="font-size:13px;color:var(--faint);margin:12px 4px 30px">You can only clock in when you’re inside your unit.</p>
+</div>
+
+<!-- LOGIN -->
+<div class="overlay welcome" id="loginOverlay">
+  <div class="sheet" style="text-align:center">
+    <div class="wel-badge">🔑</div>
+    <h2>Who are you?</h2>
+    <div class="lead">Choose how you’ll use EvenShift on this phone.</div>
+    <button class="bigaction" id="loginMgr" style="margin-top:4px">🗂️ I’m the manager</button>
+    <div class="sub" style="margin:16px 0 8px;color:var(--muted)">— or sign in as staff —</div>
+    <select id="loginStaff" class="selbox"><option value="">Choose your name…</option></select>
+    <button class="bigaction grey" id="loginStaffGo" style="margin-top:10px">Sign in for duty</button>
+  </div>
+</div>
+
 <!-- TAB BAR -->
-<div class="tabbar">
+<div class="tabbar" id="tabbar">
   <button id="tab-people" class="on" data-screen="people"><span class="ic">👥</span>People</button>
   <button id="tab-rules" data-screen="rules"><span class="ic">⚙️</span>Rules</button>
   <button id="tab-sched" data-screen="sched"><span class="ic">📅</span>Schedule</button>
@@ -367,8 +453,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
   <h2>Import picks</h2>
   <div class="lead">Bring in everyone's requested days from a file.</div>
   <ol style="margin:0 0 4px;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.7">
-    <li>In MyTime, <b>export</b> the picks to Excel or CSV (or fill our template).</li>
-    <li>If it's Excel, open it and do <b>File → Save As → CSV</b>.</li>
+    <li>In MyTime, <b>export</b> the picks to Excel (.xlsx) or CSV.</li>
+    <li>Upload it straight here — Excel is fine, no converting needed.</li>
     <li>Tap <b>Choose file</b> below and pick it.</li>
   </ol>
   <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
@@ -378,7 +464,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
   <div id="importResult" style="margin-top:14px"></div>
   <div class="sheet-actions"><button class="bigaction grey" id="importClose" style="flex:1">Close</button></div>
 </div></div>
-<input type="file" id="fileInput" accept=".csv,text/csv" style="display:none">
+<input type="file" id="fileInput" accept=".csv,.xlsx,.xls,text/csv" style="display:none">
 
 <div class="toast" id="toast"></div>
 
@@ -400,9 +486,13 @@ const isColWE=d=>{const w=wd(d);return w===0||w===6;};
 const lineWEof=(line,d)=>line==='night'?isNightWE(d):isDayWE(d);
 function fmtDate(d){return dateOf(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});}
 function calDateLabel(d){const dt=dateOf(d),dd=dt.getDate();return (d===0||dd===1)?MON[dt.getMonth()]+' '+dd:''+dd;}
+function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function cycleDayToday(){const t=todayISO();for(let d=0;d<DAYS;d++)if(isoOf(d)===t)return d;return -1;}
+function haversine(la1,lo1,la2,lo2){const R=6371000,rad=x=>x*Math.PI/180;const dLa=rad(la2-la1),dLo=rad(lo2-lo1);const s=Math.sin(dLa/2)**2+Math.cos(rad(la1))*Math.cos(rad(la2))*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(s));}
+function fmtClock(ts){if(!ts)return '';const d=new Date(ts);let h=d.getHours(),m=d.getMinutes();const ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+String(m).padStart(2,'0')+' '+ap;}
 
 /* ============ settings ============ */
-let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctIdeal:4,pctMin:3,usePCT:true,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3};
+let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctIdeal:4,pctMin:3,usePCT:true,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',selfSchedule:true};
 function req(role,line){const cm=(settings.useCharge===false?0:(settings.chargeMin||0));if(role==='RN')return line==='day'?{ideal:settings.rnDayIdeal+cm,min:settings.rnDayMin+cm}:{ideal:settings.rnNightIdeal+cm,min:settings.rnNightMin+cm};if(role==='PCT')return{ideal:settings.pctIdeal,min:settings.pctMin};return{ideal:settings.hucNeed,min:settings.hucNeed};}
 function roleOn(role){if(role==='PCT')return settings.usePCT!==false;if(role==='HUC')return settings.useHUC!==false;return true;}
 function isoOf(d){const dt=dateOf(d);return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
@@ -416,8 +506,12 @@ function reqEff(role,line,d){if(!roleOn(role))return{ideal:0,min:0,off:true};con
   return{ideal,min};}
 
 /* ============ solver ============ */
-const targetShifts=p=>p.fte==='PRN'?3:p.fte==='PT'?12:17;
-const maxShifts=p=>p.fte==='PRN'?8:p.fte==='PT'?13:18;
+const WK=()=>settings.weeks||6;
+const targetShifts=p=>p.fte==='PRN'?Math.min(2*WK(),8):p.fte==='PT'?2*WK():3*WK();
+const maxShifts=p=>p.fte==='PRN'?Math.min(2*WK(),9):p.fte==='PT'?2*WK()+1:3*WK();
+const weekCap=p=>p.fte==='PRN'?2:p.fte==='PT'?2:3;
+const weekOf=d=>Math.floor(d/7);
+const weekCount=(p,d)=>{const w=weekOf(d);let n=0;for(const x of p.asn)if(weekOf(x)===w)n++;return n;};
 const weekendQuota=p=>p.fte==='PRN'?settings.wkPRN:p.fte==='PT'?settings.wkPT:settings.wkFT;
 function genPicks(p){
   const want=targetShifts(p)+1;const pool=[];for(let d=0;d<DAYS;d++)if(!p.pto.has(d))pool.push(d);
@@ -428,33 +522,34 @@ function genPicks(p){
   for(const d of pool){if(chosen.size>=want)break;chosen.add(d);}p.picks=chosen;
 }
 const consecIfAdd=(p,d)=>{let r=1,x=d-1;while(x>=0&&p.asn.has(x)){r++;x--;}x=d+1;while(x<DAYS&&p.asn.has(x)){r++;x++;}return r;};
-const available=(p,d)=>!p.pto.has(d)&&!p.asn.has(d)&&p.asn.size<maxShifts(p)&&consecIfAdd(p,d)<=settings.maxConsec;
+const available=(p,d)=>!p.pto.has(d)&&!p.asn.has(d)&&p.asn.size<maxShifts(p)&&weekCount(p,d)<weekCap(p)&&consecIfAdd(p,d)<=settings.maxConsec;
+const availableOT=(p,d)=>!p.pto.has(d)&&!p.asn.has(d)&&consecIfAdd(p,d)<=settings.maxConsec;
 let cycleSeed=0;
-function score(p,d){let v=0;if(p.picks.has(d))v+=100;v+=(targetShifts(p)-p.asn.size)*6;
+function score(p,d){let v=0;if(p.picks.has(d))v+=100;if(p.avoid&&p.avoid.has(d))v-=80;v+=(targetShifts(p)-p.asn.size)*6;
   if(lineWEof(p.line,d)){const need=weekendQuota(p)-p.weCount;if(p.wtw)v+=40;if(need>0)v+=need*9;else v-=12;}
   v-=((p.seniority+cycleSeed)%Math.max(1,staff.length))*0.04;return v;}
 function assign(p,d){p.asn.add(d);if(lineWEof(p.line,d))p.weCount++;if(p.line==='night'&&isRough(d))p.roughCount++;}
 function unassign(p,d){p.asn.delete(d);if(lineWEof(p.line,d))p.weCount--;if(p.line==='night'&&isRough(d))p.roughCount--;}
 function build(){
   cycleSeed++;staff.forEach(p=>{p.asn=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();if(!p.picks||!p.picks.size)genPicks(p);});
-  const fill=(role,line,d,ideal,wantCharge)=>{
-    let pool=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d));
-    const picked=[];
-    if(wantCharge)for(const p of pool.filter(p=>p.charge)){if(picked.filter(x=>x.charge).length>=settings.chargeMin)break;assign(p,d);picked.push(p);}
-    for(const p of pool){if(picked.includes(p))continue;if(picked.length>=ideal)break;assign(p,d);picked.push(p);}
+  const fill=(role,line,d,target,wantCharge)=>{
+    const have=()=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
+    if(wantCharge){let pool=staff.filter(p=>p.role===role&&p.line===line&&p.charge&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d));
+      for(const p of pool){if(chargeCount(line,d)>=settings.chargeMin)break;assign(p,d);}}
+    const pool=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d));
+    for(const p of pool){if(have()>=target)break;assign(p,d);}
   };
   const useCh=settings.useCharge!==false;
-  for(let d=0;d<DAYS;d++){
-    fill('RN','day',d,reqEff('RN','day',d).ideal,useCh);fill('RN','night',d,reqEff('RN','night',d).ideal,useCh);
-    if(roleOn('PCT')){fill('PCT','day',d,reqEff('PCT','day',d).ideal,false);fill('PCT','night',d,reqEff('PCT','night',d).ideal,false);}
-    if(roleOn('HUC'))fill('HUC','day',d,reqEff('HUC','day',d).ideal,false);
-  }
-  for(let d=0;d<DAYS;d++)for(const [role,line] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
-    if(!roleOn(role))continue;
-    const m=reqEff(role,line,d).min;const cur=()=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
-    if(cur()>=m)continue;const pool=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&available(p,d)).sort((a,b)=>a.asn.size-b.asn.size);
-    for(const p of pool){if(cur()>=m)break;assign(p,d);}
-  }
+  const LINES=[['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']];
+  if(useCh)for(let d=0;d<DAYS;d++){fill('RN','day',d,0,true);fill('RN','night',d,0,true);} // seed a charge nurse on every shift
+  const sweep=tf=>{let imp=true,g=0;while(imp&&g++<5000){imp=false;
+    for(const [role,line] of LINES){if(!roleOn(role))continue;
+      for(let d=0;d<DAYS;d++){const rq=reqEff(role,line,d);
+        if(shiftCount(role,line,d)>=tf(rq))continue;
+        const cand=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d))[0];
+        if(cand){assign(cand,d);imp=true;}}}}};
+  sweep(rq=>rq.min);   // minimums everywhere first, spread evenly
+  sweep(rq=>rq.ideal); // then top up toward ideal where staff remain
   // charge repair: ensure each shift hits its charge minimum where a charge nurse is free
   if(useCh)for(let d=0;d<DAYS;d++)for(const line of ['day','night']){
     let guard=0;
@@ -557,9 +652,10 @@ const REAL_ROSTER=[
   {n:'Imelda Flores',role:'HUC',line:'day',fte:'FT',charge:false,precept:false}
 ];
 let staff=[];let built=false;
-const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1';
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.asn=new Set();p.oriDays=new Set();if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;return p;}
-function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],imported:false,floatCount:0}));}
+const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1';
+let currentUser=null;
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;return p;}
+function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{}}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
     if(c)settings=Object.assign(settings,JSON.parse(c));
@@ -568,7 +664,7 @@ function load(){
   staff=seed();return false;
 }
 function save(){try{
-  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],imported:!!p.imported,floatCount:p.floatCount||0}))));
+  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{}}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
 }catch(e){}}
 
@@ -578,6 +674,7 @@ let screen='people',curDay=0,filterRole='all',searchTxt='',editId=null,openPicke
 let schedView='month',calMode='coverage',editPersonId=null,painting=false,paintAdd=true,openFlag=null;
 let addingRule=false,ruleDraft={name:'',note:false,role:'PCT',line:'night',min:3};
 let addingHoliday=false,holDraft={name:'',date:''};
+let addingCode=false,codeDraft={code:'',cat:'off'};
 let draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,wtw:false,orientee:false,preceptor:null},floatFilter='all';
 
 /* ============ render router ============ */
@@ -624,7 +721,7 @@ function renderRules(){
       (tk?`<button class="sw-toggle${on?' on':''}" data-roletgl="${tk}" style="margin-right:6px"><i></i></button>`:'')+
       `<div class="stepper"${tk&&!on?' style="opacity:.4;pointer-events:none"':''}><button data-step="${k}|-1">−</button><div class="val" id="rv_${k}">${settings[k]}</div><button data-step="${k}|1">+</button></div></div>`;
   }).join('');
-  renderPeriod();renderCustom();renderHolidays();
+  renderPeriod();renderCustom();renderHolidays();renderCodes();renderClockSetup();
 }
 function renderPeriod(){
   $('periodCard').innerHTML=
@@ -651,6 +748,19 @@ function renderCustom(){
   $('customCard').innerHTML=h;
 }
 function fmtISO(iso){const a=iso.split('-').map(Number);return new Date(a[0],a[1]-1,a[2]).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});}
+function renderCodes(){
+  const CATL={want:'Wants to work',avoid:'Prefers off',off:'PTO / leave'},CATC={want:'good',avoid:'mid',off:'low'};
+  const codes=settings.codeMap||[];
+  let h=`<div style="padding:14px 16px 6px"><b style="font-size:15px">Request codes</b><div class="sub">Map your unit\u2019s own abbreviations. Already understood: D, N, OFF, NO, PTO, FMLA, VAC, SICK, LOA, holiday\u2026</div></div>`;
+  h+=codes.map((c,i)=>`<div class="rule"><div class="rl"><b>${(c.code||'').toUpperCase()}</b></div><span class="reqbadge ${CATC[c.cat]||''}" style="margin-right:8px">${CATL[c.cat]||c.cat}</span><button class="xbtn" data-delcode="${i}">\u2715</button></div>`).join('');
+  if(addingCode){const cats=[['want','Wants to work'],['avoid','Prefers off'],['off','PTO / leave']];
+    h+=`<div class="rule" style="flex-direction:column;align-items:stretch;gap:10px;background:var(--teal-soft)">
+      <input id="codeText" placeholder="Code as it appears (e.g. RQ, PL, V)" value="${codeDraft.code||''}" style="${INP}">
+      <div class="pickrow">${cats.map(([k,l])=>`<button class="pickbtn${codeDraft.cat===k?' on':''}" data-ccat="${k}">${l}</button>`).join('')}</div>
+      <div style="display:flex;gap:10px"><button class="bigaction" id="codeSave" style="flex:1">Add code</button><button class="bigaction grey" id="codeCancel" style="flex:1">Cancel</button></div></div>`;
+  }else h+=`<div style="padding:12px 16px"><button class="bigaction ghost" id="addCodeBtn">\uFF0B Add a code</button></div>`;
+  $('codesCard').innerHTML=h;
+}
 function renderHolidays(){
   const hs=(settings.holidays||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
   let h=`<div style="padding:14px 16px 6px"><b style="font-size:15px">Holidays</b><div class="sub">On these days the schedule uses your holiday coverage below.</div></div>`;
@@ -668,6 +778,14 @@ function renderHolidays(){
 }
 function periodChanged(){applyPeriod();staff.forEach(p=>{if(!p.imported)p.picks=new Set();});if(built)build();save();renderPeriod();if(screen==='sched')renderSched();}
 function rulesChanged(){if(built)build();save();if(screen==='sched')renderSched();}
+function rosterChanged(){
+  const ids=new Set(staff.map(p=>p.id));
+  staff.forEach(p=>{if(p.orientee&&!ids.has(p.preceptor)){p.preceptor=null;p.orientee=false;}});
+  if(built)build();
+  save();
+  if(screen==='people')renderPeople();
+  if(screen==='sched')renderSched();
+}
 function stepRule(k,delta){
   let v=Math.max(0,(settings[k]||0)+delta);
   if(k==='chargeMin'){v=Math.min(4,v);settings.chargeMin=v;settings.chargeTarget=Math.max(v,2);}
@@ -715,12 +833,37 @@ function renderSched(){
   $('exportBtn').classList.toggle('hide',!built);
   $('buildBtn').textContent=built?'↻ Build again':'✨ Build schedule';
   const ni=staff.filter(p=>p.imported).length;$('picksSrc').textContent=ni?`Using imported picks (${ni} people)`:'Using sample picks';
-  const month=schedView==='month';
-  $('schedViewTabs').querySelectorAll('[data-sv]').forEach(b=>b.classList.toggle('on',b.dataset.sv===schedView));
-  $('dayWrap').classList.toggle('hide',month);
-  $('calCard').classList.toggle('hide',!month);
-  if(month)renderCalendar();else{renderRibbon();renderDay();}
+  const v=schedView;
+  $('schedViewTabs').querySelectorAll('[data-sv]').forEach(b=>b.classList.toggle('on',b.dataset.sv===v));
+  $('dayWrap').classList.toggle('hide',v!=='day');
+  $('calCard').classList.toggle('hide',v!=='month');
+  $('reqCard').classList.toggle('hide',v!=='req');
+  $('todayCard').classList.toggle('hide',v!=='today');
+  const ssOff=!settings.selfSchedule;
+  $('picksCard').classList.toggle('hide',ssOff);
+  const reqTab=$('schedViewTabs').querySelector('[data-sv=\"req\"]');if(reqTab)reqTab.classList.toggle('hide',ssOff);
+  if(v==='month')renderCalendar();else if(v==='req')renderRequests();else if(v==='today')renderToday();else{renderRibbon();renderDay();}
+  renderHealth();
   renderFlags();
+}
+function renderRequests(){
+  const imported=staff.some(p=>p.imported);
+  let people=staff.filter(p=>!p.orientee&&(p.picks.size||p.pto.size));
+  if(imported)people=people.filter(p=>p.imported);
+  const honor=p=>{const w=p.picks.size;if(!w)return 2;let g=0;p.picks.forEach(d=>{if(p.asn.has(d))g++;});return g/w;};
+  people.sort((a,b)=>honor(a)-honor(b)||a.name.localeCompare(b.name));
+  let h='<div style="padding:13px 16px 8px"><b>Requested vs granted</b><div class="sub">'+(imported?'From your imported MyTime picks. ':'Sample picks \u2014 import MyTime to see real requests. ')+'Time off is always granted; shift requests are honored when staffing allows.</div></div>';
+  if(!people.length){h+='<div style="padding:4px 16px 16px;color:var(--muted);font-size:14px">No requests to show yet. Import your MyTime file from the Schedule screen.</div>';$('reqCard').innerHTML=h;return;}
+  const show=people.slice(0,40);
+  h+=show.map(p=>{const wants=[...p.picks].sort((a,b)=>a-b),avoids=[...(p.avoid||[])].sort((a,b)=>a-b),offs=[...p.pto].sort((a,b)=>a-b);
+    const g=wants.filter(d=>p.asn.has(d)).length,pct=wants.length?Math.round(g/wants.length*100):null;
+    let row='<div class="reqrow"><div class="reqhd"><b>'+p.name+'</b>'+(wants.length?'<span class="reqbadge '+(pct>=80?'good':pct>=50?'mid':'low')+'">'+g+'/'+wants.length+' shifts \u00b7 '+pct+'%</span>':'')+'</div>';
+    if(wants.length)row+='<div class="reqline"><span class="reqlbl">Wanted</span>'+wants.map(d=>'<span class="reqchip '+(p.asn.has(d)?'ok':'no')+'">'+fmtDate(d)+(p.asn.has(d)?' \u2713':' \u2717')+'</span>').join('')+'</div>';
+    if(avoids.length)row+='<div class="reqline"><span class="reqlbl">Prefer off</span>'+avoids.map(d=>'<span class="reqchip '+(p.asn.has(d)?'no':'off')+'">'+fmtDate(d)+(p.asn.has(d)?' \u2717 worked':' \u2713')+'</span>').join('')+'</div>';
+    if(offs.length)row+='<div class="reqline"><span class="reqlbl">PTO/leave</span>'+offs.map(d=>'<span class="reqchip off">'+fmtDate(d)+' \u2713</span>').join('')+'</div>';
+    row+='</div>';return row;}).join('');
+  if(people.length>40)h+='<div style="padding:10px 16px;color:var(--faint);font-size:13px">+'+(people.length-40)+' more people\u2026</div>';
+  $('reqCard').innerHTML=h;
 }
 function renderRibbon(){const r=$('ribbon');r.innerHTML='';
   for(let d=0;d<DAYS;d++){const c=coverage[d];
@@ -759,31 +902,57 @@ function renderDay(){
   $('dayBody').innerHTML=h;
 }
 const firstName=n=>n.split(' ')[0];
-function renderFlags(){
-  const F=[];
-  for(let d=0;d<DAYS;d++){const c=coverage[d];const lbl=WDF[wd(d)].slice(0,3)+' '+fmtDate(d);
-    const add=(role,line,count,label)=>{const rq=reqEff(role,line,d);if(rq.off||count>=rq.ideal)return;const short=rq.ideal-count;
-      F.push({key:role+'|'+line+'|'+d,sev:count<rq.min?'red':'amber',day:d,role,line,charge:false,title:lbl+' · '+label,solution:'Short '+short+' — add '+short+' more.',fixable:true});};
-    add('RN','day',c.rnDay,'Day nurses');add('RN','night',c.rnNight,'Night nurses');
-    add('PCT','day',c.pctDay,'Day PCTs');add('PCT','night',c.pctNight,'Night PCTs');
-    add('HUC','day',c.huc,'HUCs');
-    if(settings.useCharge!==false&&c.chgDay<settings.chargeMin)F.push({key:'cg|day|'+d,sev:'red',day:d,role:'RN',line:'day',charge:true,title:lbl+' · No charge nurse (day)',solution:'Assign a charge-trained nurse.',fixable:true});
-    if(settings.useCharge!==false&&c.chgNight<settings.chargeMin)F.push({key:'cg|night|'+d,sev:'red',day:d,role:'RN',line:'night',charge:true,title:lbl+' · No charge nurse (night)',solution:'Assign a charge-trained nurse.',fixable:true});
+function renderHealth(){
+  const useCh=settings.useCharge!==false;const grp={};let chgMiss=0;
+  for(let d=0;d<DAYS;d++){const c=coverage[d];
+    const look=(role,line,count)=>{const rq=reqEff(role,line,d);if(rq.off||count>=rq.ideal)return;const k=role+'|'+line;
+      const g=grp[k]||(grp[k]={role,line,ideal:rq.ideal,belowMin:false,tot:staff.filter(p=>p.role===role&&p.line===line&&!p.orientee).length});
+      g.ideal=rq.ideal;if(count<rq.min)g.belowMin=true;};
+    look('RN','day',c.rnDay);look('RN','night',c.rnNight);look('PCT','day',c.pctDay);look('PCT','night',c.pctNight);look('HUC','day',c.huc);
+    if(useCh&&c.chgDay<settings.chargeMin)chgMiss++;if(useCh&&c.chgNight<settings.chargeMin)chgMiss++;
   }
+  const NM={'RN|day':'Day nurses','RN|night':'Night nurses','PCT|day':'Day PCTs','PCT|night':'Night PCTs','HUC|day':'HUCs'};
+  const items=Object.values(grp);const el=$('healthBanner');
+  if(!items.length&&!chgMiss){el.className='health ok';el.innerHTML='✓ Every shift is fully staffed — nothing outstanding.';return;}
+  const perPerson=3*(settings.weeks||6);
+  const parts=items.map(g=>{const sustainable=Math.ceil(g.ideal*DAYS/perPerson);const extra=Math.max(0,sustainable-g.tot);
+    return NM[g.role+'|'+g.line]+': overtime'+(extra>0?(' or +'+extra+' '+roleWord(g.role)+(extra>1?'s':'')):'');});
+  if(chgMiss)parts.unshift('Charge nurse: needs overtime');
+  const anyRed=items.some(g=>g.belowMin)||chgMiss>0;
+  el.className='health '+(anyRed?'bad':'warn');
+  el.innerHTML='<b>Solved, except</b> — '+parts.join(' · ');
+}
+function renderFlags(){
+  const useCh=settings.useCharge!==false;
+  const L={'RN|day':'Day nurses','RN|night':'Night nurses','PCT|day':'Day PCTs','PCT|night':'Night PCTs','HUC|day':'HUCs'};
+  const grp={},chg={day:0,night:0};
+  for(let d=0;d<DAYS;d++){const c=coverage[d];
+    const look=(role,line,count)=>{const rq=reqEff(role,line,d);if(rq.off||count>=rq.ideal)return;const k=role+'|'+line;
+      const g=grp[k]||(grp[k]={role,line,days:0,lo:99,ideal:rq.ideal,belowMin:false,tot:staff.filter(p=>p.role===role&&p.line===line&&!p.orientee).length});
+      g.days++;g.lo=Math.min(g.lo,count);g.ideal=rq.ideal;if(count<rq.min)g.belowMin=true;};
+    look('RN','day',c.rnDay);look('RN','night',c.rnNight);look('PCT','day',c.pctDay);look('PCT','night',c.pctNight);look('HUC','day',c.huc);
+    if(useCh&&c.chgDay<settings.chargeMin)chg.day++;if(useCh&&c.chgNight<settings.chargeMin)chg.night++;
+  }
+  const F=[];
+  Object.values(grp).forEach(g=>F.push({kind:'cov',sev:g.belowMin?'red':'amber',role:g.role,line:g.line,
+    title:L[g.role+'|'+g.line]+(g.belowMin?' — below your minimum':' — below the ideal'),
+    reason:'Running '+(g.lo===g.ideal-1?(g.ideal-1)+'':g.lo+'–'+(g.ideal-1))+' of '+g.ideal+' on '+g.days+' shift'+(g.days>1?'s':'')+'. Only '+g.tot+' '+roleWord(g.role)+'s on the roster for a '+g.ideal+'/shift rule — that\'s the real limit.'}));
+  ['day','night'].forEach(line=>{if(chg[line])F.push({kind:'chg',sev:'red',role:'RN',line,
+    title:'Charge nurse missing — '+line,reason:'No charge-trained nurse on '+chg[line]+' '+line+' shift'+(chg[line]>1?'s':'')+'. Overtime from a charge-trained nurse can cover it.'});});
   const wkShort=staff.filter(p=>!p.orientee&&weekendQuota(p)&&p.weCount<weekendQuota(p));
-  if(wkShort.length)F.push({sev:'amber',title:wkShort.length+' staff short on weekend shifts',solution:'Open Month view, pick a person, and tap a Sat/Sun to add one.',fixable:false});
+  if(wkShort.length)F.push({kind:'info',sev:'amber',title:wkShort.length+' staff short on weekend shifts',reason:'Open Month view, pick a person, and tap a Sat/Sun to add one.'});
   F.sort((a,b)=>(a.sev==='red'?0:1)-(b.sev==='red'?0:1));
   $('flagCount').textContent=F.length?F.length:'';
-  if(!F.length){$('flags').innerHTML='<div class="flag-ok">✓ Everything’s covered. Nice!</div>';return;}
+  if(!F.length){$('flags').innerHTML='<div class="flag-ok">✓ All shifts solved — nothing to fix.</div>';return;}
   let h='';
-  F.slice(0,40).forEach(f=>{
-    h+='<div class="flag '+(f.sev==='amber'?'amber':'')+'"><span class="dot"></span><div class="fbody"><b>'+f.title+'</b><div class="sub">'+f.solution+'</div></div>'+(f.fixable?'<button class="flagfix" data-fix="'+f.key+'">'+(openFlag===f.key?'Close':'Fix')+'</button>':'')+'</div>';
-    if(f.fixable&&openFlag===f.key){
-      const av=staff.filter(p=>p.role===f.role&&p.line===f.line&&!p.orientee&&available(p,f.day)&&(!f.charge||p.charge)).sort((a,b)=>score(b,f.day)-score(a,f.day)).slice(0,12);
-      h+='<div class="flagpick">'+(av.length?'<div class="pklist">'+av.map(p=>'<button class="pkitem" data-fixadd="'+p.id+'|'+f.day+'">'+(p.charge?'<i class="cd"></i>':'')+firstName(p.name)+'<span class="sub">'+fteWord(p.fte)+'</span></button>').join('')+'</div>':'<div class="pkempty" style="padding:10px 16px">No one free for this shift — open Month view and drag someone over from a fuller day.</div>')+'</div>';
-    }
+  F.forEach(f=>{
+    h+='<div class="flag '+(f.sev==='amber'?'amber':'')+'"><span class="dot"></span><div class="fbody"><b>'+f.title+'</b><div class="sub">'+f.reason+'</div>';
+    if(f.kind==='cov'||f.kind==='chg'){h+='<div class="flagopts">'+
+      '<button class="optbtn ot" data-otall="'+f.kind+'|'+f.role+'|'+f.line+'">Use overtime</button>'+
+      (f.kind==='cov'?'<button class="optbtn ghost" data-lower="'+f.role+'|'+f.line+'">Lower target</button>':'')+
+      '</div>';}
+    h+='</div></div>';
   });
-  if(F.length>40)h+='<div class="flag"><span class="dot" style="background:var(--faint)"></span><div class="sub">+'+(F.length-40)+' more…</div></div>';
   $('flags').innerHTML=h;
 }
 
@@ -826,7 +995,23 @@ $('calCard').addEventListener('click',e=>{
 $('calCard').addEventListener('pointerdown',e=>{if(calMode!=='edit')return;const cell=e.target.closest('.calcell.edit');if(!cell)return;const d=+cell.dataset.d;const p=editPerson();if(!p||p.pto.has(d))return;paintAdd=!p.asn.has(d);painting=true;calApply(d);e.preventDefault();});
 $('calCard').addEventListener('pointermove',e=>{if(!painting||calMode!=='edit')return;const t=document.elementFromPoint(e.clientX,e.clientY);const cell=t&&t.closest&&t.closest('.calcell.edit');if(cell)calApply(+cell.dataset.d);e.preventDefault();});
 window.addEventListener('pointerup',()=>{if(painting){painting=false;computeCoverage();renderFlags();}});
-$('flags').addEventListener('click',e=>{const fx=e.target.closest('[data-fix]'),fa=e.target.closest('[data-fixadd]');if(fx){openFlag=openFlag===fx.dataset.fix?null:fx.dataset.fix;renderFlags();return;}if(fa){const a=fa.dataset.fixadd.split('|');assign(staff.find(p=>p.id==+a[0]),+a[1]);openFlag=null;computeCoverage();if(schedView==='month')renderCalendar();else{renderRibbon();renderDay();}renderFlags();toast('Added — nice');}});
+$('flags').addEventListener('click',e=>{
+  const oa=e.target.closest('[data-otall]'),lo=e.target.closest('[data-lower]');
+  if(oa){const[kind,role,line]=oa.dataset.otall.split('|');
+    for(let d=0;d<DAYS;d++){const rq=reqEff(role,line,d);let guard=0;
+      const need=()=>kind==='chg'?(line==='day'?coverage[d].chgDay:coverage[d].chgNight)<settings.chargeMin:shiftCount(role,line,d)<rq.ideal;
+      while(need()&&guard++<20){
+        const c=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&(kind!=='chg'||p.charge)&&availableOT(p,d)).sort((a,b)=>a.asn.size-b.asn.size)[0];
+        if(!c)break;assign(c,d);computeCoverage();}
+    }
+    computeCoverage();if(schedView==='month')renderCalendar();else{renderRibbon();renderDay();}renderFlags();toast('Overtime applied where possible');return;}
+  if(lo){const[role,line]=lo.dataset.lower.split('|');
+    if(role==='RN'&&line==='day'){settings.rnDayIdeal=Math.max(1,settings.rnDayIdeal-1);settings.rnDayMin=Math.min(settings.rnDayMin,settings.rnDayIdeal);}
+    else if(role==='RN'&&line==='night'){settings.rnNightIdeal=Math.max(1,settings.rnNightIdeal-1);settings.rnNightMin=Math.min(settings.rnNightMin,settings.rnNightIdeal);}
+    else if(role==='PCT'){settings.pctIdeal=Math.max(1,settings.pctIdeal-1);settings.pctMin=Math.min(settings.pctMin,settings.pctIdeal);}
+    else if(role==='HUC'){settings.hucNeed=Math.max(0,settings.hucNeed-1);}
+    save();build();if(schedView==='month')renderCalendar();else{renderRibbon();renderDay();}renderFlags();toast('Target lowered — rebuilt');return;}
+});
 
 /* ============ events ============ */
 $('search').addEventListener('input',e=>{searchTxt=e.target.value;renderPeople();});
@@ -846,6 +1031,13 @@ $('customCard').addEventListener('click',e=>{
   const am=e.target.closest('[data-amin]');if(am){ruleDraft.min=Math.max(0,Math.min(20,ruleDraft.min+ +am.dataset.amin));if($('ruleName'))ruleDraft.name=$('ruleName').value;renderCustom();return;}
   if(e.target.closest('#ruleSave')){const nm=($('ruleName')?$('ruleName').value:'').trim();if(ruleDraft.note&&!nm){toast('Give the note a name');return;}settings.customRules=settings.customRules||[];settings.customRules.push({name:nm,note:ruleDraft.note,role:ruleDraft.role,line:ruleDraft.line,min:ruleDraft.min});addingRule=false;renderCustom();rulesChanged();toast('Rule added');return;}
   const dr=e.target.closest('[data-delrule]');if(dr){settings.customRules.splice(+dr.dataset.delrule,1);renderCustom();rulesChanged();toast('Rule removed');return;}
+});
+$('codesCard').addEventListener('click',e=>{
+  if(e.target.closest('#addCodeBtn')){addingCode=true;codeDraft={code:'',cat:'off'};renderCodes();return;}
+  if(e.target.closest('#codeCancel')){addingCode=false;renderCodes();return;}
+  const cc=e.target.closest('[data-ccat]');if(cc){codeDraft.cat=cc.dataset.ccat;if($('codeText'))codeDraft.code=$('codeText').value;renderCodes();return;}
+  if(e.target.closest('#codeSave')){const t=($('codeText')?$('codeText').value:'').trim();if(!t){toast('Type the code');return;}settings.codeMap=settings.codeMap||[];settings.codeMap.push({code:t,cat:codeDraft.cat});addingCode=false;renderCodes();save();toast('Code added');return;}
+  const dc=e.target.closest('[data-delcode]');if(dc){settings.codeMap.splice(+dc.dataset.delcode,1);renderCodes();save();toast('Code removed');return;}
 });
 $('holidaysCard').addEventListener('click',e=>{
   const hs=e.target.closest('[data-hstep]');if(hs){const[k,dv]=hs.dataset.hstep.split('|');settings[k]=Math.max(0,Math.min(20,(settings[k]||0)+ +dv));renderHolidays();rulesChanged();return;}
@@ -922,9 +1114,9 @@ $('personSave').onclick=()=>{
   if(editId==null){const id=staff.length?Math.max(...staff.map(p=>p.id))+1:0;
     staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0}));toast('Added '+firstName(name));}
   else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor});toast('Saved');}
-  built=false;save();$('personOverlay').classList.remove('show');renderPeople();
+  $('personOverlay').classList.remove('show');rosterChanged();
 };
-$('personDelete').onclick=()=>{if(editId==null)return;if(!confirm('Remove this person?'))return;staff=staff.filter(p=>p.id!==editId);built=false;save();$('personOverlay').classList.remove('show');renderPeople();toast('Removed');};
+$('personDelete').onclick=()=>{if(editId==null)return;if(!confirm('Remove this person? Their shifts will be reassigned.'))return;staff=staff.filter(p=>p.id!==editId);$('personOverlay').classList.remove('show');rosterChanged();toast('Removed — schedule updated');};
 
 function exportCSV(){
   const groups=[['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']];
@@ -956,30 +1148,81 @@ function nameKeys(name){const t=normName(name).split(' ').filter(Boolean);const 
   k.add(t.join(' '));if(t.length>=2){k.add(t.slice(1).concat(t[0]).join(' '));k.add(t[0]+' '+t[t.length-1]);k.add(t[t.length-1]+' '+t[0]);k.add(t[t.length-1]+' '+t[0][0]);}return k;}
 function nameIndex(){const idx={};for(const p of staff)for(const key of nameKeys(p.name))if(!(key in idx))idx[key]=p;return idx;}
 function matchStaff(idx,name){for(const key of nameKeys(name))if(idx[key])return idx[key];return null;}
-function processImport(rows){
-  if(!rows.length){return showImportResult(false,'That file looks empty.');}
-  const header=rows[0];
-  let nameCol=header.findIndex(h=>/name/i.test(h));if(nameCol<0)nameCol=0;
-  const dayCols=[];header.forEach((h,i)=>{const m=/^\s*D(\d+)/i.exec(h);if(m){const dn=+m[1]-1;if(dn>=0&&dn<DAYS)dayCols.push([i,dn]);}});
-  if(!dayCols.length)return showImportResult(false,"I couldn't find the day columns. Use the blank template above so the columns line up, then try again.");
-  const idx=nameIndex();let matched=0;const unmatched=[];
-  for(let r=1;r<rows.length;r++){const row=rows[r];if(!row||!row.join('').trim())continue;
-    const nm=(row[nameCol]||'').trim();if(!nm)continue;
-    const p=matchStaff(idx,nm);if(!p){unmatched.push(nm);continue;}
-    const picks=new Set(),pto=new Set();
-    for(const [ci,dn] of dayCols){const v=(row[ci]||'').trim().toUpperCase();if(!v)continue;
-      if(v.indexOf('OFF')>=0||v.indexOf('PTO')>=0||v==='TO'||v==='VAC')pto.add(dn);else picks.add(dn);}
-    p.picks=picks;p.pto=pto;p.imported=true;matched++;
+const MONTHS3=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+function headerToDay(h){
+  if(h==null||h==='')return -1;
+  const tpl=/^\s*D(\d+)/i.exec(''+h);if(tpl){const dn=+tpl[1]-1;return(dn>=0&&dn<DAYS)?dn:-1;}
+  let dt=null;
+  if(h instanceof Date&&!isNaN(h))dt=h;
+  else{const s=(''+h).trim();
+    const md=/(\d{1,2})[\/\-.](\d{1,2})(?:[\/\-.](\d{2,4}))?/.exec(s);
+    if(md){const mo=+md[1],da=+md[2];for(let d=0;d<DAYS;d++){const x=dateOf(d);if(x.getMonth()+1===mo&&x.getDate()===da)return d;}}
+    const mm=/([a-z]{3,})\.?\s*(\d{1,2})|(\d{1,2})\s*([a-z]{3,})/i.exec(s);
+    if(mm){const nm=(mm[1]||mm[4]||'').slice(0,3).toLowerCase();const da=+(mm[2]||mm[3]);const mo=MONTHS3.indexOf(nm)+1;if(mo>0)for(let d=0;d<DAYS;d++){const x=dateOf(d);if(x.getMonth()+1===mo&&x.getDate()===da)return d;}}
+    const t=Date.parse(s);if(!isNaN(t))dt=new Date(t);
   }
-  picksSource='imported';built=false;save();
-  showImportResult(true,`Matched <b>${matched}</b> people.`,unmatched);
+  if(dt&&!isNaN(dt)){for(let d=0;d<DAYS;d++){const x=dateOf(d);if(x.getFullYear()===dt.getFullYear()&&x.getMonth()===dt.getMonth()&&x.getDate()===dt.getDate())return d;}
+    for(let d=0;d<DAYS;d++){const x=dateOf(d);if(x.getMonth()===dt.getMonth()&&x.getDate()===dt.getDate())return d;}}
+  return -1;
 }
-function showImportResult(ok,msg,unmatched){
+let _xlsxP=null;
+function loadXLSX(){if(window.XLSX)return Promise.resolve(window.XLSX);if(_xlsxP)return _xlsxP;
+  _xlsxP=new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=()=>res(window.XLSX);s.onerror=()=>rej(new Error('x'));document.head.appendChild(s);});
+  return _xlsxP;}
+function classifyCell(raw){
+  let v=(raw==null?'':String(raw)).trim();if(!v)return 'none';const u=v.toUpperCase();
+  const cm=settings.codeMap||[];
+  for(const m of cm){if(m.code&&u===m.code.toUpperCase().trim())return m.cat;}
+  for(const m of cm){if(m.code){const c=m.code.toUpperCase().trim();if(c&&u.indexOf(c)>=0)return m.cat;}}
+  if(/\b(PTO|FMLA|LOA|VAC|VACATION|SICK|JURY|BEREAV|MILITARY|MATERNITY|PATERNITY|FUNERAL|UNPAID|EIB|HOLIDAY|HOL|LEAVE)\b/.test(u))return 'off';
+  if(/\b(REQ\s*OFF|REQUEST\s*OFF|REQUESTED\s*OFF|PREFER\s*OFF|PREF\s*OFF|DNW|DON'?T|PNW|NOT\s*AVAIL|UNAVAIL|NW|NO)\b/.test(u)||u==='OFF'||u==='O'||u==='X')return 'avoid';
+  return 'want';
+}
+function processImport(rows){
+  if(!rows||!rows.length)return showImportResult(false,'That file looks empty.');
+  const idx=nameIndex();
+  let headerRow=-1,dayCols=[];
+  for(let r=0;r<Math.min(8,rows.length);r++){const dc=[];(rows[r]||[]).forEach((h,i)=>{const dn=headerToDay(h);if(dn>=0)dc.push([i,dn]);});if(dc.length>dayCols.length){dayCols=dc;headerRow=r;}}
+  let matched=0;const unmatched=[],preview=[];let totOff=0,totAvoid=0,totWant=0;
+  const apply=(p,cat,dn)=>{if(cat==='off')p.pto.add(dn);else if(cat==='avoid')p.avoid.add(dn);else if(cat==='want')p.picks.add(dn);};
+  if(dayCols.length>=3){
+    const dataRows=rows.slice(headerRow+1).filter(rw=>rw&&rw.join('').trim());
+    let nameCol=0,bestN=-1;const ncMax=Math.max(0,...rows.map(rw=>rw?rw.length:0));
+    for(let ci=0;ci<ncMax;ci++){let cnt=0;for(const rw of dataRows)if(matchStaff(idx,String(rw[ci]==null?'':rw[ci]).trim()))cnt++;if(cnt>bestN){bestN=cnt;nameCol=ci;}}
+    for(const rw of dataRows){const nm=String(rw[nameCol]==null?'':rw[nameCol]).trim();if(!nm)continue;
+      const p=matchStaff(idx,nm);if(!p){unmatched.push(nm);continue;}
+      p.picks=new Set();p.pto=new Set();p.avoid=new Set();
+      for(const [ci,dn] of dayCols){const cat=classifyCell(rw[ci]);if(cat==='none')continue;apply(p,cat,dn);if(cat==='off')totOff++;else if(cat==='avoid')totAvoid++;else totWant++;}
+      p.imported=true;matched++;
+      if(preview.length<6)preview.push({name:p.name,off:[...p.pto].sort((a,b)=>a-b),avoid:[...p.avoid].sort((a,b)=>a-b),work:[...p.picks].sort((a,b)=>a-b)});
+    }
+  } else {
+    const allRows=rows.filter(rw=>rw&&rw.join('').trim());const ncMax=Math.max(0,...allRows.map(rw=>rw.length));
+    let nameCol=-1,bestN=0,dateCol=-1,bestD=0;
+    for(let ci=0;ci<ncMax;ci++){let nC=0,dC=0;for(const rw of allRows){const cell=String(rw[ci]==null?'':rw[ci]).trim();if(matchStaff(idx,cell))nC++;if(headerToDay(rw[ci])>=0)dC++;}
+      if(nC>bestN){bestN=nC;nameCol=ci;}if(dC>bestD){bestD=dC;dateCol=ci;}}
+    if(nameCol<0||dateCol<0||bestN===0||bestD===0)return showImportResult(false,"I couldn\u2019t recognise this layout. It works best with a names column plus either date columns or a single Date column. Send me a screenshot and I\u2019ll match it.");
+    let typeCol=-1,bestT=-1;
+    for(let ci=0;ci<ncMax;ci++){if(ci===nameCol||ci===dateCol)continue;let t=0;for(const rw of allRows){const c=classifyCell(rw[ci]);if(c==='off'||c==='avoid')t++;}if(t>bestT){bestT=t;typeCol=ci;}}
+    const seen=new Set();
+    for(const rw of allRows){const p=matchStaff(idx,String(rw[nameCol]==null?'':rw[nameCol]).trim());const dn=headerToDay(rw[dateCol]);if(!p||dn<0)continue;
+      if(!seen.has(p.id)){seen.add(p.id);p.picks=new Set();p.pto=new Set();p.avoid=new Set();matched++;}
+      let cat=typeCol>=0?classifyCell(rw[typeCol]):'off';if(cat==='none')cat='off';
+      apply(p,cat,dn);if(cat==='off')totOff++;else if(cat==='avoid')totAvoid++;else totWant++;p.imported=true;}
+    staff.filter(p=>p.imported).slice(0,6).forEach(p=>preview.push({name:p.name,off:[...p.pto].sort((a,b)=>a-b),avoid:[...p.avoid].sort((a,b)=>a-b),work:[...p.picks].sort((a,b)=>a-b)}));
+  }
+  if(!matched)return showImportResult(false,'I read the file but couldn\u2019t match any names to your roster. Check names match the People list, or send a screenshot.',unmatched);
+  picksSource='imported';built=false;save();
+  showImportResult(true,'Matched <b>'+matched+'</b> people \u2014 read <b>'+totWant+'</b> shift requests, <b>'+totAvoid+'</b> prefer-off, <b>'+totOff+'</b> PTO/leave.',unmatched,preview);
+}
+function showImportResult(ok,msg,unmatched,preview){
   let h=`<div class="card" style="padding:13px 15px;border-color:${ok?'#bfe2cd':'#e7c4c1'}">
     <div style="font-weight:600;color:${ok?'var(--green)':'var(--red)'}">${ok?'✓ Imported':'⚠ Could not import'}</div>
     <div style="font-size:13.5px;margin-top:3px">${msg}</div>`;
-  if(unmatched&&unmatched.length){h+=`<div style="font-size:12.5px;color:var(--muted);margin-top:8px">Not matched (check spelling, or add them in People): ${unmatched.slice(0,12).map(x=>x.replace(/</g,'')).join(', ')}${unmatched.length>12?` +${unmatched.length-12} more`:''}</div>`;}
-  if(ok)h+=`<div style="font-size:13px;color:var(--teal-deep);margin-top:8px">Now close this and tap ✨ Build.</div>`;
+  if(ok&&preview&&preview.length){h+=`<div style="font-size:12.5px;color:var(--muted);margin-top:9px"><b style="color:var(--ink)">Quick check — did I read these right?</b><br>`+
+    preview.map(x=>{const parts=[];if(x.work&&x.work.length)parts.push('wants '+x.work.map(fmtDate).join(', '));if(x.avoid&&x.avoid.length)parts.push('prefers off '+x.avoid.map(fmtDate).join(', '));if(x.off&&x.off.length)parts.push('PTO/leave '+x.off.map(fmtDate).join(', '));return '• '+x.name+' — '+(parts.length?parts.join('; '):'no requests');}).join('<br>')+`</div>`;}
+  if(unmatched&&unmatched.length){h+=`<div style="font-size:12.5px;color:var(--muted);margin-top:8px">Not matched (check spelling, or add them in People): ${unmatched.slice(0,12).map(x=>(''+x).replace(/</g,'')).join(', ')}${unmatched.length>12?` +${unmatched.length-12} more`:''}</div>`;}
+  if(ok)h+=`<div style="font-size:13px;color:var(--teal-deep);margin-top:8px">Looks right? Close this and tap ✨ Build. If not, re-upload or fix names in People.</div>`;
   h+='</div>';$('importResult').innerHTML=h;
 }
 function downloadTemplate(){
@@ -996,14 +1239,137 @@ $('importClose').onclick=()=>{$('importOverlay').classList.remove('show');render
 $('importOverlay').addEventListener('click',e=>{if(e.target.id==='importOverlay')$('importOverlay').classList.remove('show');});
 $('tmplBtn').onclick=downloadTemplate;
 $('chooseFileBtn').onclick=()=>$('fileInput').click();
-$('fileInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();
-  rd.onload=()=>{try{processImport(parseCSV(rd.result));}catch(err){showImportResult(false,'Sorry, I had trouble reading that file.');}};
-  rd.readAsText(f);e.target.value='';});
+$('fileInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const nm=f.name.toLowerCase();
+  if(/\.(xlsx|xls)$/.test(nm)){
+    $('importResult').innerHTML='<div style="font-size:13px;color:var(--muted);padding:6px 2px">Reading your Excel file\u2026</div>';
+    loadXLSX().then(XLSX=>{const rd=new FileReader();rd.onload=()=>{try{const wb=XLSX.read(new Uint8Array(rd.result),{type:'array',cellDates:true});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});processImport(rows);}catch(err){showImportResult(false,'I had trouble reading that Excel file. You can also save it as CSV and upload that.');}};rd.readAsArrayBuffer(f);})
+    .catch(()=>showImportResult(false,'I couldn\u2019t load the Excel reader (need internet for that step). Save the file as CSV and upload it instead.'));
+  }else{const rd=new FileReader();rd.onload=()=>{try{processImport(parseCSV(rd.result));}catch(err){showImportResult(false,'Sorry, I had trouble reading that file.');}};rd.readAsText(f);}
+  e.target.value='';});
+
+/* ============ staff / clock / attendance ============ */
+function meUser(){return currentUser&&currentUser.id!=null?staff.find(p=>p.id===currentUser.id):null;}
+function hrsBetween(a,b){if(!a||!b)return '';let m=Math.round((b-a)/60000);const h=Math.floor(m/60);m=m%60;return h+'h'+(m?' '+m+'m':'');}
+function populateLogin(){const sel=$('loginStaff');if(!sel)return;sel.innerHTML='<option value="">Choose your name…</option>'+staff.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`<option value="${p.id}">${p.name} · ${p.role}${p.line&&p.role!=='HUC'?' '+p.line:''}</option>`).join('');}
+function applyRole(){
+  const sm=currentUser&&currentUser.role==='staff';
+  $('tabbar').classList.toggle('hide',sm);
+  $('screen-staff').classList.toggle('hide',!sm);
+  if(sm){
+    ['people','rules','sched'].forEach(x=>$('screen-'+x).classList.add('hide'));
+    $('addFab').classList.add('hide');
+    const p=meUser();$('unitSub').textContent=(p?p.name.split(' ')[0]:'Staff')+' · '+(settings.unitName||'10G');
+    renderStaff();
+  }else{
+    $('unitSub').textContent=(settings.unitName||'10G')+' · 32 beds';
+    show('people');
+  }
+}
+function renderStaff(){
+  const p=meUser();
+  if(!p){currentUser=null;try{localStorage.removeItem(KEY_U)}catch(e){}populateLogin();$('loginOverlay').classList.add('show');return;}
+  $('staffHi').textContent='Hi, '+p.name.split(' ')[0];
+  $('staffSub').textContent=p.role+(p.role!=='HUC'?' · '+(p.line==='day'?'Days':'Nights'):'')+' · '+(settings.unitName||'10G');
+  const iso=todayISO(),rec=p.clock[iso]||{},onDuty=rec.in&&!rec.out;
+  const dT=cycleDayToday(),schedToday=dT>=0&&p.asn.has(dT);
+  let cl=`<div class="clk-head"><div class="clk-when">${new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})}</div>`;
+  cl+=`<div class="clk-stat ${onDuty?'on':rec.out?'done':''}">${onDuty?'On duty since '+fmtClock(rec.in):rec.out?'Clocked out · '+hrsBetween(rec.in,rec.out):schedToday?'Scheduled today — not clocked in':'Not scheduled today'}</div></div>`;
+  if(onDuty)cl+=`<button class="clk-btn out" id="clockBtn">Clock out</button>`;
+  else if(rec.out)cl+=`<div class="clk-note">Have a good rest — see you next shift.</div>`;
+  else cl+=`<button class="clk-btn in" id="clockBtn">Clock in for duty</button>`;
+  if(settings.unitLat==null&&!settings.unitCode)cl+=`<div class="clk-note warn">Your manager hasn’t set the unit location yet, so clock-in isn’t locked to the unit.</div>`;
+  $('clockCard').innerHTML=cl;
+  const start=Math.max(0,dT);
+  const days=[...p.asn].filter(d=>d>=start).sort((a,b)=>a-b).slice(0,8);
+  $('myShiftsCard').innerHTML=days.length?days.map(d=>{const dt=dateOf(d);return `<div class="rule"><div class="rl"><b>${dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</b><span>${p.line==='day'?'Day 7a–7p':'Night 7p–7a'}${isHoliday(d)?' · ★ holiday':''}</span></div></div>`;}).join(''):`<div style="padding:16px;color:var(--faint)">No upcoming shifts yet. Your manager builds the schedule.</div>`;
+  const ssect=$('myReqCard').previousElementSibling;
+  if(!settings.selfSchedule){$('myReqCard').classList.add('hide');if(ssect&&ssect.classList.contains('sect'))ssect.classList.add('hide');}
+  else{$('myReqCard').classList.remove('hide');if(ssect&&ssect.classList.contains('sect'))ssect.classList.remove('hide');renderMyReq(p);}
+}
+function renderMyReq(p){
+  const start=Math.max(0,cycleDayToday());let h='';
+  for(let d=start;d<Math.min(DAYS,start+14);d++){const dt=dateOf(d);const st=p.pto.has(d)?'pto':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';
+    h+=`<div class="dayreq"><div class="rl"><b>${dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}</b></div><div class="reqbtns"><button class="rqb want${st==='want'?' on':''}" data-rq="want" data-d="${d}">Work</button><button class="rqb off${st==='off'?' on':''}" data-rq="off" data-d="${d}">Off</button><button class="rqb pto${st==='pto'?' on':''}" data-rq="pto" data-d="${d}">PTO</button></div></div>`;}
+  $('myReqCard').innerHTML=h||`<div style="padding:16px;color:var(--faint)">No dates in this schedule period.</div>`;
+}
+function setReq(p,d,k){
+  const was=p.pto.has(d)?'pto':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';
+  p.pto.delete(d);if(p.avoid)p.avoid.delete(d);p.picks.delete(d);
+  if(was!==k){if(k==='pto')p.pto.add(d);else if(k==='off'){(p.avoid=p.avoid||new Set()).add(d);}else p.picks.add(d);}
+  p.imported=true;save();renderStaff();
+  toast(was===k?'Cleared':k==='want'?'Asked to work':k==='off'?'Asked for off':'PTO requested');
+}
+function doClockIn(p){
+  const finish=()=>{const iso=todayISO();p.clock[iso]=p.clock[iso]||{};p.clock[iso].in=Date.now();save();renderStaff();toast('Clocked in — have a great shift');};
+  const code=(d)=>{const c=prompt((d?('You seem about '+d+'m away. '):'')+'Enter the unit code posted at the nurses’ station:');if(c==null)return;if(String(c).trim().toUpperCase()===String(settings.unitCode).trim().toUpperCase())finish();else toast('That code doesn’t match. Ask your charge nurse.');};
+  if(settings.unitLat!=null&&typeof navigator!=='undefined'&&navigator.geolocation){
+    toast('Checking you’re on the unit…');
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const dist=haversine(pos.coords.latitude,pos.coords.longitude,settings.unitLat,settings.unitLng);
+      if(dist<=(settings.unitRadius||150)+(pos.coords.accuracy||0))finish();
+      else if(settings.unitCode)code(Math.round(dist));
+      else toast('You’re about '+Math.round(dist)+'m from the unit. Clock in once you’re there.');
+    },err=>{if(settings.unitCode)code();else toast('Couldn’t check your location. Turn on location access, or ask your manager for a unit code.');},{enableHighAccuracy:true,timeout:8000});
+  }else if(settings.unitCode){code();}
+  else finish();
+}
+function renderClockSetup(){
+  const s=settings,locSet=s.unitLat!=null;
+  let h=`<div style="padding:14px 16px 4px"><b style="font-size:15px">Clock-in & location</b><div class="sub">Staff can only clock in when they’re at the unit. Set the unit’s spot, or give a code posted at the station.</div></div>`;
+  h+=`<div class="toggle" style="padding:10px 16px"><div><b>Staff submit requests?</b><span>Off = you build the schedule top-down (no staff requests)</span></div><button class="sw-toggle ${s.selfSchedule?'on':''}" data-tog="self"><i></i></button></div>`;
+  h+=`<div class="rule"><div class="rl"><b>Unit name</b></div><input id="unitNameInp" value="${(s.unitName||'').replace(/"/g,'&quot;')}" style="${INP};max-width:130px"></div>`;
+  h+=`<div class="rule"><div class="rl"><b>Unit location</b><span>${locSet?('Set ✓ · staff must be within '+(s.unitRadius||150)+'m'):'Not set yet'}</span></div><button class="bigaction grey" id="useLoc" style="width:auto;padding:11px 13px;min-height:auto;font-size:13px">📍 Use current</button></div>`;
+  h+=`<div class="rule"><div class="rl"><b>How close (meters)</b><span>Bigger = more forgiving indoors</span></div><div class="stepper"><button data-rad="-1">−</button><div class="val">${s.unitRadius||150}</div><button data-rad="1">+</button></div></div>`;
+  h+=`<div class="rule"><div class="rl"><b>Unit code</b><span>Optional backup if phone location is off</span></div><input id="unitCodeInp" value="${(s.unitCode||'').replace(/"/g,'&quot;')}" placeholder="e.g. 10G24" style="${INP};max-width:120px"></div>`;
+  if(locSet)h+=`<div style="padding:10px 16px"><button class="bigaction ghost" id="clearLoc">Clear saved location</button></div>`;
+  $('clockSetupCard').innerHTML=h;
+}
+function grabLocation(){
+  if(typeof navigator==='undefined'||!navigator.geolocation){toast('This phone can’t share location. Use a unit code instead.');return;}
+  toast('Getting the unit’s location…');
+  navigator.geolocation.getCurrentPosition(pos=>{settings.unitLat=pos.coords.latitude;settings.unitLng=pos.coords.longitude;save();renderClockSetup();toast('Unit location saved ✓');},err=>{toast('Couldn’t get location. Allow location access, or use a unit code.');},{enableHighAccuracy:true,timeout:8000});
+}
+function renderToday(){
+  const d=cycleDayToday(),iso=todayISO();
+  let h=`<div style="padding:14px 16px 6px"><b style="font-size:15px">Today on the unit</b><div class="sub">${d>=0?dateOf(d).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}):'Today is outside this schedule period.'}</div></div>`;
+  if(d>=0){
+    ['day','night'].forEach(line=>{
+      const ppl=staff.filter(p=>p.asn.has(d)&&p.line===line).sort((a,b)=>a.name.localeCompare(b.name));
+      if(!ppl.length)return;
+      const inCt=ppl.filter(p=>(p.clock[iso]||{}).in).length;
+      h+=`<div class="sect" style="margin:14px 16px 4px">${line==='day'?'Day shift':'Night shift'} · ${inCt}/${ppl.length} clocked in</div>`;
+      h+=ppl.map(p=>{const r=p.clock[iso]||{};const stat=r.in&&!r.out?'in since '+fmtClock(r.in):r.out?'done · '+hrsBetween(r.in,r.out):'not in yet';const cls=r.in&&!r.out?'good':r.out?'mid':'low';return `<div class="rule"><div class="rl"><b>${p.name}</b><span>${p.role}</span></div><span class="reqbadge ${cls}">${stat}</span></div>`;}).join('');
+    });
+  }else h+=`<div style="padding:8px 16px 16px;color:var(--muted)">Set the schedule period in Rules to cover today, then staff will appear here as they clock in.</div>`;
+  $('todayCard').innerHTML=h;
+}
+/* listeners */
+$('switchBtn').onclick=()=>{populateLogin();$('loginOverlay').classList.add('show');};
+$('loginMgr').onclick=()=>{currentUser={role:'manager'};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser))}catch(e){}$('loginOverlay').classList.remove('show');applyRole();};
+$('loginStaffGo').onclick=()=>{const id=+$('loginStaff').value;if(!id){toast('Pick your name first');return;}currentUser={role:'staff',id};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser))}catch(e){}$('loginOverlay').classList.remove('show');applyRole();};
+$('screen-staff').addEventListener('click',e=>{
+  const p=meUser();if(!p)return;
+  if(e.target.closest('#clockBtn')){const iso=todayISO(),rec=p.clock[iso]||{};if(rec.in&&!rec.out){p.clock[iso].out=Date.now();save();renderStaff();toast('Clocked out — '+hrsBetween(rec.in,p.clock[iso].out));}else if(!rec.in){doClockIn(p);}return;}
+  if(e.target.closest('#staffSwitch')){populateLogin();$('loginOverlay').classList.add('show');return;}
+  const rq=e.target.closest('.rqb');if(rq){setReq(p,+rq.dataset.d,rq.dataset.rq);return;}
+});
+$('clockSetupCard').addEventListener('click',e=>{
+  if(e.target.closest('[data-tog]')){settings.selfSchedule=!settings.selfSchedule;renderClockSetup();save();toast(settings.selfSchedule?'Staff can submit requests':'Manager-built schedule');return;}
+  if(e.target.closest('#useLoc')){grabLocation();return;}
+  if(e.target.closest('#clearLoc')){settings.unitLat=null;settings.unitLng=null;save();renderClockSetup();toast('Location cleared');return;}
+  const r=e.target.closest('[data-rad]');if(r){settings.unitRadius=Math.max(25,(settings.unitRadius||150)+(+r.dataset.rad)*25);renderClockSetup();save();return;}
+});
+$('clockSetupCard').addEventListener('change',e=>{
+  if(e.target.id==='unitNameInp'){settings.unitName=e.target.value.trim()||'10G';save();$('unitSub').textContent=settings.unitName+' · 32 beds';}
+  if(e.target.id==='unitCodeInp'){settings.unitCode=e.target.value.trim();save();}
+});
 
 /* ============ init ============ */
 const hadData=load();applyPeriod();picksSource=staff.some(p=>p.imported)?'imported':'sample';
-if(!hadData)$('welcomeOverlay').classList.add('show');
-show('people');
+try{const u=localStorage.getItem(KEY_U);if(u)currentUser=JSON.parse(u);}catch(e){}
+populateLogin();
+if(!hadData){$('welcomeOverlay').classList.add('show');currentUser={role:'manager'};try{localStorage.setItem(KEY_U,JSON.stringify(currentUser));}catch(e){}}
+if(!currentUser){$('loginOverlay').classList.add('show');show('people');}else applyRole();
 </script>
 </body>
 </html>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>EvenShift Schedule</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+:root{
+  --teal:#0f766e;--teal-deep:#0b5650;--teal-soft:#e3f1ef;
+  --ink:#16202e;--muted:#5d6b7a;--faint:#8c98a6;
+  --line:#e3e8ed;--line-strong:#cfd7df;--paper:#fff;--bg:#eceff3;
+  --green:#2f8f5b;--amber:#bd8311;--red:#c0413b;
+  --night:#4456b8;--night-bg:#e9ecf9;--violet:#7a52c7;
+  --shadow:0 1px 2px rgba(20,32,46,.06),0 6px 20px rgba(20,32,46,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+button{font-family:inherit;cursor:pointer}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
+.mono{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace}
+.hide{display:none!important}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--ink);color:#fff;padding:11px 16px;padding-top:max(11px,env(safe-area-inset-top));position:sticky;top:0;z-index:40}
+.brand{display:flex;align-items:center;gap:9px}
+.mark{width:30px;height:30px;border-radius:8px;background:var(--teal);display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.mark svg{width:17px;height:17px}
+.brand b{font-size:15.5px;letter-spacing:-.02em}
+.brand span{display:block;font-size:11px;color:#aeb9c5;margin-top:-1px}
+.unittag{font-size:12px;color:#c4cdd6}.unittag b{color:#fff}
+.topbar .spacer{flex:1;min-width:8px}
+.topbar button{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14);padding:9px 14px;border-radius:9px;font-size:13px;font-weight:500;white-space:nowrap;min-height:40px}
+.topbar button.primary{background:var(--teal);border-color:var(--teal)}
+.topbar button:active{transform:scale(.97)}
+@media(max-width:560px){.unittag{display:none}.brand span{display:none}}
+
+/* LAYOUT (mobile-first single column) */
+.wrap{max-width:1480px;margin:0 auto;padding:14px}
+.row{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+.main{display:flex;flex-direction:column;gap:14px}
+.side{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.card-h{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.card-h h2{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.card-h .tag{margin-left:auto;font-size:11px;color:var(--faint)}
+
+/* CONTROL BAR */
+.controlbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.viewtabs{display:flex;flex:1;background:#fff;border:1px solid var(--line);border-radius:11px;padding:4px;box-shadow:var(--shadow)}
+.viewtabs button{flex:1;border:none;background:none;padding:11px;border-radius:8px;font-size:14px;font-weight:600;color:var(--muted);min-height:44px}
+.viewtabs button.on{background:var(--teal);color:#fff}
+.controlbar .gap{display:none}
+.ghostbtn{background:#fff;border:1px solid var(--line-strong);border-radius:10px;padding:10px 14px;font-size:13.5px;font-weight:500;color:var(--ink);box-shadow:var(--shadow);min-height:44px}
+.ghostbtn.warn{color:var(--red);border-color:#e7c4c1}
+
+/* SETTINGS */
+.settings{overflow:hidden}
+.settings .card-h{cursor:pointer}
+.settings .chev{margin-left:auto;color:var(--faint);transition:.2s}
+.settings.closed .chev{transform:rotate(-90deg)}
+.settings.closed .settings-body{display:none}
+.settings-body{padding:14px}
+.bedsrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;padding:12px;background:var(--teal-soft);border-radius:11px}
+.bedsrow label{font-weight:600;color:var(--teal-deep)}
+.bedsrow input{width:66px;padding:8px;border:1px solid var(--line-strong);border-radius:8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:15px}
+.bedsrow .note{font-size:12px;color:var(--muted);flex:1;min-width:140px}
+.setgrid{display:grid;grid-template-columns:1fr;gap:12px}
+.setgroup{border:1px solid var(--line);border-radius:11px;padding:13px;background:#fbfcfd}
+.setgroup h3{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal-deep);margin-bottom:10px}
+.field{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;min-height:36px}
+.field:last-child{margin-bottom:0}
+.field label{font-size:13.5px;color:var(--muted)}
+.field input[type=number]{width:62px;padding:8px;border:1px solid var(--line-strong);border-radius:8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:15px}
+.field select{padding:8px;border:1px solid var(--line-strong);border-radius:8px;font-size:14px;background:#fff;min-height:40px}
+input:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
+.slider-field{margin-bottom:10px}
+.slider-field .top{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);margin-bottom:6px}
+.slider-field .top b{color:var(--teal-deep);font-family:'IBM Plex Mono',monospace}
+input[type=range]{width:100%;accent-color:var(--teal);height:28px}
+.set-note{font-size:12px;color:var(--faint);margin-top:6px;line-height:1.4}
+
+/* RIBBON */
+.ribbon-wrap{overflow-x:auto;padding:12px 14px;-webkit-overflow-scrolling:touch}
+.ribbon{display:flex;gap:3px;min-width:max-content}
+.rlabels{display:flex;flex-direction:column;justify-content:flex-end;gap:3px;margin-right:6px;flex:0 0 auto}
+.rlabels span{height:22px;display:flex;align-items:center;font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase}
+.rlabels .sp{height:25px}
+.rday{width:30px;flex:0 0 30px;text-align:center;cursor:pointer}
+.rday .wd{font-size:9.5px;color:var(--faint);text-transform:uppercase}
+.rday .dn{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:4px}
+.rday.we .wd{color:var(--teal)}
+.rday.sel .dn{color:var(--teal-deep);font-weight:700}
+.rcell{height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace;margin-bottom:3px;color:#fff;position:relative}
+.rcell.full{background:var(--green)}.rcell.low{background:var(--amber)}.rcell.hole{background:var(--red)}
+.rcell .cflag{position:absolute;top:-2px;right:-2px;width:7px;height:7px;border-radius:50%;background:var(--violet);box-shadow:0 0 0 1.5px #fff}
+.rday.sel .rcell{box-shadow:0 0 0 2px var(--ink)}
+.rmini{display:flex;gap:2px;justify-content:center}.rmini i{width:6px;height:6px;border-radius:50%;display:block}
+
+/* DAY VIEW */
+.daynav{display:flex;align-items:center;gap:10px;padding:14px;border-bottom:1px solid var(--line);position:sticky;top:58px;background:#fff;z-index:6;border-radius:14px 14px 0 0}
+.daynav .arrow{width:46px;height:46px;border-radius:12px;border:1px solid var(--line-strong);background:#fff;font-size:20px;color:var(--ink);flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.daynav .arrow:active{background:var(--teal-soft)}
+.daynav .dlabel{flex:1;text-align:center}
+.daynav .dlabel .wd{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.daynav .dlabel .dt{font-size:18px;font-weight:600}
+.stat{font-size:11px;font-weight:600;padding:4px 9px;border-radius:20px;white-space:nowrap}
+.stat.ok{background:#e7f4ec;color:var(--green)}.stat.warn{background:#fbf1da;color:var(--amber)}.stat.bad{background:#fae8e6;color:var(--red)}
+.jumpbar{display:flex;gap:8px;padding:12px 14px 0;flex-wrap:wrap}
+.daybody{padding:12px 14px 16px}
+.shiftcard{border:1px solid var(--line);border-radius:13px;margin-bottom:12px;overflow:hidden}
+.shiftcard.short{border-color:#e7c4c1}
+.sc-h{display:flex;align-items:center;gap:9px;padding:13px;background:#fbfcfd;border-bottom:1px solid var(--line)}
+.sc-h .ttl{font-weight:600;font-size:15px}.sc-h .ttl small{font-weight:500;color:var(--faint);font-size:12px;margin-left:3px}
+.sc-h .cnt{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px}
+.badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
+.badge.full{background:#e7f4ec;color:var(--green)}.badge.low{background:#fbf1da;color:var(--amber)}.badge.hole{background:#fae8e6;color:var(--red)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:10px 12px;border-radius:10px;background:#eef2f5;font-size:14px;font-weight:500;border:1px solid transparent;color:var(--ink);min-height:44px}
+.chip.day{background:var(--teal-soft)}.chip.night{background:var(--night-bg)}.chip.ori{background:#fdeede;color:#9a5d11}
+.chip:active{background:#fae8e6;border-color:#e7c4c1}
+.chip .x{font-size:13px;color:var(--red);opacity:.5}
+.chip .cd{width:8px;height:8px;border-radius:50%;background:var(--violet);flex:0 0 auto}
+.chip .tg{font-size:9px;font-weight:700;opacity:.65}
+.addbtn{margin:0 13px 13px;display:inline-flex;align-items:center;gap:6px;padding:11px 14px;border:1px dashed var(--line-strong);background:#fff;border-radius:10px;font-size:14px;font-weight:500;color:var(--teal-deep);min-height:44px}
+.addbtn:active{background:var(--teal-soft);border-color:var(--teal)}
+.picker{padding:0 13px 13px}
+.pk-h{font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.pklist{display:flex;flex-wrap:wrap;gap:8px}
+.pkitem{padding:10px 12px;border-radius:10px;border:1px solid var(--line-strong);background:#fff;font-size:14px;min-height:44px;display:inline-flex;align-items:center;gap:5px}
+.pkitem:active{border-color:var(--teal);background:var(--teal-soft)}
+.pkitem .sub{font-size:11px;color:var(--faint);margin-left:4px}
+.pkempty{font-size:13px;color:var(--faint);padding:4px 0}
+
+/* GRID VIEW */
+.gridscroll{overflow:auto;max-height:66vh;border-radius:0 0 14px 14px;-webkit-overflow-scrolling:touch}
+table.grid{border-collapse:separate;border-spacing:0;width:max-content;font-size:12px}
+table.grid th,table.grid td{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.gnamehead{position:sticky;left:0;top:0;z-index:6;background:#f7f9fa;text-align:left;padding:8px 12px;min-width:172px;width:172px}
+.gdayhead{position:sticky;top:0;z-index:4;background:#f7f9fa;width:30px;min-width:30px;padding:5px 0;text-align:center}
+.gdayhead .wd{font-size:9px;color:var(--faint)}.gdayhead .dn{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.gdayhead.we{background:#eef5f4}
+.namecell{position:sticky;left:0;z-index:3;background:#fff;padding:6px 12px;min-width:172px;width:172px}
+.namecell .nm{font-weight:500;font-size:12.5px}
+.namecell .meta{font-size:10px;color:var(--faint);margin-top:1px;display:flex;gap:4px;flex-wrap:wrap}
+.pill{font-size:9px;padding:1px 5px;border-radius:5px;font-weight:600}
+.pill.charge{background:#efe9fb;color:var(--violet)}.pill.wtw{background:var(--teal-soft);color:var(--teal-deep)}
+.pill.ori{background:#fdeede;color:#b06a12}.pill.fte{background:#eef1f4;color:var(--muted)}
+.grouprow td{position:sticky;left:0;background:#eef2f5;font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal-deep);padding:6px 12px;z-index:3}
+.cell{width:30px;min-width:30px;height:34px;text-align:center;cursor:pointer;user-select:none;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:11px}
+.cell.we{background:#f6faf9}.cell.d{background:var(--teal);color:#fff}.cell.n{background:var(--night);color:#fff}.cell.orib{background:#b98a3a;color:#fff}
+.cell.pto{background:repeating-linear-gradient(45deg,#f0f2f5,#f0f2f5 3px,#e6eaef 3px,#e6eaef 6px);color:var(--faint)}
+.covrow td{position:sticky;background:#fbfcfd;font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-align:center;font-weight:600;padding:3px 0}
+.covrow .lab{position:sticky;left:0;z-index:3;text-align:left;padding-left:12px;background:#fbfcfd;color:var(--muted);font-family:'IBM Plex Sans';font-weight:600;font-size:10px;text-transform:uppercase}
+.cv-full{color:var(--green)}.cv-low{color:var(--amber)}.cv-hole{color:var(--red)}
+
+/* SIDE PANELS */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.kpi{background:#fff;padding:14px 16px}
+.kpi .v{font-size:24px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.kpi .l{font-size:11px;color:var(--muted);margin-top:1px}
+.kpi.good .v{color:var(--green)}.kpi.warn .v{color:var(--amber)}.kpi.bad .v{color:var(--red)}
+.flaglist{padding:6px 0;max-height:300px;overflow:auto}
+.flag{display:flex;gap:10px;padding:10px 16px;font-size:13px;align-items:flex-start}
+.flag+.flag{border-top:1px solid var(--line)}
+.flag .dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex:0 0 auto}
+.flag.hole .dot{background:var(--red)}.flag.charge .dot{background:var(--violet)}.flag.wk .dot{background:var(--night)}
+.flag .sub{color:var(--muted)}
+.flag-empty{padding:18px 16px;text-align:center;color:var(--green);font-size:13px}
+.fair{padding:6px 0;max-height:320px;overflow:auto}
+.fr{display:flex;align-items:center;gap:10px;padding:7px 16px;font-size:13px}
+.fr .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{width:74px;height:7px;border-radius:4px;background:var(--line);overflow:hidden;flex:0 0 auto}
+.bar i{display:block;height:100%;background:var(--green)}.bar.under i{background:var(--amber)}
+.fr .q{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);width:32px;text-align:right}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:12px 16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:12px;height:12px;border-radius:4px;display:inline-block}
+.about{font-size:12.5px;color:var(--muted);line-height:1.55;padding:13px 16px}.about b{color:var(--ink)}
+
+/* TOAST */
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:11px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:80;box-shadow:var(--shadow);max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* DESKTOP */
+@media(min-width:900px){
+  body{font-size:14px}
+  .wrap{padding:20px}
+  .row{display:grid;grid-template-columns:1fr 332px;gap:20px;align-items:start}
+  .setgrid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px 20px}
+  .controlbar .gap{display:block;flex:1}
+  .viewtabs{flex:0 0 auto}
+  .daynav{position:static}
+  .chip{font-size:12.5px;min-height:auto;padding:7px 10px}
+  .addbtn{min-height:auto;padding:8px 12px}
+  .pkitem{min-height:auto;padding:7px 10px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="8" cy="7" r="2.4" fill="#fff"/><circle cx="15" cy="12" r="2.4" fill="#fff"/><circle cx="11" cy="17" r="2.4" fill="#fff"/></svg></div>
+    <div><b>EvenShift Schedule</b><span>Fair auto-scheduling · prototype</span></div>
+  </div>
+  <div class="unittag">4 West · Med/Surg · <b>32 beds</b></div>
+  <div class="spacer"></div>
+  <button id="rebuildBtn" class="primary">↻ Build</button>
+  <button id="exportBtn">↓ CSV</button>
+</div>
+
+<div class="wrap">
+
+  <!-- settings -->
+  <div class="card settings closed" id="settings">
+    <div class="card-h" id="settingsToggle">
+      <h2>Unit settings</h2><span class="tag">every value editable per unit</span><span class="chev">▾</span>
+    </div>
+    <div class="settings-body">
+      <div class="bedsrow">
+        <label>Unit size</label>
+        <input type="number" id="s_beds" value="32" min="4" max="80"> <span style="font-weight:600;color:var(--teal-deep)">beds</span>
+        <button class="ghostbtn" id="applyRatios" style="box-shadow:none">Suggest coverage from beds</button>
+        <span class="note">Sets sensible RN/PCT targets from the bed count — then fine-tune below.</span>
+      </div>
+      <div class="setgrid">
+        <div class="setgroup">
+          <h3>RN — day shift</h3>
+          <div class="field"><label>Ideal</label><input type="number" id="s_rnDayIdeal" value="7" min="1" max="20"></div>
+          <div class="field"><label>Minimum</label><input type="number" id="s_rnDayMin" value="6" min="1" max="20"></div>
+          <div class="field"><label>Charge needed</label><input type="number" id="s_chargeMin" value="1" min="0" max="4"></div>
+          <div class="field"><label>Charge target</label><input type="number" id="s_chargeTarget" value="2" min="0" max="4"></div>
+        </div>
+        <div class="setgroup">
+          <h3>RN — night shift</h3>
+          <div class="field"><label>Ideal</label><input type="number" id="s_rnNightIdeal" value="6" min="1" max="20"></div>
+          <div class="field"><label>Minimum</label><input type="number" id="s_rnNightMin" value="5" min="1" max="20"></div>
+          <div class="set-note">Nurses stay fixed on days or nights.</div>
+        </div>
+        <div class="setgroup">
+          <h3>PCT &amp; HUC</h3>
+          <div class="field"><label>PCT ideal</label><input type="number" id="s_pctIdeal" value="3" min="1" max="12"></div>
+          <div class="field"><label>PCT minimum</label><input type="number" id="s_pctMin" value="2" min="1" max="12"></div>
+          <div class="field"><label>HUC / day</label><input type="number" id="s_hucNeed" value="2" min="0" max="6"></div>
+          <div class="set-note">HUCs work 8h, ~6a–11p, day only.</div>
+        </div>
+        <div class="setgroup">
+          <h3>Hard limits</h3>
+          <div class="field"><label>Max in a row</label><input type="number" id="s_maxConsec" value="4" min="1" max="7"></div>
+          <div class="field"><label>Weekends · FT/WTW</label><input type="number" id="s_wkFT" value="4" min="0" max="12"></div>
+          <div class="field"><label>Weekends · PT</label><input type="number" id="s_wkPT" value="3" min="0" max="12"></div>
+          <div class="set-note">PTO &amp; orientee→preceptor always enforced.</div>
+        </div>
+        <div class="setgroup">
+          <h3>Self-scheduling fairness</h3>
+          <div class="slider-field"><div class="top"><span>Pick-honor target</span><b id="honorVal">85%</b></div><input type="range" id="s_honor" min="70" max="95" value="85"></div>
+          <div class="field"><label>Protected requests</label><input type="number" id="s_protected" value="2" min="0" max="6"></div>
+          <div class="field"><label>Tie-breaker</label><select id="s_priority"><option value="rotating">Rotating</option><option value="seniority">Seniority</option><option value="fcfs">First-come</option></select></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- control bar -->
+  <div class="controlbar">
+    <div class="viewtabs">
+      <button id="tabDay" class="on">Day view</button>
+      <button id="tabGrid">Grid view</button>
+    </div>
+    <div class="gap"></div>
+    <button class="ghostbtn warn hide" id="nextGap">⚠ Next gap</button>
+  </div>
+
+  <div class="row">
+    <div class="main">
+      <!-- ribbon -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-h"><h2>Coverage across the cycle</h2><span class="tag">tap a day to open it</span></div>
+        <div class="ribbon-wrap"><div style="display:flex"><div class="rlabels"><span class="sp"></span><span>Day</span><span>Night</span><span style="height:11px;font-size:9px">aides</span></div><div class="ribbon" id="ribbon"></div></div></div>
+      </div>
+
+      <!-- DAY VIEW -->
+      <div class="card" id="dayView">
+        <div class="daynav">
+          <button class="arrow" id="prevDay">‹</button>
+          <div class="dlabel"><div class="wd" id="dvWd">—</div><div class="dt" id="dvDt">—</div></div>
+          <span class="stat ok" id="dvStat">—</span>
+          <button class="arrow" id="nextDayBtn">›</button>
+        </div>
+        <div class="daybody" id="dayBody"></div>
+      </div>
+
+      <!-- GRID VIEW -->
+      <div class="card hide" id="gridView">
+        <div class="card-h"><h2>Schedule — tap a cell to edit</h2><span class="tag">D day · N night</span></div>
+        <div class="gridscroll" id="gridscroll"></div>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--teal)"></i>Day</span>
+          <span><i class="sw" style="background:var(--night)"></i>Night</span>
+          <span><i class="sw" style="background:#b98a3a"></i>Orientee</span>
+          <span><i class="sw" style="background:var(--green)"></i>Full</span>
+          <span><i class="sw" style="background:var(--amber)"></i>Below ideal</span>
+          <span><i class="sw" style="background:var(--red)"></i>Below min</span>
+          <span><i class="sw" style="background:var(--violet)"></i>Charge</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side">
+      <div class="card"><div class="card-h"><h2>Cycle health</h2></div><div class="kpis" id="kpis"></div></div>
+      <div class="card" style="margin-top:16px"><div class="card-h"><h2>Flags</h2><span class="tag" id="flagCount"></span></div><div class="flaglist" id="flags"></div></div>
+      <div class="card" style="margin-top:16px"><div class="card-h"><h2>Weekend ledger</h2><span class="tag">worked / required</span></div><div class="fair" id="fair"></div></div>
+      <div class="card" style="margin-top:16px"><div class="card-h"><h2>About this prototype</h2></div><div class="about">A <b>fairness-weighted heuristic</b> over demo data for a 32-bed unit — honors picks, balances weekends, protects PTO and orientee→preceptor pairing, and flags what it can't satisfy. Production adds <b>Kronos/MyTime import</b>, a real constraint solver, and <b>cloud storage</b> so ledgers persist across cycles. Edits live in memory for this session.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const DAYS=42,START_DOW=0;
+const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const wd=d=>(START_DOW+d)%7;
+const isDayWE=d=>{const w=wd(d);return w===0||w===6;};
+const isNightWE=d=>{const w=wd(d);return w===5||w===6;};
+const isRough=d=>isNightWE(d);
+const isColWE=d=>wd(d)===0||wd(d)===6;
+const lineWEof=(line,d)=>line==='night'?isNightWE(d):isDayWE(d);
+
+let settings={};
+function readSettings(){const n=id=>+document.getElementById(id).value;settings={
+  rnDayIdeal:n('s_rnDayIdeal'),rnDayMin:n('s_rnDayMin'),rnNightIdeal:n('s_rnNightIdeal'),rnNightMin:n('s_rnNightMin'),
+  chargeMin:n('s_chargeMin'),chargeTarget:n('s_chargeTarget'),
+  pctIdeal:n('s_pctIdeal'),pctMin:n('s_pctMin'),hucNeed:n('s_hucNeed'),
+  maxConsec:n('s_maxConsec'),wkFT:n('s_wkFT'),wkPT:n('s_wkPT'),wkPRN:1,
+  honor:n('s_honor'),protected:n('s_protected'),priority:document.getElementById('s_priority').value};}
+function req(role,line){
+  if(role==='RN')return line==='day'?{ideal:settings.rnDayIdeal,min:settings.rnDayMin}:{ideal:settings.rnNightIdeal,min:settings.rnNightMin};
+  if(role==='PCT')return{ideal:settings.pctIdeal,min:settings.pctMin};
+  return{ideal:settings.hucNeed,min:settings.hucNeed};}
+
+const FIRST=['Maria','James','Aisha','Liam','Sofia','Noah','Grace','Ethan','Priya','Lucas','Hannah','David','Mei','Carlos','Emma','Owen','Fatima','Jack','Nina','Ravi','Ava','Theo','Leah','Omar','Chloe','Sam','Yara','Ben','Rosa','Kai','Tara','Marco','Iris','Dev','Lena','Cole','Amara','Finn','Zoe','Hugo','Ada','Reed','Paloma','Niko','Esme','Vince','Dalia','Pierre','Wren','Gus'];
+const LAST=['Nguyen','Okafor','Patel','Rossi','Kim','Silva','Brennan','Cohen','Mensah','Park','Flores','Walsh','Haddad','Lopez','Yu','Osei','Reyes','Tan','Bauer','Iqbal','Cruz','Novak','Diaz','Khan','Marsh','Ito','Bello','Quinn','Vega','Sharma'];
+let nameStock=[];
+function nm(){if(!nameStock.length){for(const f of FIRST)for(const l of LAST)nameStock.push(f+' '+l);for(let i=nameStock.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[nameStock[i],nameStock[j]]=[nameStock[j],nameStock[i]];}}return nameStock.pop();}
+const rnd=n=>Math.floor(Math.random()*n);const chance=p=>Math.random()<p;
+
+let staff=[];
+function targetShifts(p){if(p.fte==='PRN')return 3;if(p.fte==='PT')return 12;return 17;}
+function weekendQuota(p){if(p.fte==='PRN')return settings.wkPRN;return p.fte==='PT'?settings.wkPT:settings.wkFT;}
+
+function buildRoster(){
+  staff=[];nameStock=[];let id=0,sen=0;
+  const add=(role,line,opts={})=>{const fte=opts.fte||(chance(.72)?'FT':chance(.6)?'PT':'PRN');
+    const p={id:id++,name:nm(),role,line,fte,charge:role==='RN'&&!opts.orientee?chance(.42):false,
+      wtw:!!opts.wtw,orientee:!!opts.orientee,preceptor:opts.preceptor??null,seniority:sen++,
+      pto:new Set(),picks:new Set(),asn:new Set(),oriDays:new Set()};staff.push(p);return p;};
+  for(let i=0;i<20;i++)add('RN','day');
+  for(let i=0;i<18;i++)add('RN','night');
+  staff.filter(p=>p.role==='RN'&&p.fte==='FT').slice(0,3).forEach(p=>p.wtw=true);
+  for(let i=0;i<9;i++)add('PCT','day');
+  for(let i=0;i<7;i++)add('PCT','night');
+  for(let i=0;i<6;i++)add('HUC','day',{fte:chance(.7)?'FT':'PT'});
+  ['day','night'].forEach(line=>{const precept=staff.find(p=>p.role==='RN'&&p.line===line&&p.charge&&!p.orientee);
+    add('RN',line,{fte:'FT',orientee:true,preceptor:precept?precept.id:null});});
+  staff.forEach(p=>{const k=chance(.6)?0:1+rnd(2);for(let j=0;j<k;j++)p.pto.add(rnd(DAYS));});
+  staff.forEach(genPicks);
+}
+function genPicks(p){
+  const want=targetShifts(p)+1;
+  const pool=[];for(let d=0;d<DAYS;d++)if(!p.pto.has(d))pool.push(d);
+  const sc=d=>{let s=Math.random();if(p.wtw)s+=lineWEof(p.line,d)?3:-1.5;else s+=lineWEof(p.line,d)?.15:.6;return s;};
+  pool.sort((a,b)=>sc(b)-sc(a));
+  const weDays=pool.filter(d=>lineWEof(p.line,d));const q=weekendQuota(p);
+  const chosen=new Set();
+  for(let i=0;i<q&&i<weDays.length;i++)chosen.add(weDays[i]);
+  for(const d of pool){if(chosen.size>=want)break;chosen.add(d);}
+  p.picks=chosen;
+}
+
+let coverage=[],cycleSeed=0;
+function consecIfAdd(p,d){let run=1,x=d-1;while(x>=0&&p.asn.has(x)){run++;x--;}x=d+1;while(x<DAYS&&p.asn.has(x)){run++;x++;}return run;}
+function available(p,d){return !p.pto.has(d)&&!p.asn.has(d)&&consecIfAdd(p,d)<=settings.maxConsec;}
+function priorityKey(p){if(settings.priority==='seniority')return p.seniority;if(settings.priority==='fcfs')return p.id;return (p.seniority+cycleSeed)%staff.length;}
+function score(p,d){let s=0;if(p.picks.has(d))s+=100;const tgt=targetShifts(p);s+=(tgt-p.asn.size)*6;
+  if(lineWEof(p.line,d)){const need=weekendQuota(p)-p.weCount;if(p.wtw)s+=40;if(need>0)s+=need*9;else s-=12;}
+  s-=priorityKey(p)*0.04;return s;}
+function assign(p,d){p.asn.add(d);if(lineWEof(p.line,d))p.weCount++;if(p.line==='night'&&isRough(d))p.roughCount++;}
+function unassign(p,d){p.asn.delete(d);if(lineWEof(p.line,d))p.weCount--;if(p.line==='night'&&isRough(d))p.roughCount--;}
+
+function build(){
+  cycleSeed++;
+  staff.forEach(p=>{p.asn=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();});
+  const fill=(role,line,d,ideal,wantCharge)=>{
+    let pool=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&available(p,d));
+    pool.sort((a,b)=>score(b,d)-score(a,d));const picked=[];
+    if(wantCharge){const chg=pool.filter(p=>p.charge);for(const p of chg){if(picked.filter(x=>x.charge).length>=settings.chargeTarget)break;assign(p,d);picked.push(p);}}
+    for(const p of pool){if(picked.includes(p))continue;if(picked.length>=ideal)break;assign(p,d);picked.push(p);}
+  };
+  for(let d=0;d<DAYS;d++){
+    fill('RN','day',d,settings.rnDayIdeal,true);
+    fill('RN','night',d,settings.rnNightIdeal,true);
+    fill('PCT','day',d,settings.pctIdeal,false);
+    fill('PCT','night',d,settings.pctIdeal,false);
+    fill('HUC','day',d,settings.hucNeed,false);
+  }
+  staff.filter(p=>p.orientee).forEach(o=>{const cap=targetShifts(o);
+    [...o.picks].sort((a,b)=>a-b).forEach(d=>{if(o.oriDays.size>=cap)return;if(o.pto.has(d))return;
+      const prec=staff.find(x=>x.id===o.preceptor);if(prec&&prec.asn.has(d))o.oriDays.add(d);});});
+  for(let d=0;d<DAYS;d++){repair('RN','day',d);repair('RN','night',d);repair('PCT','day',d);repair('PCT','night',d);repair('HUC','day',d);}
+  computeCoverage();
+}
+function repair(role,line,d){const m=req(role,line).min;
+  let cur=()=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
+  if(cur()>=m)return;
+  let pool=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&available(p,d)).sort((a,b)=>a.asn.size-b.asn.size);
+  for(const p of pool){if(cur()>=m)break;assign(p,d);}}
+function shiftCount(role,line,d){return staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;}
+function chargeCount(line,d){return staff.filter(p=>p.role==='RN'&&p.line===line&&p.charge&&!p.orientee&&p.asn.has(d)).length;}
+function computeCoverage(){coverage=[];for(let d=0;d<DAYS;d++)coverage.push({
+  rnDay:shiftCount('RN','day',d),rnNight:shiftCount('RN','night',d),chgDay:chargeCount('day',d),chgNight:chargeCount('night',d),
+  pctDay:shiftCount('PCT','day',d),pctNight:shiftCount('PCT','night',d),huc:shiftCount('HUC','day',d)});}
+function statusOf(c,ideal,min){if(c<min)return'hole';if(c<ideal)return'low';return'full';}
+
+/* render */
+const $=id=>document.getElementById(id);
+function fmtDate(d){const dt=new Date(2026,5,21);dt.setDate(dt.getDate()+d);return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+let curDay=0,view='day';
+function render(){renderRibbon();if(view==='day')renderDay();else renderGrid();renderPanels();}
+
+function renderRibbon(){const r=$('ribbon');r.innerHTML='';
+  for(let d=0;d<DAYS;d++){const c=coverage[d];
+    const sD=statusOf(c.rnDay,settings.rnDayIdeal,settings.rnDayMin);
+    const sN=statusOf(c.rnNight,settings.rnNightIdeal,settings.rnNightMin);
+    const aideHole=c.pctDay<settings.pctMin||c.pctNight<settings.pctMin||c.huc<settings.hucNeed;
+    const aideLow=c.pctDay<settings.pctIdeal||c.pctNight<settings.pctIdeal;
+    const dot=aideHole?'var(--red)':aideLow?'var(--amber)':'var(--green)';
+    const el=document.createElement('div');el.className='rday'+(isColWE(d)?' we':'')+(d===curDay&&view==='day'?' sel':'');
+    el.innerHTML=`<div class="wd">${WD[wd(d)][0]}</div><div class="dn">${d+1}</div>`+
+      `<div class="rcell ${sD}">${c.rnDay}${c.chgDay<settings.chargeMin?'<i class="cflag"></i>':''}</div>`+
+      `<div class="rcell ${sN}">${c.rnNight}${c.chgNight<settings.chargeMin?'<i class="cflag"></i>':''}</div>`+
+      `<div class="rmini"><i style="background:${dot}"></i></div>`;
+    el.onclick=()=>{curDay=d;if(view!=='day'){view='day';applyView();}render();};
+    r.appendChild(el);}}
+
+const SECTIONS=[
+  {role:'RN',line:'day',ttl:'RN',sub:'Day',charge:true},
+  {role:'RN',line:'night',ttl:'RN',sub:'Night',charge:true},
+  {role:'PCT',line:'day',ttl:'PCT',sub:'Day'},
+  {role:'PCT',line:'night',ttl:'PCT',sub:'Night'},
+  {role:'HUC',line:'day',ttl:'HUC',sub:'6a–11p'},
+];
+let openPicker=null;
+function renderDay(){
+  const d=curDay;
+  $('dvWd').textContent=WD[wd(d)]+(isColWE(d)?' · weekend':'');
+  $('dvDt').textContent=fmtDate(d)+' · Day '+(d+1);
+  // overall status
+  let bad=0,low=0;
+  SECTIONS.forEach(s=>{const c=shiftCount(s.role,s.line,d);const rq=req(s.role,s.line);if(c<rq.min)bad++;else if(c<rq.ideal)low++;});
+  const st=$('dvStat');
+  if(bad){st.className='stat bad';st.textContent=bad+' short';}
+  else if(low){st.className='stat warn';st.textContent=low+' below ideal';}
+  else{st.className='stat ok';st.textContent='Fully covered';}
+  // body
+  const body=$('dayBody');let h='';
+  for(const s of SECTIONS){
+    const rq=req(s.role,s.line);const c=shiftCount(s.role,s.line,d);
+    const status=statusOf(c,rq.ideal,rq.min);
+    const members=staff.filter(p=>p.role===s.role&&p.line===s.line&&!p.orientee&&p.asn.has(d)).sort((a,b)=>a.name.localeCompare(b.name));
+    const oris=staff.filter(p=>p.role===s.role&&p.line===s.line&&p.orientee&&p.oriDays.has(d));
+    const chg=s.charge?chargeCount(s.line,d):null;
+    const badge=status==='hole'?'hole':status==='low'?'low':'full';
+    const badgeTxt=status==='hole'?'Below min':status==='low'?'Below ideal':'Full';
+    h+=`<div class="shiftcard${status==='hole'?' short':''}">`;
+    h+=`<div class="sc-h"><div class="ttl">${s.ttl} <small>${s.sub}</small></div>`;
+    h+=`<span class="cnt">${c}/${rq.ideal}</span><span class="badge ${badge}">${badgeTxt}</span></div>`;
+    h+='<div class="chips">';
+    members.forEach(p=>{h+=`<span class="chip ${s.line}" data-rm="${p.id}" data-d="${d}">${p.charge?'<i class="cd"></i>':''}${p.name}${p.wtw?'<span class="tg">WTW</span>':''}<span class="x">✕</span></span>`;});
+    oris.forEach(p=>{h+=`<span class="chip ori" data-rmori="${p.id}" data-d="${d}">${p.name}<span class="tg">ORI·EXTRA</span><span class="x">✕</span></span>`;});
+    if(!members.length&&!oris.length)h+='<span class="pkempty">No one assigned yet.</span>';
+    h+='</div>';
+    if(s.charge&&chg<settings.chargeMin)h+=`<div style="padding:0 13px 8px;font-size:11.5px;color:var(--violet)">⚠ No charge nurse assigned (need ${settings.chargeMin}).</div>`;
+    h+=`<button class="addbtn" data-add="${s.role}|${s.line}|${d}">+ Add ${s.ttl}</button>`;
+    const pk=`${s.role}|${s.line}|${d}`;
+    if(openPicker===pk){
+      const avail=staff.filter(p=>p.role===s.role&&p.line===s.line&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d)).slice(0,18);
+      h+=`<div class="picker"><div class="pk-h">Available — tap to assign (sorted by best fit)</div><div class="pklist">`;
+      if(!avail.length)h+='<span class="pkempty">No eligible staff free this shift.</span>';
+      avail.forEach(p=>{const picked=p.picks.has(d);h+=`<span class="pkitem" data-asn="${p.id}" data-d="${d}">${p.charge?'<i class="cd" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--violet);margin-right:4px"></i>':''}${p.name}<span class="sub">${p.fte}${picked?' · picked':''}</span></span>`;});
+      h+='</div></div>';
+    }
+    h+='</div>';
+  }
+  body.innerHTML=h;
+}
+
+const GROUPS=[
+  {label:'Registered Nurses · Day',role:'RN',line:'day'},
+  {label:'Registered Nurses · Night',role:'RN',line:'night'},
+  {label:'Patient Care Techs · Day',role:'PCT',line:'day'},
+  {label:'Patient Care Techs · Night',role:'PCT',line:'night'},
+  {label:'Unit Coordinators (HUC)',role:'HUC',line:'day'},
+];
+function renderGrid(){
+  const wrap=$('gridscroll');
+  let h='<table class="grid"><thead><tr><th class="gnamehead">Staff ('+staff.length+')</th>';
+  for(let d=0;d<DAYS;d++)h+=`<th class="gdayhead${isColWE(d)?' we':''}"><div class="wd">${WD[wd(d)][0]}</div><div class="dn">${d+1}</div></th>`;
+  h+='</tr></thead><tbody>';
+  for(const g of GROUPS){
+    const members=staff.filter(p=>p.role===g.role&&p.line===g.line).sort((a,b)=>(a.orientee-b.orientee)||a.name.localeCompare(b.name));
+    h+=`<tr class="grouprow"><td colspan="${DAYS+1}">${g.label} · ${members.length}</td></tr>`;
+    for(const p of members){h+='<tr>'+nameCell(p);for(let d=0;d<DAYS;d++)h+=cellHtml(p,d,g.line);h+='</tr>';}
+    h+=covRow(g);
+  }
+  h+='</tbody></table>';wrap.innerHTML=h;
+}
+function nameCell(p){let pl='';if(p.charge)pl+='<span class="pill charge">CHG</span>';if(p.wtw)pl+='<span class="pill wtw">WTW</span>';if(p.orientee)pl+='<span class="pill ori">ORI</span>';pl+=`<span class="pill fte">${p.fte}</span>`;
+  return `<td class="namecell"><div class="nm">${p.name}</div><div class="meta">${pl}</div></td>`;}
+function cellHtml(p,d,line){const we=isColWE(d)?' we':'';
+  if(p.pto.has(d))return `<td class="cell pto${we}" title="Approved time off">PTO</td>`;
+  if(p.orientee){const on=p.oriDays.has(d);return `<td class="cell${we} editable${on?' orib':''}" data-p="${p.id}" data-d="${d}">${on?(line==='night'?'N':'D'):''}</td>`;}
+  const on=p.asn.has(d);const cls=on?(line==='night'?' n':' d'):'';
+  return `<td class="cell${we}${cls} editable" data-p="${p.id}" data-d="${d}">${on?(line==='night'?'N':'D'):''}</td>`;}
+function covRow(g){const rq=req(g.role,g.line);let h=`<tr class="covrow"><td class="lab">staffed</td>`;
+  for(let d=0;d<DAYS;d++){const c=shiftCount(g.role,g.line,d);h+=`<td class="cv-${statusOf(c,rq.ideal,rq.min)}">${c}</td>`;}return h+'</tr>';}
+
+function renderPanels(){
+  let holes=0,low=0,chargeGaps=0;
+  for(let d=0;d<DAYS;d++){const c=coverage[d];
+    [['RN','day',c.rnDay],['RN','night',c.rnNight],['PCT','day',c.pctDay],['PCT','night',c.pctNight],['HUC','day',c.huc]].forEach(([r,l,v])=>{const rq=req(r,l);if(v<rq.min)holes++;else if(v<rq.ideal)low++;});
+    if(c.chgDay<settings.chargeMin)chargeGaps++;if(c.chgNight<settings.chargeMin)chargeGaps++;}
+  let picks=0,honored=0;staff.forEach(p=>p.picks.forEach(d=>{picks++;if(p.asn.has(d))honored++;}));
+  const honorPct=picks?Math.round(honored/picks*100):0;
+  $('kpis').innerHTML=kpi(holes,'Coverage holes',holes===0?'good':'bad')+kpi(honorPct+'%','Picks honored',honorPct>=settings.honor?'good':'warn')+kpi(low,'Below ideal',low===0?'good':'warn')+kpi(chargeGaps,'Charge gaps',chargeGaps===0?'good':'bad');
+  // next gap button
+  const gapDay=firstGapDay();$('nextGap').classList.toggle('hide',gapDay<0);
+  const F=[];
+  for(let d=0;d<DAYS;d++){const c=coverage[d];const lbl=`${WD[wd(d)]} ${fmtDate(d)}`;
+    if(c.rnDay<settings.rnDayMin)F.push(['hole','RN day under minimum',`${lbl} — ${c.rnDay}/${settings.rnDayMin}`,d]);
+    if(c.rnNight<settings.rnNightMin)F.push(['hole','RN night under minimum',`${lbl} — ${c.rnNight}/${settings.rnNightMin}`,d]);
+    if(c.pctDay<settings.pctMin)F.push(['hole','PCT day under minimum',`${lbl} — ${c.pctDay}/${settings.pctMin}`,d]);
+    if(c.pctNight<settings.pctMin)F.push(['hole','PCT night under minimum',`${lbl} — ${c.pctNight}/${settings.pctMin}`,d]);
+    if(c.huc<settings.hucNeed)F.push(['hole','HUC short',`${lbl} — ${c.huc}/${settings.hucNeed}`,d]);
+    if(c.chgDay<settings.chargeMin)F.push(['charge','No charge nurse · day',lbl,d]);
+    if(c.chgNight<settings.chargeMin)F.push(['charge','No charge nurse · night',lbl,d]);}
+  staff.filter(p=>!p.orientee).forEach(p=>{const q=weekendQuota(p);if(p.weCount<q)F.push(['wk',`${p.name} short on weekends`,`${p.weCount}/${q} · ${p.fte}${p.wtw?' · WTW':''}`,-1]);});
+  $('flagCount').textContent=F.length?F.length+' to resolve':'';
+  const fl=$('flags');
+  if(!F.length)fl.innerHTML='<div class="flag-empty">✓ No unmet constraints — fair &amp; fully covered.</div>';
+  else{F.sort((a,b)=>({hole:0,charge:1,wk:2}[a[0]]-{hole:0,charge:1,wk:2}[b[0]]));
+    fl.innerHTML=F.slice(0,40).map(f=>`<div class="flag ${f[0]}"${f[3]>=0?` data-go="${f[3]}" style="cursor:pointer"`:''}><span class="dot"></span><div><b>${f[1]}</b><div class="sub">${f[2]}</div></div></div>`).join('')+(F.length>40?`<div class="flag"><span class="dot" style="background:var(--faint)"></span><div class="sub">+${F.length-40} more…</div></div>`:'');}
+  const sample=staff.filter(p=>p.role==='RN'&&!p.orientee).slice(0,16);
+  $('fair').innerHTML=sample.map(p=>{const q=weekendQuota(p);const pct=q?Math.min(100,Math.round(p.weCount/q*100)):100;const under=p.weCount<q;
+    return `<div class="fr"><span class="nm">${p.name}${p.wtw?' <span class="pill wtw" style="font-size:8px">WTW</span>':''}</span><span class="bar ${under?'under':''}"><i style="width:${pct}%"></i></span><span class="q">${p.weCount}/${q}</span></div>`;}).join('');
+}
+function kpi(v,l,cls){return `<div class="kpi ${cls}"><div class="v">${v}</div><div class="l">${l}</div></div>`;}
+function firstGapDay(){for(let d=0;d<DAYS;d++){const c=coverage[d];if(c.rnDay<settings.rnDayMin||c.rnNight<settings.rnNightMin||c.pctDay<settings.pctMin||c.pctNight<settings.pctMin||c.huc<settings.hucNeed||c.chgDay<settings.chargeMin||c.chgNight<settings.chargeMin)return d;}return -1;}
+
+/* interactions */
+$('dayBody').addEventListener('click',e=>{
+  const rm=e.target.closest('[data-rm]');const rmo=e.target.closest('[data-rmori]');
+  const add=e.target.closest('[data-add]');const asn=e.target.closest('[data-asn]');
+  if(rm){const p=staff.find(x=>x.id==rm.dataset.rm);unassign(p,+rm.dataset.d);computeCoverage();render();return;}
+  if(rmo){const p=staff.find(x=>x.id==rmo.dataset.rmori);p.oriDays.delete(+rmo.dataset.d);computeCoverage();render();return;}
+  if(add){const key=add.dataset.add;openPicker=openPicker===key?null:key;renderDay();return;}
+  if(asn){const p=staff.find(x=>x.id==asn.dataset.asn);assign(p,+asn.dataset.d);openPicker=null;computeCoverage();render();return;}
+});
+$('gridscroll').addEventListener('click',e=>{const td=e.target.closest('td.editable');if(!td)return;
+  const p=staff.find(x=>x.id==td.dataset.p);const d=+td.dataset.d;
+  if(p.orientee){p.oriDays.has(d)?p.oriDays.delete(d):p.oriDays.add(d);}
+  else{p.asn.has(d)?unassign(p,d):assign(p,d);}
+  computeCoverage();render();});
+$('flags').addEventListener('click',e=>{const f=e.target.closest('[data-go]');if(!f)return;curDay=+f.dataset.go;if(view!=='day'){view='day';applyView();}render();window.scrollTo({top:0,behavior:'smooth'});});
+
+function applyView(){
+  $('tabDay').classList.toggle('on',view==='day');$('tabGrid').classList.toggle('on',view==='grid');
+  $('dayView').classList.toggle('hide',view!=='day');$('gridView').classList.toggle('hide',view!=='grid');
+}
+$('tabDay').onclick=()=>{view='day';applyView();render();};
+$('tabGrid').onclick=()=>{view='grid';applyView();render();};
+$('prevDay').onclick=()=>{curDay=(curDay-1+DAYS)%DAYS;openPicker=null;render();};
+$('nextDayBtn').onclick=()=>{curDay=(curDay+1)%DAYS;openPicker=null;render();};
+$('nextGap').onclick=()=>{const g=firstGapDay();if(g<0)return;let n=-1;for(let i=1;i<=DAYS;i++){const d=(curDay+i)%DAYS;const c=coverage[d];if(c.rnDay<settings.rnDayMin||c.rnNight<settings.rnNightMin||c.pctDay<settings.pctMin||c.pctNight<settings.pctMin||c.huc<settings.hucNeed||c.chgDay<settings.chargeMin||c.chgNight<settings.chargeMin){n=d;break;}}curDay=n<0?g:n;openPicker=null;if(view!=='day'){view='day';applyView();}render();};
+
+$('settingsToggle').addEventListener('click',()=>$('settings').classList.toggle('closed'));
+$('s_honor').addEventListener('input',e=>$('honorVal').textContent=e.target.value+'%');
+$('applyRatios').onclick=()=>{const beds=+$('s_beds').value;
+  const rd=Math.max(2,Math.round(beds/4.5)),rn=Math.max(2,Math.round(beds/5.5)),pc=Math.max(1,Math.round(beds/10));
+  $('s_rnDayIdeal').value=rd;$('s_rnDayMin').value=Math.max(1,rd-1);
+  $('s_rnNightIdeal').value=rn;$('s_rnNightMin').value=Math.max(1,rn-1);
+  $('s_pctIdeal').value=pc;$('s_pctMin').value=Math.max(1,pc-1);
+  toast(`Suggested coverage for ${beds} beds — review & build.`);};
+$('rebuildBtn').onclick=()=>{readSettings();
+  if(settings.rnDayMin>settings.rnDayIdeal)settings.rnDayMin=settings.rnDayIdeal;
+  if(settings.rnNightMin>settings.rnNightIdeal)settings.rnNightMin=settings.rnNightIdeal;
+  staff.forEach(genPicks);build();openPicker=null;render();toast('Schedule rebuilt — picks honored, holes flagged.');};
+$('exportBtn').onclick=exportCSV;
+function exportCSV(){let rows=[['Name','Role','Line','FTE','Charge','WTW'].concat(Array.from({length:DAYS},(_,d)=>WD[wd(d)]+' '+(d+1)))];
+  for(const g of GROUPS)staff.filter(p=>p.role===g.role&&p.line===g.line).sort((a,b)=>a.name.localeCompare(b.name)).forEach(p=>{
+    const row=[p.name,p.role,p.line,p.fte,p.charge?'Y':'',p.wtw?'Y':''];
+    for(let d=0;d<DAYS;d++){if(p.pto.has(d))row.push('PTO');else if(p.orientee)row.push(p.oriDays.has(d)?(p.line==='night'?'N(ori)':'D(ori)'):'');else row.push(p.asn.has(d)?(p.line==='night'?'N':'D'):'');}
+    rows.push(row);});
+  const csv=rows.map(r=>r.map(c=>/[",\n]/.test(c)?'"'+(''+c).replace(/"/g,'""')+'"':c).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='evenshift-schedule.csv';a.click();URL.revokeObjectURL(url);
+  toast('Exported — ready for Kronos entry.');}
+let toastT;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+
+/* init */
+readSettings();buildRoster();build();
+view=window.innerWidth<900?'day':'grid';applyView();
+render();
+</script>
+</body>
+</html>

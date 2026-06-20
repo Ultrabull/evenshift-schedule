@@ -38,6 +38,12 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .tonerow{display:flex;gap:8px;flex-wrap:wrap}
 .tonebtn{flex:1;min-width:62px;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:9px 6px;font-size:13px;font-weight:700;color:var(--muted);font-family:inherit;cursor:pointer}
 .tonebtn.on{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-deep)}
+.help{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--teal-soft);color:var(--teal-deep);font-size:11px;font-weight:800;line-height:1;cursor:pointer;vertical-align:middle;margin-left:6px;position:relative;user-select:none;align-self:center}
+.help .tip{display:none;position:absolute;left:-6px;top:165%;width:250px;max-width:74vw;background:var(--ink);color:#fff;font-size:12.5px;font-weight:500;line-height:1.45;text-align:left;padding:11px 13px;border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.30);z-index:130;white-space:normal;letter-spacing:.1px}
+.help .tip::before{content:'';position:absolute;left:11px;top:-6px;border:6px solid transparent;border-bottom-color:var(--ink);border-top:0}
+.help:hover .tip,.help.show .tip{display:block}
+.help.help-l .tip{left:auto;right:-6px}
+.help.help-l .tip::before{left:auto;right:11px}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{font-family:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
@@ -1014,25 +1020,25 @@ const fteWord=f=>f==='FT'?'Full-time':f==='PT'?'Part-time':'PRN';
 
 /* ============ RULES ============ */
 const RULES=[
-  ['rnDayIdeal','Bedside nurses — day','Not counting the charge nurse'],
+  ['rnDayIdeal','Bedside nurses — day','Not counting the charge nurse','How many bedside nurses you want on a day shift (the charge nurse is counted separately). A shift turns red if it drops below the safe minimum.'],
   ['rnNightIdeal','Bedside nurses — night','Not counting the charge nurse'],
-  ['chargeMin','Charge nurses — extra','On top of bedside (e.g. 8 + 1 = 9)'],
-  ['pctDayIdeal','PCTs — day','Patient care techs, day shift'],
+  ['chargeMin','Charge nurses — extra','On top of bedside (e.g. 8 + 1 = 9)','The charge nurse runs the floor and is counted on top of the bedside number. Example: 8 bedside + 1 charge = 9 nurses working that shift.'],
+  ['pctDayIdeal','PCTs — day','Patient care techs, day shift','PCTs can have different targets for day and night. In the month view it shows like “4·2” — that means 4 PCTs on days and 2 on nights.'],
   ['pctNightIdeal','PCTs — night','Patient care techs, night shift'],
   ['hucNeed','HUCs per day','Unit coordinators (day only)'],
 ];
 const ROLE_TGL={chargeMin:'useCharge',pctDayIdeal:'usePCT',pctNightIdeal:'usePCT',hucNeed:'useHUC'};
 function renderRules(){
-  $('rulesCard').innerHTML=RULES.map(([k,t,s])=>{
+  $('rulesCard').innerHTML=RULES.map(([k,t,s,tip])=>{
     const tk=ROLE_TGL[k];const on=tk?settings[tk]!==false:true;
-    return `<div class="rule${tk&&!on?' off':''}"><div class="rl"><b>${t}</b><span>${s}</span></div>`+
+    return `<div class="rule${tk&&!on?' off':''}"><div class="rl"><b>${t}${tip?hlp(tip):''}</b><span>${s}</span></div>`+
       (tk?`<button class="sw-toggle${on?' on':''}" data-roletgl="${tk}" style="margin-right:6px"><i></i></button>`:'')+
       `<div class="stepper"${tk&&!on?' style="opacity:.4;pointer-events:none"':''}><button data-step="${k}|-1">−</button><div class="val" id="rv_${k}">${settings[k]}</div><button data-step="${k}|1">+</button></div></div>`;
   }).join('');
   renderPeriod();renderCustom();renderHolidays();renderCodes();renderClockSetup();renderPay();
 }
 function renderPay(){const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const psd=(settings.payStartDow==null?START_DOW:settings.payStartDow);
-  let h=`<div class="rule"><div class="rl"><b>Overtime after</b><span>Hours in one week before overtime starts</span></div><div class="stepper"><button data-otstep="-1">−</button><div class="val">${settings.otThreshold||40}</div><button data-otstep="1">+</button></div></div>`;
+  let h=`<div class="rule"><div class="rl"><b>Overtime after${hlp('Overtime is hours a nurse works beyond this many in one week (often 40). The app avoids it when filling shifts and only uses it as a last resort, then flags the extra cost.')}</b><span>Hours in one week before overtime starts</span></div><div class="stepper"><button data-otstep="-1">−</button><div class="val">${settings.otThreshold||40}</div><button data-otstep="1">+</button></div></div>`;
   h+=`<div style="padding:12px 16px 2px"><b>Pay week starts on</b><div class="sub">So Hours and overtime line up with your real pay week.</div></div>`;
   h+=`<div class="daypick">${WD.map((w,i)=>`<button class="dchip ${psd===i?'on':''}" data-paydow="${i}">${w}</button>`).join('')}</div>`;
   $('payCard').innerHTML=h;}
@@ -1114,15 +1120,15 @@ function stepRule(k,delta){
 
 /* ============ advanced rules ============ */
 const ADV=[
-  ['maxConsec','Most shifts in a row','Safety cap (e.g. 4)'],
+  ['maxConsec','Most shifts in a row','Safety cap (e.g. 4)','The most shifts anyone can work back-to-back before a day off, to prevent burnout. Example: a cap of 4 means no one gets a 5th shift in a row.'],
   ['wkFT','Weekend shifts · full-time','Per cycle'],
   ['wkPT','Weekend shifts · part-time','Per cycle'],
-  ['honor','Honor staff picks','Aim to keep this many'],
+  ['honor','Honor staff picks','Aim to keep this many','How hard the app tries to give people the exact days they asked for. Higher means more requests honored, but slightly less even coverage.'],
   ['protected','Protected days off','Always granted, each person'],
 ];
 function renderAdvanced(){
-  let h=ADV.map(([k,t,s])=>{const val=k==='honor'?settings.honor+'%':settings[k];
-    return `<div class="rule"><div class="rl"><b>${t}</b><span>${s}</span></div><div class="stepper"><button data-astep="${k}|-1">−</button><div class="val" id="rv_${k}">${val}</div><button data-astep="${k}|1">+</button></div></div>`;}).join('');
+  let h=ADV.map(([k,t,s,tip])=>{const val=k==='honor'?settings.honor+'%':settings[k];
+    return `<div class="rule"><div class="rl"><b>${t}${tip?hlp(tip):''}</b><span>${s}</span></div><div class="stepper"><button data-astep="${k}|-1">−</button><div class="val" id="rv_${k}">${val}</div><button data-astep="${k}|1">+</button></div></div>`;}).join('');
   h+=`<div class="rule" style="flex-direction:column;align-items:stretch;gap:11px"><div class="rl"><b>Same day off — who wins?</b><span>When two people want the same day off</span></div><div class="pickrow" id="prioRow">`+
      [['rotating','Take turns'],['seniority','Most senior'],['fcfs','First to ask']].map(([k,l])=>`<button class="pickbtn${settings.priority===k?' on':''}" data-prio="${k}">${l}</button>`).join('')+`</div></div>`;
   $('advCard').innerHTML=h;
@@ -1337,9 +1343,9 @@ function renderFlags(){
   F.forEach(f=>{
     h+='<div class="flag '+(f.sev==='amber'?'amber':'')+'"><span class="dot"></span><div class="fbody"><b>'+f.title+'</b><div class="sub">'+f.reason+'</div>';
     if(f.kind==='cov'||f.kind==='chg'){h+='<div class="flagopts">'+
-      '<button class="optbtn ot" data-fillsmart="'+f.kind+'|'+f.role+'|'+f.line+'">⚡ Fill smart</button>'+
+      '<button class="optbtn ot" data-fillsmart="'+f.kind+'|'+f.role+'|'+f.line+'">⚡ Fill smart</button>'+hlp('Fills the gap automatically with the best person — ranked by who is owed, who wants the hours, and who is under their target. It avoids overtime unless there is no other option, and never breaks the in-a-row safety cap.')+
       (f.kind==='cov'?'<button class="optbtn" data-openpost="'+f.role+'|'+f.line+'">📣 Post open</button>':'')+
-      (f.surplus?'<button class="optbtn" data-rebal="'+f.role+'|'+f.line+'">⇄ Rebalance</button>':'')+
+      (f.surplus?'<button class="optbtn" data-rebal="'+f.role+'|'+f.line+'">⇄ Rebalance</button>'+hlpL('Moves a spare nurse from a day that has more than enough over to this short day. No overtime, no charge nurses moved, and it keeps your in-a-row limit.'):'')+
       (f.kind==='cov'?'<button class="optbtn ghost" data-lower="'+f.role+'|'+f.line+'">Lower target</button>':'')+
       '</div>';}
     else if(f.kind==='owed'){h+='<div class="flagopts"><button class="optbtn ot" data-grantall="1">🎁 Grant top wishes</button></div>';}
@@ -1850,6 +1856,9 @@ function staffTile(key,ic,label,badge){return '<button class="tile" data-tile="'
 function applyStaffView(){const v=staffView||'home';if($('staffHome'))$('staffHome').classList.toggle('hide',v!=='home');if($('staffBack'))$('staffBack').classList.toggle('hide',v==='home');['clock','schedule','hours','requests','timeoff','swaps','openshifts'].forEach(s=>{const el=$('sec-'+s);if(el)el.classList.toggle('hide',v!==s);});}
 function fmtRange(a,b){const f=iso=>{const p=(iso||'').split('-').map(Number);return new Date(p[0],p[1]-1,p[2]).toLocaleDateString(undefined,{month:'short',day:'numeric'});};return a===b?f(a):f(a)+' – '+f(b);}
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function hlp(t){return '<span class="help" tabindex="0">?<span class="tip">'+esc(t)+'</span></span>';}
+function hlpL(t){return '<span class="help help-l" tabindex="0">?<span class="tip">'+esc(t)+'</span></span>';}
+document.addEventListener('click',function(e){const h=e.target.closest&&e.target.closest('.help');document.querySelectorAll('.help.show').forEach(x=>{if(x!==h)x.classList.remove('show');});if(h){e.stopPropagation();h.classList.toggle('show');}},true);
 function isoToIdx(iso){if(!iso)return -1;const a=iso.split('-').map(Number);return Math.round((new Date(a[0],a[1]-1,a[2])-parseStart())/86400000);}
 function renderTimeoff(p){
   const mine=timeOff.filter(t=>t.sid===p.id).sort((a,b)=>(b.created||0)-(a.created||0));
@@ -1958,7 +1967,7 @@ function renderFairness(){
   let rows=staff.filter(p=>p.asn.size>0||(p.ledger||0)!==0).map(p=>{const tc=p.asn.size>0?(cycleEquity(p)-mean):0;return {p,banked:p.ledger||0,tc,standing:(p.ledger||0)+tc};});
   rows.sort((a,b)=>b.standing-a.standing||a.p.name.localeCompare(b.p.name));
   const banked=settings.bankedKey===periodKey();
-  let h=`<div style="padding:14px 16px 6px;display:flex;align-items:center;gap:8px"><b style="font-size:15px;flex:1">Fairness ledger</b><button class="bigaction ${banked?'grey':''}" id="bankBtn" style="width:auto;padding:9px 12px;min-height:auto;font-size:13px"${banked?' disabled':''}>${banked?'Banked ✓':'Bank this cycle'}</button></div>`;
+  let h=`<div style="padding:14px 16px 6px;display:flex;align-items:center;gap:8px"><b style="font-size:15px;flex:1">Fairness ledger${hlp('Each nurse has a fairness number. Working more weekends, nights, or holidays than your share pushes it up; an easy stretch pushes it down. Higher numbers get first pick next schedule. Example: Mia worked 3 weekends and Sam worked 0, so Mia’s number is higher — if both want the same Friday off, Mia gets it. Tap “Bank this cycle” when a cycle ends to lock it in.')}</b><button class="bigaction ${banked?'grey':''}" id="bankBtn" style="width:auto;padding:9px 12px;min-height:auto;font-size:13px"${banked?' disabled':''}>${banked?'Banked ✓':'Bank this cycle'}</button>${hlp('Banking saves this cycle’s fairness scores so they carry into the next schedule. Do it once a cycle is finished — it locks in who is owed so the next build can pay them back.')}</div>`;
   h+=`<div class="sub" style="padding:0 16px 10px">Who’s owed fairer shifts — higher means a raw deal (denied requests, extra weekends/holidays). The next build gives them priority. Bank each cycle to carry it forward.</div>`;
   if(!rows.length){h+=`<div style="padding:6px 16px 18px;color:var(--muted)">Build a schedule, then bank the cycle to start tracking fairness.</div>`;}
   else h+=rows.map(r=>{const lab=r.standing>=3?'Owed':r.standing<=-3?'Favored':'Fair';const cls=r.standing>=3?'low':r.standing<=-3?'good':'mid';const round=x=>Math.round(x*10)/10;return `<div class="rule"><div class="rl"><b>${r.p.name}</b><span>${r.p.role}${r.p.role!=='HUC'?' · '+(r.p.line==='day'?'Day':'Night'):''} · banked ${r.banked>0?'+':''}${r.banked}${r.p.asn.size>0?' · this cycle '+(r.tc>0?'+':'')+round(r.tc):''}</span></div><span class="reqbadge ${cls}">${lab} ${r.standing>0?'+':''}${round(r.standing)}</span></div>`;}).join('');

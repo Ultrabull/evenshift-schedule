@@ -400,6 +400,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .optbtn.ghost{background:#eef1f4;color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:calc(var(--tabh) + 20px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:13px 18px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:80;box-shadow:var(--shadow);max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#greetbar{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translate(-50%,-185%);width:calc(100% - 24px);max-width:520px;background:var(--teal);color:#fff;padding:17px 20px;border-radius:16px;font-size:17.5px;line-height:1.4;font-weight:600;text-align:center;z-index:95;opacity:0;transition:transform .4s cubic-bezier(.2,.85,.25,1),opacity .3s;box-shadow:0 12px 34px rgba(16,32,40,.30);cursor:pointer}
+#greetbar.show{transform:translate(-50%,0);opacity:1}
 </style>
 </head>
 <body>
@@ -723,6 +725,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,text/csv" style="display:none">
 
 <div class="toast" id="toast"></div>
+<div id="greetbar"></div>
 
 <script>
 "use strict";
@@ -1547,6 +1550,7 @@ function exportCSV(){
   const url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));const a=document.createElement('a');a.href=url;a.download='evenshift-schedule.csv';a.click();URL.revokeObjectURL(url);toast('Saved to your files.');
 }
 let toastT;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2400);}
+let greetT;function greetBanner(m){const b=$('greetbar');if(!b){toast(m);return;}b.textContent=m;b.classList.add('show');b.onclick=()=>b.classList.remove('show');clearTimeout(greetT);greetT=setTimeout(()=>b.classList.remove('show'),4400);}
 const HELLO_LINES=[
  "Welcome back, {n}! Let's make today fair. ⚖️",
  "Hi {n} — the schedule's lucky to have you. 🍀",
@@ -1610,15 +1614,15 @@ function whoNudge(){
 function sayHello(){try{
   const tone=settings.greetTone||'warm';if(tone==='off')return;
   const name=whoName();
-  if(tone==='playful'&&Math.random()<0.45){toast(pickLine(HELLO_LINES,'es_hello_bag').replace(/\{n\}/g,name));return;}
+  if(tone==='playful'&&Math.random()<0.45){greetBanner(pickLine(HELLO_LINES,'es_hello_bag').replace(/\{n\}/g,name));return;}
   const n=whoNudge();
-  toast(timeWord()+', '+name+'! '+(n||pickLine(WARM_LINES,'es_warm_bag')));
+  greetBanner(timeWord()+', '+name+'! '+(n||pickLine(WARM_LINES,'es_warm_bag')));
 }catch(e){}}
 function sayBye(){try{
   const tone=settings.greetTone||'warm';if(tone==='off')return;
   const name=whoName();
-  if(tone==='minimal'){toast('See you, '+name+'.');return;}
-  toast(pickLine(BYE_LINES,'es_bye_bag').replace(/\{n\}/g,name));
+  if(tone==='minimal'){greetBanner('See you, '+name+'.');return;}
+  greetBanner(pickLine(BYE_LINES,'es_bye_bag').replace(/\{n\}/g,name));
 }catch(e){}}
 
 

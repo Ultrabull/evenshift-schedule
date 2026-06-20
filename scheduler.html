@@ -41,7 +41,8 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .help{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--teal-soft);color:var(--teal-deep);font-size:11px;font-weight:800;line-height:1;cursor:pointer;vertical-align:middle;margin-left:6px;position:relative;user-select:none;align-self:center}
 .help .tip{display:none;position:absolute;left:-6px;top:165%;width:250px;max-width:74vw;background:var(--ink);color:#fff;font-size:12.5px;font-weight:500;line-height:1.45;text-align:left;padding:11px 13px;border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.30);z-index:130;white-space:normal;letter-spacing:.1px}
 .help .tip::before{content:'';position:absolute;left:11px;top:-6px;border:6px solid transparent;border-bottom-color:var(--ink);border-top:0}
-.help:hover .tip,.help.show .tip{display:block}
+.help.show .tip{display:block}
+@media (hover:hover) and (pointer:fine){.help:hover .tip{display:block}}
 .help.help-l .tip{left:auto;right:-6px}
 .help.help-l .tip::before{left:auto;right:11px}
 *{box-sizing:border-box}

@@ -43,6 +43,7 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .help .tip::before{content:'';position:absolute;left:11px;top:-6px;border:6px solid transparent;border-bottom-color:var(--ink);border-top:0}
 .help.show .tip{display:block}
 .buildtag{text-align:center;color:var(--faint);font-size:11px;margin:18px 0 2px}
+.pplsec{font-size:12px;font-weight:800;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin:18px 4px 9px}
 .help.help-l .tip{left:auto;right:-6px}
 .help.help-l .tip::before{left:auto;right:11px}
 *{box-sizing:border-box}
@@ -262,6 +263,12 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 
 /* welcome */
 .welcome .sheet{text-align:left}
+.gsec{font-weight:800;font-size:15px;color:var(--ink);margin:20px 2px 11px;padding-top:14px;border-top:1px solid var(--line)}
+.gp{font-size:14.5px;line-height:1.55;color:var(--ink);margin:11px 2px}
+.gpri{display:flex;gap:11px;align-items:flex-start;margin:10px 2px}
+.gpri .gn{flex:0 0 26px;height:26px;border-radius:50%;background:var(--teal);color:#fff;font-weight:800;font-size:13.5px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.gpri>div{font-size:14px;line-height:1.5;color:var(--ink)}
+.gnote{background:var(--teal-soft);border-radius:13px;padding:13px 15px;font-size:14px;line-height:1.55;color:var(--ink);margin:13px 2px}
 .wstep{display:flex;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}
 .wstep:last-of-type{border-bottom:none}
 .wnum{width:34px;height:34px;border-radius:50%;background:var(--teal-soft);color:var(--teal-deep);display:flex;align-items:center;justify-content:center;font-weight:700;flex:0 0 auto}
@@ -713,6 +720,31 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
   </div>
 </div>
 
+<div class="overlay" id="guideOverlay"><div class="sheet">
+  <h2>How EvenShift works 🧭</h2>
+  <div class="lead">The whole app, in plain words.</div>
+  <div class="gsec" style="border-top:0;padding-top:2px">📋 Making a schedule — 3 steps</div>
+  <div class="wstep"><div class="wnum">1</div><div><b>👥 People</b><p>Everyone on the unit is here — day staff and night staff, kept separate.</p></div></div>
+  <div class="wstep"><div class="wnum">2</div><div><b>⚙️ Rules</b><p>Set how many you need each shift with ➖ and ➕. Tap any “?” to learn what a setting means.</p></div></div>
+  <div class="wstep"><div class="wnum">3</div><div><b>📅 Schedule</b><p>Tap <b>Build</b> and the whole schedule fills in at once. If a shift is short, <b>Things to fix</b> shows it with one-tap helpers.</p></div></div>
+  <div class="gsec">🙋 How it honors what people ask for</div>
+  <p class="gp">Think of it like a coach making the team lineup. Players say which games they want and which they can’t play. EvenShift does the same with shifts.</p>
+  <p class="gp">When you tap <b>Build</b>, it follows this order, top to bottom:</p>
+  <div class="gpri"><span class="gn">1</span><div><b>Keep every shift safe.</b> It never drops below the safe minimum of staff. This always comes first.</div></div>
+  <div class="gpri"><span class="gn">2</span><div><b>Always give needed days off.</b> Approved time off is locked — no one is ever put on a day they have off.</div></div>
+  <div class="gpri"><span class="gn">3</span><div><b>Be fair.</b> Whoever got stuck with the rough shifts last time gets first pick this time. The app remembers — that’s the fairness number.</div></div>
+  <div class="gpri"><span class="gn">4</span><div><b>Grant wishes.</b> Then it gives people the days they asked for — as many as it possibly can.</div></div>
+  <div class="gnote"><b>So “honoring requests” means:</b> the app starts by trying to give everyone the days they want. Then it checks — is every shift covered? Is it fair? If one wish would leave a shift empty or pile the bad shifts on one person, it changes just that one and keeps all the rest.</div>
+  <p class="gp"><b>Three kinds of requests:</b></p>
+  <div class="gpri"><span class="gn" style="background:var(--red)">✓</span><div><b>Need off</b> (time off you approve) → <b>always</b> honored.</div></div>
+  <div class="gpri"><span class="gn" style="background:var(--amber)">~</span><div><b>Rather not</b> work a day → avoided <i>when it’s safe to</i>.</div></div>
+  <div class="gpri"><span class="gn">★</span><div><b>Want</b> to work a day → given as much as possible.</div></div>
+  <p class="gp">There’s a dial in <b>Rules → Fairness &amp; limits → Honor staff picks</b>. Turn it up to grant more wishes; turn it down for more even coverage.</p>
+  <div class="gsec">🔁 After the schedule is posted</div>
+  <p class="gp">Nurses ask for <b>swaps</b>, <b>time off</b>, and <b>open shifts</b> from their own phones. Each request lands on your <b>Home</b> screen for a yes or no — nothing changes until you approve it.</p>
+  <div class="sheet-actions"><button class="bigaction" id="guideClose">Got it 👍</button></div>
+</div></div>
+
 <!-- IMPORT PICKS -->
 <div class="overlay" id="importOverlay"><div class="sheet">
   <h2>Import picks</h2>
@@ -760,14 +792,15 @@ function fmtHrs(h){if(!h)return '0h';const r=Math.round(h*10)/10;return (Number.
 function recHours(r){if(!r||!r.in)return 0;const end=r.out||Date.now();return Math.max(0,(end-r.in)/3600000);}
 function clockHoursInRange(p,sISO,eISO){let h=0;const c=p.clock||{};for(const iso in c){if(iso>=sISO&&iso<=eISO)h+=recHours(c[iso]);}return h;}
 function weekRanges(){const out=[];const psd=(settings.payStartDow==null?START_DOW:settings.payStartDow);let s=0;for(let d=1;d<DAYS;d++){if(((START_DOW+d)%7)===psd){out.push({w:out.length,startD:s,endD:d-1,startISO:isoOf(s),endISO:isoOf(d-1)});s=d;}}out.push({w:out.length,startD:s,endD:DAYS-1,startISO:isoOf(s),endISO:isoOf(DAYS-1)});return out;}
-function schedHoursWeek(p,r){let n=0;for(let d=r.startD;d<=r.endD;d++)if(p.asn.has(d))n++;return n*12;}
+function shiftLen(p){return p&&p.role==='HUC'?8:12;}
+function schedHoursWeek(p,r){let n=0;for(let d=r.startD;d<=r.endD;d++)if(p.asn.has(d))n++;return n*shiftLen(p);}
 function workedHoursWeek(p,r){return clockHoursInRange(p,r.startISO,r.endISO);}
-function schedHoursTotal(p){return p.asn.size*12;}
+function schedHoursTotal(p){return p.asn.size*shiftLen(p);}
 function workedHoursTotal(p){let h=0;const c=p.clock||{};for(const iso in c)h+=recHours(c[iso]);return h;}
 function otTotal(p){return weekRanges().reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-(settings.otThreshold||40)),0);}
 
 /* ============ settings ============ */
-let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:2,pctNightMin:1,usePCT:true,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm'};
+let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:2,pctNightMin:1,usePCT:true,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
 function req(role,line){const cm=(settings.useCharge===false?0:(settings.chargeMin||0));if(role==='RN')return line==='day'?{ideal:settings.rnDayIdeal+cm,min:settings.rnDayMin+cm}:{ideal:settings.rnNightIdeal+cm,min:settings.rnNightMin+cm};if(role==='PCT')return line==='day'?{ideal:settings.pctDayIdeal,min:settings.pctDayMin}:{ideal:settings.pctNightIdeal,min:settings.pctNightMin};return{ideal:settings.hucNeed,min:settings.hucNeed};}
 function roleOn(role){if(role==='PCT')return settings.usePCT!==false;if(role==='HUC')return settings.useHUC!==false;return true;}
 function isoOf(d){const dt=dateOf(d);return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
@@ -782,9 +815,9 @@ function reqEff(role,line,d){if(!roleOn(role))return{ideal:0,min:0,off:true};con
 
 /* ============ solver ============ */
 const WK=()=>settings.weeks||6;
-const targetShifts=p=>p.fte==='PRN'?Math.min(2*WK(),8):p.fte==='PT'?2*WK():3*WK();
-const maxShifts=p=>p.fte==='PRN'?Math.min(2*WK(),9):p.fte==='PT'?2*WK()+1:3*WK();
-const weekCap=p=>p.fte==='PRN'?2:p.fte==='PT'?2:3;
+const targetShifts=p=>{const wk=WK();if(p.role==='HUC'&&p.fte!=='PRN'&&p.fte!=='PT')return Math.round((settings.hucWeek||5)*wk);if(p.fte==='PRN')return Math.max(1,Math.round((settings.prnMonth||1)*DAYS/30));if(p.fte==='PT')return Math.round((settings.ptWeek||2)*wk);return Math.round((settings.ftWeek||3)*wk);};
+const maxShifts=p=>targetShifts(p);
+const weekCap=p=>{if(p.role==='HUC'&&p.fte!=='PRN'&&p.fte!=='PT')return Math.max(1,settings.hucWeek||5);if(p.fte==='PRN')return 1;if(p.fte==='PT')return Math.max(1,settings.ptWeek||2);return Math.max(1,settings.ftWeek||3);};
 const weekOf=d=>Math.floor(d/7);
 const weekCount=(p,d)=>{const w=weekOf(d);let n=0;for(const x of p.asn)if(weekOf(x)===w)n++;return n;};
 const weekendQuota=p=>p.fte==='PRN'?settings.wkPRN:p.fte==='PT'?settings.wkPT:settings.wkFT;
@@ -826,6 +859,17 @@ function build(){
         if(cand){assign(cand,d);imp=true;}}}}};
   sweep(rq=>rq.min);   // minimums everywhere first, spread evenly
   sweep(rq=>rq.ideal); // then top up toward ideal where staff remain
+  // FTE top-up: give each person their contracted days (FT 3/wk, HUC 5/wk, PT 2/wk, PRN ~1/mo), spread evenly
+  {let imp=true,g=0;
+   while(imp&&g++<9000){imp=false;
+     const under=staff.filter(p=>!p.orientee&&roleOn(p.role)&&p.asn.size<targetShifts(p));
+     under.sort((a,b)=>(targetShifts(b)-b.asn.size)-(targetShifts(a)-a.asn.size));
+     for(const p of under){let best=-1,bestKey=1e15;
+       for(let d=0;d<DAYS;d++){if(!available(p,d))continue;
+         const k=(p.picks.has(d)?0:1)*100000+shiftCount(p.role,p.line,d)*100+d;
+         if(k<bestKey){bestKey=k;best=d;}}
+       if(best>=0){assign(p,best);imp=true;break;}}
+   }}
   // charge repair: ensure each shift hits its charge minimum where a charge nurse is free
   if(useCh)for(let d=0;d<DAYS;d++)for(const line of ['day','night']){
     let guard=0;
@@ -849,86 +893,89 @@ const statusOf=(c,ideal,min)=>c<min?'hole':c<ideal?'low':'full';
 /* ============ data + storage ============ */
 const REAL_ROSTER=[
   {n:'Mia Ajiro',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Kate Bauder',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Anna Campbell',role:'RN',line:'day',fte:'FT',charge:true,precept:true},
   {n:'Joses Rodolfo Cenidoza',role:'RN',line:'day',fte:'FT',charge:false,precept:true},
-  {n:'Tess Conley',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Derek Chapnji',role:'RN',line:'day',fte:'PRN',charge:true,precept:false},
+  {n:'Averri Collins',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Theresa Conley',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Kaitlyn Dodson',role:'RN',line:'day',fte:'FT',charge:false,precept:true},
   {n:'Grace Flood',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Kayla Fields',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Lindsay Garner',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Gracy George',role:'RN',line:'day',fte:'FT',charge:false,precept:true},
   {n:'Briana Gomez',role:'RN',line:'day',fte:'FT',charge:true,precept:true},
   {n:'Jordan Holden',role:'RN',line:'day',fte:'FT',charge:true,precept:true},
-  {n:'Jillian Hubbard',role:'RN',line:'day',fte:'FT',charge:false,precept:true},
-  {n:'Sarah Hughes',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Jillian Hubbard',role:'RN',line:'day',fte:'PT',charge:false,precept:true},
   {n:'Taylor Jobe',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Suja Johnson',role:'RN',line:'day',fte:'FT',charge:false,precept:true},
-  {n:'Ally Jones',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Dhanya Joseph',role:'RN',line:'day',fte:'FT',charge:false,precept:true},
-  {n:'Hyun Jung',role:'RN',line:'day',fte:'PRN',charge:false,precept:true},
   {n:'Juan Lindero',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Cara Martinez',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Kelsey Morgan',role:'RN',line:'day',fte:'PRN',charge:false,precept:true},
-  {n:'Diana Narvaez',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Gabi Rico',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Bharti Sharma',role:'RN',line:'day',fte:'FT',charge:false,precept:true},
-  {n:'Anne Marie Strauss',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Kathy Terryah',role:'RN',line:'day',fte:'PRN',charge:false,precept:true},
-  {n:'Macy Traynham',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Crystal Winners',role:'RN',line:'day',fte:'PRN',charge:false,precept:true},
+  {n:'Raquel Lusk',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Ally Moore',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Kelsey Morgan',role:'RN',line:'day',fte:'PRN',charge:true,precept:true},
+  {n:'Gillian Munoz',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Ruby Poole',role:'RN',line:'day',fte:'PRN',charge:false,precept:false},
+  {n:'Marie Rillo',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Anne Marie Strauss',role:'RN',line:'day',fte:'PRN',charge:false,precept:true},
+  {n:'Mia Tynes',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Chayse Whilhite',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Eskinder Yonis',role:'RN',line:'day',fte:'FT',charge:false,precept:true},
   {n:'Makayla Young',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Ashlyn Adams',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
   {n:'Ruth Alemayehu',role:'RN',line:'night',fte:'FT',charge:false,precept:true},
-  {n:'Kate Bauder',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Charina Bautista',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
   {n:'Geneva Marie Bato',role:'RN',line:'night',fte:'FT',charge:false,precept:true},
   {n:'Jennifer Bernardo',role:'RN',line:'night',fte:'FT',charge:false,precept:true},
   {n:'Cortney Brown',role:'RN',line:'night',fte:'FT',charge:true,precept:true},
   {n:'Celenia Delima',role:'RN',line:'night',fte:'PRN',charge:false,precept:false},
-  {n:'Cecilia Efuetlacha',role:'RN',line:'night',fte:'PRN',charge:false,precept:true},
+  {n:'Cecilia Efuetlacha',role:'RN',line:'night',fte:'FT',charge:false,precept:true},
+  {n:'Amabelle Garciano',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
   {n:'Gema Gomez',role:'RN',line:'night',fte:'FT',charge:true,precept:true},
   {n:'Mary Gutierrez',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
   {n:'Kelsey Hudson',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'Anitta James',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'December Johnson',role:'RN',line:'night',fte:'FT',charge:false,precept:true},
+  {n:'December Johnson',role:'RN',line:'night',fte:'FT',charge:true,precept:true},
   {n:'Ashley Lara',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'Stephanie Lekunga',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'Raquel Lusk',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'Gillian Munoz',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Stephanie Lekunga',role:'RN',line:'night',fte:'PRN',charge:false,precept:false},
   {n:'Ngan Nguyen',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
   {n:'Kristie Nweke',role:'RN',line:'night',fte:'FT',charge:true,precept:true},
+  {n:'Wendy Pels',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
   {n:'Krystle Faith Pilarca',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'AJ Rippenkroeger',role:'RN',line:'night',fte:'PRN',charge:true,precept:true},
-  {n:'Dini Sebastian',role:'RN',line:'night',fte:'PRN',charge:false,precept:false},
+  {n:'Alex Rippenkroeger',role:'RN',line:'night',fte:'FT',charge:true,precept:true},
   {n:'Samuel Siagi',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
   {n:'Rachel Takwih',role:'RN',line:'night',fte:'FT',charge:false,precept:true},
-  {n:'Amith Varghese',role:'RN',line:'night',fte:'PRN',charge:true,precept:false},
-  {n:'Bindhya Varghese',role:'RN',line:'night',fte:'FT',charge:false,precept:true},
-  {n:'Blessy Babu',role:'PCT',line:'day',fte:'FT',charge:false,precept:true},
-  {n:'Dennis Basto',role:'PCT',line:'day',fte:'FT',charge:false,precept:true},
-  {n:'Joselle Cariaga',role:'PCT',line:'day',fte:'PRN',charge:false,precept:true},
-  {n:'Hannah Choi',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Amith Varghese',role:'RN',line:'night',fte:'FT',charge:true,precept:false},
+  {n:'Bindhya Varghese',role:'RN',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Blessy Babu',role:'PCT',line:'day',fte:'PRN',charge:false,precept:true},
   {n:'Eric Cisneros',role:'PCT',line:'day',fte:'PRN',charge:false,precept:false},
-  {n:'Samantha Edlin',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Mia Gates',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Jacqueline Corral',role:'PCT',line:'day',fte:'PT',charge:false,precept:false},
+  {n:'Lily Cottle',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Jenifer Diaz',role:'PCT',line:'day',fte:'FT',charge:false,precept:true},
+  {n:'Kidist Ejigu',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Ivon Gonzalez',role:'PCT',line:'day',fte:'PRN',charge:false,precept:true},
-  {n:'Carina Rios',role:'PCT',line:'day',fte:'PRN',charge:false,precept:true},
+  {n:'Juan Hernandez',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Julie Rose Josh',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Abeba Kassa',role:'PCT',line:'day',fte:'FT',charge:false,precept:true},
+  {n:'Alexiz Thornton',role:'PCT',line:'day',fte:'PRN',charge:false,precept:false},
   {n:'Tamara Saavedra',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Dasia Thompson',role:'PCT',line:'day',fte:'PT',charge:false,precept:false},
-  {n:'Briana Cole',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'Jenifer Diaz',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Darby Stanley',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Fekadu Tukue',role:'PCT',line:'day',fte:'FT',charge:false,precept:true},
+  {n:'Saba Yeseab',role:'PCT',line:'day',fte:'FT',charge:false,precept:false},
+  {n:'Lydia Addo',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Dennis Basto',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
   {n:'Corina Franklin',role:'PCT',line:'night',fte:'PT',charge:false,precept:true},
-  {n:'Carina Gonzalez',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'Carson Little',role:'PCT',line:'night',fte:'PT',charge:false,precept:false},
-  {n:'Joshna Nibin',role:'PCT',line:'night',fte:'PRN',charge:false,precept:false},
-  {n:'Cindy Palencia',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
-  {n:'Carina Soto',role:'PCT',line:'night',fte:'FT',charge:false,precept:true},
+  {n:'Mia Gates',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Carina Gonzalez',role:'PCT',line:'night',fte:'FT',charge:false,precept:true},
+  {n:'Ariyel Griffin',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Angelina Isaac',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Joshna Nibin',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Michelle Martinez Ramirez',role:'PCT',line:'night',fte:'FT',charge:false,precept:true},
+  {n:'Melody Sanchez',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Jiji Skaria',role:'PCT',line:'night',fte:'FT',charge:false,precept:false},
+  {n:'Carina Soto',role:'PCT',line:'night',fte:'PRN',charge:false,precept:true},
   {n:'Siby Abraham',role:'HUC',line:'day',fte:'FT',charge:false,precept:false},
-  {n:'Jackie Brooks',role:'HUC',line:'day',fte:'FT',charge:false,precept:true},
-  {n:'Imelda Flores',role:'HUC',line:'day',fte:'FT',charge:false,precept:false}
+  {n:'Jacqueline Brooks',role:'HUC',line:'day',fte:'FT',charge:false,precept:true},
+  {n:'Imelda Flores',role:'HUC',line:'day',fte:'FT',charge:false,precept:false},
 ];
 let staff=[];let built=false;
+const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
 function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.name)p.name=shortenName(p.name);return p;}
@@ -983,8 +1030,9 @@ function renderHome(){
   h+='<button class="tile" data-go="people"><span class="tile-ic">👥</span><span class="tile-l">People</span></button>';
   h+='<button class="tile" data-go="rules"><span class="tile-ic">⚙️</span><span class="tile-l">Rules</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
+  h+='<button class="tile" data-guide="1"><span class="tile-ic">🧭</span><span class="tile-l">How it works</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 19</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 26c</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1008,14 +1056,17 @@ function renderPeople(){
   if(searchTxt)list=list.filter(p=>p.name.toLowerCase().includes(searchTxt.toLowerCase()));
   list.sort((a,b)=>a.name.localeCompare(b.name));
   $('pplCount').textContent=`${list.length} ${list.length===1?'person':'people'}`;
-  $('pplList').innerHTML=list.map(p=>{
+  const rowHtml=p=>{
     const av=p.role.toLowerCase();
-    const shift=p.role==='HUC'?'':`<span class="tag ${p.line}">${p.line==='day'?'Day':'Night'}</span>`;
+    const shift=`<span class="tag ${p.line}">${p.line==='day'?'Day':'Night'}</span>`;
     return `<div class="ppl-row" data-id="${p.id}">
       <div class="ava ${av}">${initials(p.name)||'?'}</div>
       <div><div class="nm">${p.name}</div><div class="meta">${roleWord(p.role)} ${shift}${p.charge?'<span class="tag chg">CHG</span>':''}${p.precept?'<span class="tag" style="background:#e6f0fb;color:#2c5aa0">PRE</span>':''}${p.wtw?'<span class="tag" style="background:var(--teal-soft);color:var(--teal-deep)">WTW</span>':''}${p.orientee?'<span class="tag" style="background:#fdeede;color:#9a5d11">ORI</span>':''}<span class="tag fte">${fteWord(p.fte)}</span></div></div>
       <div class="go">›</div></div>`;
-  }).join('') || `<div class="card" style="padding:26px;text-align:center;color:var(--muted)">No one here yet. Tap <b>＋ Add person</b>.</div>`;
+  };
+  const dayL=list.filter(p=>p.line==='day'),nightL=list.filter(p=>p.line==='night');
+  const sec=(label,arr)=>arr.length?`<div class="pplsec">${label} · ${arr.length}</div>`+arr.map(rowHtml).join(''):'';
+  $('pplList').innerHTML=list.length?(sec('Day',dayL)+sec('Night',nightL)):`<div class="card" style="padding:26px;text-align:center;color:var(--muted)">No one here yet. Tap <b>＋ Add person</b>.</div>`;
 }
 const roleWord=r=>r==='RN'?'Nurse':r==='PCT'?'PCT':'HUC';
 const fteWord=f=>f==='FT'?'Full-time':f==='PT'?'Part-time':'PRN';
@@ -1027,7 +1078,7 @@ const RULES=[
   ['chargeMin','Charge nurses — extra','On top of bedside (e.g. 8 + 1 = 9)','The charge nurse runs the floor and is counted on top of the bedside number. Example: 8 bedside + 1 charge = 9 nurses working that shift.'],
   ['pctDayIdeal','PCTs — day','Patient care techs, day shift','PCTs can have different targets for day and night. In the month view it shows like “4·2” — that means 4 PCTs on days and 2 on nights.'],
   ['pctNightIdeal','PCTs — night','Patient care techs, night shift'],
-  ['hucNeed','HUCs per day','Unit coordinators (day only)'],
+  ['hucNeed','HUCs on days','8-hour shifts · about 6am–11pm','HUCs (unit coordinators) work 8-hour shifts covering roughly 6am–11pm — up to 2 during the day. There is no overnight HUC shift. When short, the unit flexes or pulls coverage.'],
 ];
 const ROLE_TGL={chargeMin:'useCharge',pctDayIdeal:'usePCT',pctNightIdeal:'usePCT',hucNeed:'useHUC'};
 function renderRules(){
@@ -1123,6 +1174,10 @@ function stepRule(k,delta){
 /* ============ advanced rules ============ */
 const ADV=[
   ['maxConsec','Most shifts in a row','Safety cap (e.g. 4)','The most shifts anyone can work back-to-back before a day off, to prevent burnout. Example: a cap of 4 means no one gets a 5th shift in a row.'],
+  ['ftWeek','Full-time · days/week','Usually 3','How many shifts a full-time person works each week. The build aims to give everyone their number — full-time 3, part-time 2, PRN about 1 a month, HUC 5 (on 8-hour shifts).'],
+  ['ptWeek','Part-time · days/week','Usually 2'],
+  ['prnMonth','PRN · days/month','Usually about 1'],
+  ['hucWeek','HUC · days/week','8-hour shifts, usually 5'],
   ['wkFT','Weekend shifts · full-time','Per cycle'],
   ['wkPT','Weekend shifts · part-time','Per cycle'],
   ['honor','Honor staff picks','Aim to keep this many','How hard the app tries to give people the exact days they asked for. Higher means more requests honored, but slightly less even coverage.'],
@@ -1487,11 +1542,13 @@ $('dayBody').addEventListener('click',e=>{
 $('prevDay').onclick=()=>{curDay=(curDay-1+DAYS)%DAYS;openPicker=null;renderRibbon();renderDay();};
 $('nextDayBtn').onclick=()=>{curDay=(curDay+1)%DAYS;openPicker=null;renderRibbon();renderDay();};
 document.querySelectorAll('.tabbar [data-screen]').forEach(b=>b.onclick=()=>show(b.dataset.screen));
-$('screen-home').addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(!g)return;if(g.dataset.sv)schedView=g.dataset.sv;show(g.dataset.go);});
+$('screen-home').addEventListener('click',e=>{const gd=e.target.closest('[data-guide]');if(gd){$('guideOverlay').classList.add('show');return;}const g=e.target.closest('[data-go]');if(!g)return;if(g.dataset.sv)schedView=g.dataset.sv;show(g.dataset.go);});
 $('themeCard').addEventListener('click',e=>{const t=e.target.closest('[data-pick]');if(t){settings.theme=t.dataset.pick;applyTheme();save();renderTheme();toast(settings.theme==='premium'?'Premium look on':'Friendly look on');return;}const g=e.target.closest('[data-tone]');if(g){settings.greetTone=g.dataset.tone;save();renderTheme();toast('Greetings set to '+g.dataset.tone);return;}});
 $('buildBtn').onclick=()=>{if(!staff.length){toast('Add some people first 🙂');return;}staff.forEach(p=>{if(!p.imported)genPicks(p);});build();built=true;curDay=0;openPicker=null;renderSched();toast('Schedule built!');};
 $('exportBtn').onclick=exportCSV;
-$('helpBtn').onclick=()=>$('welcomeOverlay').classList.add('show');
+$('helpBtn').onclick=()=>$('guideOverlay').classList.add('show');
+$('guideClose').onclick=()=>$('guideOverlay').classList.remove('show');
+$('guideOverlay').addEventListener('click',e=>{if(e.target===$('guideOverlay'))$('guideOverlay').classList.remove('show');});
 $('welcomeGo').onclick=()=>{$('welcomeOverlay').classList.remove('show');};
 
 /* person sheet */
@@ -2166,7 +2223,9 @@ $('clockSetupCard').addEventListener('change',e=>{
 });
 
 /* ============ init ============ */
-const hadData=load();applyTheme();applyPeriod();picksSource=staff.some(p=>p.imported)?'imported':'sample';
+const hadData=load();
+try{if(localStorage.getItem('evenshift_roster_ver')!==ROSTER_VER){staff=seed();swaps=[];timeOff=[];openShifts=[];localStorage.setItem('evenshift_roster_ver',ROSTER_VER);save();}}catch(e){}
+applyTheme();applyPeriod();picksSource=staff.some(p=>p.imported)?'imported':'sample';
 if(!hadData){$('welcomeOverlay').classList.add('show');}
 show('people');openLogin(false);
 </script>

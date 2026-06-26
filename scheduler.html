@@ -38,17 +38,19 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .tonerow{display:flex;gap:8px;flex-wrap:wrap}
 .tonebtn{flex:1;min-width:62px;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:9px 6px;font-size:13px;font-weight:700;color:var(--muted);font-family:inherit;cursor:pointer}
 .tonebtn.on{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-deep)}
-.help{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--teal-soft);color:var(--teal-deep);font-size:11px;font-weight:800;line-height:1;cursor:pointer;vertical-align:middle;margin-left:6px;position:relative;user-select:none;align-self:center}
+.help{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--teal-soft);color:var(--teal-deep);font-size:11px;font-weight:800;line-height:1;cursor:pointer;vertical-align:middle;margin-left:6px;border:none;padding:0;font-family:inherit;user-select:none;align-self:center}
 .help .tip{display:none;position:absolute;left:-6px;top:165%;width:250px;max-width:74vw;background:var(--ink);color:#fff;font-size:12.5px;font-weight:500;line-height:1.45;text-align:left;padding:11px 13px;border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.30);z-index:130;white-space:normal;letter-spacing:.1px}
 .help .tip::before{content:'';position:absolute;left:11px;top:-6px;border:6px solid transparent;border-bottom-color:var(--ink);border-top:0}
-.helppop{position:fixed;inset:0;background:rgba(16,32,46,.5);z-index:210;display:none;align-items:center;justify-content:center;padding:26px}
-.helppop.show{display:flex}
-.helppop-card{background:var(--ink);color:#fff;border-radius:16px;padding:18px 18px 14px;max-width:330px;width:100%;box-shadow:0 18px 50px rgba(0,0,0,.45)}
-.helppop-card .txt{font-size:14px;line-height:1.5}
-.helppop-ok{margin-top:15px;width:100%;background:rgba(255,255,255,.16);color:#fff;border:none;border-radius:11px;padding:12px;font-size:14.5px;font-weight:600;font-family:inherit}
+.tipline{background:var(--ink);color:#fff;font-size:13px;line-height:1.5;padding:12px 14px;margin:2px 12px 12px;border-radius:12px;animation:accin .18s ease;cursor:pointer}
+.tipline::after{content:' ⌄ tap to close';opacity:.55;font-size:11px}
 .buildtag{text-align:center;color:var(--faint);font-size:11px;margin:18px 0 2px}
-.pplsec{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin:16px 4px 8px}
-.ppln{font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:10px;padding:1px 8px;font-size:11px;letter-spacing:0}
+".pplsec{display:flex;align-items:center;gap:9px;width:100%;font-size:12.5px;font-weight:800;letter-spacing:.4px;color:var(--ink);text-transform:uppercase;margin:11px 0 0;padding:13px 14px;background:#fff;border:1px solid var(--line);border-radius:13px;font-family:inherit;cursor:pointer;box-shadow:var(--shadow);text-align:left}
+.pplsec:active{background:#fafbfc}
+.grpcv{color:var(--faint);font-size:13px;transition:transform .2s;flex:0 0 auto}
+.pplsec.open .grpcv{transform:rotate(180deg)}
+.pplgrp{display:none;flex-direction:column;gap:7px;padding-top:7px;padding-bottom:4px}
+.pplgrp.open{display:flex;animation:accin .18s ease}
+.ppln{margin-left:auto;font-weight:800;color:var(--teal-deep);background:var(--teal-soft);border:none;border-radius:11px;padding:2px 9px;font-size:11.5px;letter-spacing:0}
 .help.help-l .tip{left:auto;right:-6px}
 .help.help-l .tip::before{left:auto;right:11px}
 *{box-sizing:border-box}
@@ -134,7 +136,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .fchip{padding:9px 14px;border-radius:20px;border:1px solid var(--line-strong);background:#fff;font-size:14px;font-weight:500;color:var(--muted);min-height:40px}
 .fchip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
 .countline{font-size:13px;color:var(--faint);margin:2px 4px 10px}
-.ppl-list{display:flex;flex-direction:column;gap:7px}
+.ppl-list{display:flex;flex-direction:column;gap:0}
 .ppl-main{flex:1;min-width:0}
 .ppl-row{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px 13px;box-shadow:var(--shadow);cursor:pointer}
 .ppl-row:active{background:#fafbfc}
@@ -306,7 +308,9 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .calcell.edit.d{background:var(--teal);border-color:var(--teal)}.calcell.edit.d .cmark,.calcell.edit.d .cdate{color:#fff}
 .calcell.edit.n{background:var(--night);border-color:var(--night)}.calcell.edit.n .cmark,.calcell.edit.n .cdate{color:#fff}
 .calcell.edit.pto{background:repeating-linear-gradient(45deg,#f0f2f5,#f0f2f5 4px,#e6eaef 4px,#e6eaef 8px);cursor:not-allowed}
-.calcell.edit.pto .cmark{font-size:10px;color:var(--faint)}
+".calcell.edit.pto .cmark{font-size:10px;color:var(--faint)}
+.calcell.edit.flt{background:#f5ecd6;border-color:#e0c98f}.calcell.edit.flt .cmark{color:#9a6a12;font-size:11px}
+.calcell.mine.flt{background:#f5ecd6;border-color:#e0c98f}.calcell.mine.flt .cmark{color:#9a6a12;font-size:10px}
 .crole{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:600;font-size:11px;line-height:1.2;border-radius:5px;padding:1px 0;margin-top:2px;width:90%;text-align:center;font-variant-numeric:tabular-nums}
 .crole.sv-ok{color:var(--green)}
 .crole.sv1{background:#fbf1da;color:var(--amber)}
@@ -605,8 +609,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 <div class="overlay welcome" id="pinSetupOverlay">
   <div class="sheet" style="text-align:center">
     <div class="wel-badge">🔒</div>
-    <h2>Set your manager code</h2>
-    <div class="lead">This keeps staff from changing the schedule. You’ll enter it to use manager tools — staff won’t need it.</div>
+    <h2>Change manager code</h2>
+    <div class="lead">Pick a new code you’ll type to open manager tools on any phone. Staff don’t need it.</div>
     <input id="pinSet1" class="selbox" placeholder="New code (4+ characters)" autocomplete="off" style="text-align:center">
     <input id="pinSet2" class="selbox" placeholder="Type it again" autocomplete="off" style="text-align:center;margin-top:8px">
     <button class="bigaction" id="pinSetGo" style="margin-top:12px">Save code</button>
@@ -781,7 +785,6 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 </div></div>
 <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,text/csv" style="display:none">
 
-<div id="helpPop" class="helppop" onclick="this.classList.remove('show')"><div class="helppop-card"><div class="txt" id="helpPopTxt"></div><button class="helppop-ok">Got it</button></div></div>
 <div class="toast" id="toast"></div>
 <div id="greetbar"></div>
 
@@ -812,9 +815,9 @@ function recHours(r){if(!r||!r.in)return 0;const end=r.out||Date.now();return Ma
 function clockHoursInRange(p,sISO,eISO){let h=0;const c=p.clock||{};for(const iso in c){if(iso>=sISO&&iso<=eISO)h+=recHours(c[iso]);}return h;}
 function weekRanges(){const out=[];const psd=(settings.payStartDow==null?START_DOW:settings.payStartDow);let s=0;for(let d=1;d<DAYS;d++){if(((START_DOW+d)%7)===psd){out.push({w:out.length,startD:s,endD:d-1,startISO:isoOf(s),endISO:isoOf(d-1)});s=d;}}out.push({w:out.length,startD:s,endD:DAYS-1,startISO:isoOf(s),endISO:isoOf(DAYS-1)});return out;}
 function shiftLen(p){return p&&p.role==='HUC'?8:12;}
-function schedHoursWeek(p,r){let n=0;for(let d=r.startD;d<=r.endD;d++)if(p.asn.has(d))n++;return n*shiftLen(p);}
+function schedHoursWeek(p,r){let n=0;for(let d=r.startD;d<=r.endD;d++)if(worked(p,d))n++;return n*shiftLen(p);}
 function workedHoursWeek(p,r){return clockHoursInRange(p,r.startISO,r.endISO);}
-function schedHoursTotal(p){return p.asn.size*shiftLen(p);}
+function schedHoursTotal(p){return workedCount(p)*shiftLen(p);}
 function workedHoursTotal(p){let h=0;const c=p.clock||{};for(const iso in c)h+=recHours(c[iso]);return h;}
 function otTotal(p){return weekRanges().reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-(settings.otThreshold||40)),0);}
 
@@ -838,7 +841,9 @@ const targetShifts=p=>{const wk=WK();if(p.role==='HUC'&&p.fte!=='PRN'&&p.fte!=='
 const maxShifts=p=>targetShifts(p);
 const weekCap=p=>{if(p.role==='HUC'&&p.fte!=='PRN'&&p.fte!=='PT')return Math.max(1,settings.hucWeek||5);if(p.fte==='PRN')return 1;if(p.fte==='PT')return Math.max(1,settings.ptWeek||2);return Math.max(1,settings.ftWeek||3);};
 const weekOf=d=>Math.floor(d/7);
-const weekCount=(p,d)=>{const w=weekOf(d);let n=0;for(const x of p.asn)if(weekOf(x)===w)n++;return n;};
+function worked(p,d){return p.asn.has(d)||!!(p.float&&p.float.has(d));}
+function workedCount(p){return p.asn.size+(p.float?p.float.size:0);}
+const weekCount=(p,d)=>{const w=weekOf(d);let n=0;for(const x of p.asn)if(weekOf(x)===w)n++;if(p.float)for(const x of p.float)if(weekOf(x)===w)n++;return n;};
 const weekendQuota=p=>p.fte==='PRN'?settings.wkPRN:p.fte==='PT'?settings.wkPT:settings.wkFT;
 function genPicks(p){
   const want=targetShifts(p)+1;const pool=[];for(let d=0;d<DAYS;d++)if(!p.pto.has(d))pool.push(d);
@@ -848,18 +853,19 @@ function genPicks(p){
   for(let i=0;i<q&&i<weDays.length;i++)chosen.add(weDays[i]);
   for(const d of pool){if(chosen.size>=want)break;chosen.add(d);}p.picks=chosen;
 }
-const consecIfAdd=(p,d)=>{let r=1,x=d-1;while(x>=0&&p.asn.has(x)){r++;x--;}x=d+1;while(x<DAYS&&p.asn.has(x)){r++;x++;}return r;};
-const available=(p,d)=>!p.pto.has(d)&&!p.asn.has(d)&&p.asn.size<maxShifts(p)&&weekCount(p,d)<weekCap(p)&&consecIfAdd(p,d)<=settings.maxConsec;
-const availableOT=(p,d)=>!p.pto.has(d)&&!p.asn.has(d)&&consecIfAdd(p,d)<=settings.maxConsec;
+const consecIfAdd=(p,d)=>{let r=1,x=d-1;while(x>=0&&worked(p,x)){r++;x--;}x=d+1;while(x<DAYS&&worked(p,x)){r++;x++;}return r;};
+const available=(p,d)=>!p.pto.has(d)&&!worked(p,d)&&workedCount(p)<maxShifts(p)&&weekCount(p,d)<weekCap(p)&&consecIfAdd(p,d)<=settings.maxConsec;
+const availableOT=(p,d)=>!p.pto.has(d)&&!worked(p,d)&&consecIfAdd(p,d)<=settings.maxConsec;
 let cycleSeed=0;
-function score(p,d){let v=0;if(p.picks.has(d))v+=100;if(p.avoid&&p.avoid.has(d))v-=80;v+=(targetShifts(p)-p.asn.size)*6;
+function score(p,d){let v=0;if(p.picks.has(d))v+=100;if(p.avoid&&p.avoid.has(d))v-=80;v+=(targetShifts(p)-workedCount(p))*6;
   const L=(p.ledger||0);if(p.picks.has(d))v+=L*3;if((isColWE(d)||isHoliday(d))&&!p.picks.has(d))v-=L*3;
   if(lineWEof(p.line,d)){const need=weekendQuota(p)-p.weCount;if(p.wtw)v+=40;if(need>0)v+=need*9;else v-=12;}
   v-=((p.seniority+cycleSeed)%Math.max(1,staff.length))*0.04;return v;}
-function assign(p,d){p.asn.add(d);if(lineWEof(p.line,d))p.weCount++;if(p.line==='night'&&isRough(d))p.roughCount++;}
+function assign(p,d){if(p.float)p.float.delete(d);p.asn.add(d);if(lineWEof(p.line,d))p.weCount++;if(p.line==='night'&&isRough(d))p.roughCount++;}
 function unassign(p,d){p.asn.delete(d);if(lineWEof(p.line,d))p.weCount--;if(p.line==='night'&&isRough(d))p.roughCount--;}
+function floatAssign(p,d){p.asn.delete(d);(p.float=p.float||new Set()).add(d);}
 function build(){
-  cycleSeed++;staff.forEach(p=>{p.asn=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();if(!p.picks||!p.picks.size)genPicks(p);});
+  cycleSeed++;staff.forEach(p=>{p.asn=new Set();p.float=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();if(!p.picks||!p.picks.size)genPicks(p);});
   const fill=(role,line,d,target,wantCharge)=>{
     const have=()=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
     if(wantCharge){let pool=staff.filter(p=>p.role===role&&p.line===line&&p.charge&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d));
@@ -878,16 +884,18 @@ function build(){
         if(cand){assign(cand,d);imp=true;}}}}};
   sweep(rq=>rq.min);   // minimums everywhere first, spread evenly
   sweep(rq=>rq.ideal); // then top up toward ideal where staff remain
-  // FTE top-up: give each person their contracted days (FT 3/wk, HUC 5/wk, PT 2/wk, PRN ~1/mo), spread evenly
+  // FTE top-up with FLOAT overflow: bring everyone to their contracted days, but only fill 10G up to its
+  // capacity (your coverage numbers). Days beyond what the unit can hold become FLOAT (worked off 10G).
   {let imp=true,g=0;
-   while(imp&&g++<9000){imp=false;
-     const under=staff.filter(p=>!p.orientee&&roleOn(p.role)&&p.asn.size<targetShifts(p));
-     under.sort((a,b)=>(targetShifts(b)-b.asn.size)-(targetShifts(a)-a.asn.size));
+   while(imp&&g++<12000){imp=false;
+     const under=staff.filter(p=>!p.orientee&&roleOn(p.role)&&workedCount(p)<targetShifts(p));
+     under.sort((a,b)=>(targetShifts(b)-workedCount(b))-(targetShifts(a)-workedCount(a)));
      for(const p of under){let best=-1,bestKey=1e15;
        for(let d=0;d<DAYS;d++){if(!available(p,d))continue;
-         const k=(p.picks.has(d)?0:1)*100000+shiftCount(p.role,p.line,d)*100+d;
+         const room=shiftCount(p.role,p.line,d)<reqEff(p.role,p.line,d).ideal?0:1;
+         const k=room*1000000+(p.picks.has(d)?0:1)*1000+d;
          if(k<bestKey){bestKey=k;best=d;}}
-       if(best>=0){assign(p,best);imp=true;break;}}
+       if(best>=0){if(shiftCount(p.role,p.line,best)<reqEff(p.role,p.line,best).ideal)assign(p,best);else floatAssign(p,best);imp=true;break;}}
    }}
   // charge repair: ensure each shift hits its charge minimum where a charge nurse is free
   if(useCh)for(let d=0;d<DAYS;d++)for(const line of ['day','night']){
@@ -895,6 +903,31 @@ function build(){
     while(chargeCount(line,d)<settings.chargeMin&&guard++<10){
       const c=staff.find(p=>p.role==='RN'&&p.line===line&&p.charge&&!p.orientee&&available(p,d));
       if(!c)break;assign(c,d);
+    }
+  }
+  // Float in turns: even out who gets floated within each shift group. Swaps on-unit<->float on the SAME day
+  // between the most- and least-floated person, so coverage and everyone's total days stay identical —
+  // only whose turn it is to float changes. Never floats a charge nurse if it would drop charge below the min.
+  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
+    if(!roleOn(r))continue;
+    const grp=staff.filter(p=>!p.orientee&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    if(grp.length<2)continue;
+    let guard=0,changed=true;
+    while(changed&&guard++<6000){changed=false;
+      grp.sort((a,b)=>b.float.size-a.float.size);
+      const loN=grp[grp.length-1].float.size;
+      for(let i=0;i<grp.length;i++){const H=grp[i];
+        if(H.float.size-loN<=1)break;
+        let swapped=false;
+        for(const d of H.float){
+          for(let j=grp.length-1;j>i;j--){const L=grp[j];
+            if(H.float.size-L.float.size<=1)continue;
+            if(!L.asn.has(d))continue;
+            if(L.charge&&r==='RN'&&chargeCount(l,d)<=settings.chargeMin)continue;
+            assign(H,d);floatAssign(L,d);swapped=true;break;}
+          if(swapped)break;}
+        if(swapped){changed=true;break;}
+      }
     }
   }
   // orientees: extra on the floor, shadowing their preceptor (only on days the preceptor works)
@@ -997,7 +1030,7 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(p.name)p.name=shortenName(p.name);return p;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();if(p.name)p.name=shortenName(p.name);return p;}
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,senior:false,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
@@ -1016,10 +1049,18 @@ function save(){try{
   localStorage.setItem(KEY_TO,JSON.stringify(timeOff));
   localStorage.setItem(KEY_OS,JSON.stringify(openShifts));
 }catch(e){}}
+function hashCode(s){let h=2166136261>>>0;s=String(s);for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return (h>>>0).toString(36);}
+const MGR_DEFAULT_HASH='b9k6h9';const KEY_MGRDEV='evenshift_mgrdev_v1';
+function effMgrHash(){return settings.mgrPinHash||MGR_DEFAULT_HASH;}
+function checkMgrCode(code){code=String(code||'').trim();if(settings.mgrPin)return code===settings.mgrPin;return hashCode(code)===effMgrHash();}
+function rememberMgr(){try{localStorage.setItem(KEY_MGRDEV,'1');}catch(e){}}
+function forgetMgr(){try{localStorage.removeItem(KEY_MGRDEV);}catch(e){}}
+function mgrRemembered(){try{return localStorage.getItem(KEY_MGRDEV)==='1';}catch(e){return false;}}
 
 /* ============ app state ============ */
 const $=id=>document.getElementById(id);
 let screen='people',curDay=0,filterRole='all',searchTxt='',editId=null,openPicker=null,picksSource='sample';
+let openGroups=new Set();
 let schedView='month',calMode='coverage',editPersonId=null,painting=false,paintAdd=true,openFlag=null,staffView='home';
 let addingRule=false,ruleDraft={name:'',note:false,role:'PCT',line:'night',min:3};
 let addingHoliday=false,holDraft={name:'',date:''};
@@ -1051,7 +1092,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-guide="1"><span class="tile-ic">🧭</span><span class="tile-l">How it works</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 26g</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 26l</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1082,12 +1123,12 @@ function renderPeople(){
       <div class="ppl-main"><div class="nm">${p.name}</div><div class="meta">${p.charge?'<span class="tag chg">CHG</span>':''}${p.precept?'<span class="tag" style="background:#e6f0fb;color:#2c5aa0">PRE</span>':''}${p.senior?'<span class="tag" style="background:#ede7fb;color:#5b46b8">SR</span>':''}${p.wtw?'<span class="tag" style="background:var(--teal-soft);color:var(--teal-deep)">WTW</span>':''}${p.orientee?'<span class="tag" style="background:#fdeede;color:#9a5d11">ORI</span>':''}<span class="tag fte">${fteWord(p.fte)}</span></div></div>
       <div class="go">›</div></div>`;
   };
-  const grp=(label,arr)=>arr.length?`<div class="pplsec">${label}<span class="ppln">${arr.length}</span></div>`+arr.map(rowHtml).join(''):'';
+  const grp=(key,label,arr)=>{if(!arr.length)return '';const open=searchTxt?true:openGroups.has(key);return `<button type="button" class="pplsec${open?' open':''}" data-grp="${key}"><span>${label}</span><span class="ppln">${arr.length}</span><span class="grpcv">▾</span></button><div class="pplgrp${open?' open':''}">${arr.map(rowHtml).join('')}</div>`;};
   let H='';
   [['RN','Nurses'],['PCT','PCTs'],['HUC','HUCs']].forEach(([role,rlabel])=>{
     const rl=list.filter(p=>p.role===role);if(!rl.length)return;
-    if(role==='HUC'){H+=grp(rlabel,rl);return;}
-    H+=grp(rlabel+' · Day',rl.filter(p=>p.line==='day'))+grp(rlabel+' · Night',rl.filter(p=>p.line==='night'));
+    if(role==='HUC'){H+=grp('HUC',rlabel,rl);return;}
+    H+=grp(role+'|day',rlabel+' · Day',rl.filter(p=>p.line==='day'))+grp(role+'|night',rlabel+' · Night',rl.filter(p=>p.line==='night'));
   });
   $('pplList').innerHTML=list.length?H:`<div class="card" style="padding:26px;text-align:center;color:var(--muted)">No one here yet. Tap <b>＋ Add person</b>.</div>`;
 }
@@ -1292,7 +1333,8 @@ function renderChecklist(){
   const ft=active.filter(p=>p.fte==='FT');const weC=ft.map(p=>{let n=0;p.asn.forEach(d=>{if(lineWEof(p.line,d))n++;});return n;});
   const weRange=weC.length?Math.max(...weC)-Math.min(...weC):0;
   const oris=staff.filter(p=>p.orientee);let oriBad=0;oris.forEach(o=>{const pr=staff.find(x=>x.id===o.preceptor);if(!pr){oriBad++;return;}[...(o.oriDays||[])].forEach(d=>{if(!pr.asn.has(d))oriBad++;});});
-  let under=0;active.forEach(p=>{if(roleOn(p.role)&&p.asn.size<targetShifts(p))under++;});
+  let under=0;active.forEach(p=>{if(roleOn(p.role)&&workedCount(p)<targetShifts(p))under++;});
+  let floated=0;staff.forEach(p=>{floated+=(p.float?p.float.size:0);});
   let surplus=0;for(let d=0;d<DAYS;d++)for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){if(!roleOn(r))continue;if(shiftCount(r,l,d)>reqEff(r,l,d).ideal)surplus++;}
   const anySenior=staff.some(p=>p.senior);
   let supportShort=0;for(let d=0;d<DAYS;d++)for(const line of ['day','night']){const pres=staff.filter(p=>p.role==='RN'&&p.line===line&&!p.orientee&&p.asn.has(d));if(!pres.length)continue;const ex=pres.filter(p=>p.senior||p.charge||p.precept).length;if((pres.length-ex)>ex)supportShort++;}
@@ -1315,6 +1357,7 @@ function renderChecklist(){
   h+='<div class="cktier">\u2696\ufe0f Fairness & requests</div>';
   h+=row(under?'warn':'ok','Everyone works their FTE days',under?under+' '+(under>1?'people are':'person is')+' under their days (short-staffed there, or lots of time off)':'Full-time 3/wk \u00b7 part-time 2/wk \u00b7 PRN ~1/mo \u00b7 HUC 5/wk');
   if(surplus)h+=row('rev','Some shifts are overstaffed',surplus+' shift'+pl(surplus)+' have more staff than the target \u2014 fine to keep, or trim if you don\u2019t need them');
+  if(floated)h+=row('rev','Some days are floated off 10G',floated+' shift'+pl(floated)+' are worked off the unit \u2014 10G was already full those days, so the extra hands go to another unit (still counts toward their days & hours)');
   h+=row(fatigue?'warn':'ok','Fatigue limits respected',fatigue?fatigue+' '+(fatigue>1?'people':'person')+' over '+settings.maxConsec+' in a row':'No one works more than '+settings.maxConsec+' shifts in a row');
   h+=row('rev','Hard shifts shared over time','Weekends, nights & holidays even out across cycles in the Fairness ledger');
   h+=row(reqPct==null?'off':(reqPct>=80?'ok':'warn'),'Requested days granted',reqPct==null?'No requests yet \u2014 import MyTime picks':reqPct+'% of requested days granted'+(imp?'':' (sample picks for now)'));
@@ -1407,6 +1450,8 @@ function renderDay(){
     oris.forEach(p=>{h+=`<button class="chip" style="background:#fdeede;color:#9a5d11" data-rmori="${p.id}|${d}">${firstName(p.name)} <span style="font-size:9px;font-weight:700;opacity:.7">ORI</span><span class="x">✕</span></button>`;});
     if(!members.length&&!oris.length)h+='<span class="pkempty">No one yet — tap “Add”.</span>';
     h+='</div>';
+    const _fl=staff.filter(q=>q.role===s.role&&q.line===s.line&&q.float&&q.float.has(d));
+    if(_fl.length)h+=`<div class="chgwarn" style="color:#9a6a12;background:#f9f1dd;border-color:#e7d39a">↗ Floated off 10G today: ${_fl.map(q=>firstName(q.name)).join(', ')}</div>`;
     if(s.charge&&chg<settings.chargeMin)h+=`<div class="chgwarn">⚠ No charge nurse here yet.</div>`;
     h+=`<button class="addbtn" data-add="${key}">＋ Add ${s.ttl}</button>`;
     if(members.length)h+=`<button class="addbtn callout" data-callout="${s.role}|${s.line}|${d}">📞 Cover a call-out</button>`;
@@ -1493,9 +1538,10 @@ function renderCalendar(){
   const usePCT=settings.usePCT!==false;
   let banner,cells='';
   if(edit){
-    banner=`<div class="caledit"><div>Editing <b>${firstName(p.name)}</b> — drag across days to add or remove shifts</div><button class="ghostbtn" id="calDone">Done</button></div>`;
-    for(let d=0;d<DAYS;d++){const on=p.asn.has(d),pto=p.pto.has(d);
-      cells+=`<div class="calcell edit ${pto?'pto':on?(p.line==='night'?'n':'d'):''}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${pto?'OFF':on?(p.line==='night'?'N':'D'):''}</div></div>`;}
+    banner=`<div class="caledit"><div>Editing <b>${firstName(p.name)}</b> — drag across days to add or remove shifts<br><span style="color:#9a6a12;font-size:11px">FLT = floated off 10G (worked, but on another unit)</span></div><button class="ghostbtn" id="calDone">Done</button></div>`;
+    for(let d=0;d<DAYS;d++){const on=p.asn.has(d),fl=p.float&&p.float.has(d),pto=p.pto.has(d);
+      const _c=pto?'pto':on?(p.line==='night'?'n':'d'):fl?'flt':'';const _m=pto?'OFF':on?(p.line==='night'?'N':'D'):fl?'FLT':'';
+      cells+=`<div class="calcell edit ${_c}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${_m}</div></div>`;}
   }else{
     banner=`<div class="calbar"><span>RN${usePCT?' &amp; PCT':''} per day (day·night). Tap to open.</span><select id="calPick" class="calsel"><option value="">✏️ Edit a person…</option>${[...staff].sort((a,b)=>a.name.localeCompare(b.name)).map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>`;
     const sev=s=>s<=0?'sv-ok':s===1?'sv1':s===2?'sv2':'sv3';
@@ -1509,7 +1555,7 @@ function renderCalendar(){
 function calApply(d){const p=editPerson();if(!p||p.pto.has(d))return;
   if(paintAdd&&!p.asn.has(d))assign(p,d);else if(!paintAdd&&p.asn.has(d))unassign(p,d);else return;
   const cell=$('calCard').querySelector('.calcell[data-d="'+d+'"]');
-  if(cell){cell.classList.remove('d','n');const on=p.asn.has(d);if(on)cell.classList.add(p.line==='night'?'n':'d');const mk=cell.querySelector('.cmark');if(mk)mk.textContent=on?(p.line==='night'?'N':'D'):'';}
+  if(cell){cell.classList.remove('d','n','flt');const on=p.asn.has(d);if(on)cell.classList.add(p.line==='night'?'n':'d');const mk=cell.querySelector('.cmark');if(mk)mk.textContent=on?(p.line==='night'?'N':'D'):'';}
 }
 $('schedViewTabs').addEventListener('click',e=>{const b=e.target.closest('[data-sv]');if(!b)return;schedView=b.dataset.sv;if(schedView!=='month'){calMode='coverage';editPersonId=null;}renderSched();});
 $('calCard').addEventListener('change',e=>{if(e.target.id==='calPick'&&e.target.value){editPersonId=+e.target.value;calMode='edit';renderCalendar();}});
@@ -1566,7 +1612,7 @@ $('flags').addEventListener('click',e=>{
 /* ============ events ============ */
 $('search').addEventListener('input',e=>{searchTxt=e.target.value;renderPeople();});
 $('filters').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;filterRole=b.dataset.f;renderPeople();});
-$('pplList').addEventListener('click',e=>{const r=e.target.closest('[data-id]');if(!r)return;openPerson(+r.dataset.id);});
+$('pplList').addEventListener('click',e=>{const g=e.target.closest('[data-grp]');if(g){const k=g.dataset.grp;if(openGroups.has(k))openGroups.delete(k);else openGroups.add(k);renderPeople();return;}const r=e.target.closest('[data-id]');if(!r)return;openPerson(+r.dataset.id);});
 $('addFab').addEventListener('click',()=>openPerson(null));
 $('rulesCard').addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(!b)return;const[k,dv]=b.dataset.step.split('|');stepRule(k,+dv);});
 $('rulesCard').addEventListener('click',e=>{const tg=e.target.closest('[data-roletgl]');if(!tg)return;const k=tg.dataset.roletgl;settings[k]=settings[k]===false?true:false;renderRules();rulesChanged();});
@@ -1958,12 +2004,12 @@ function renderMySchedule(p){
   const lead=START_DOW,trail=(7-((lead+DAYS)%7))%7;
   let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
   const tday=cycleDayToday();
-  let cells='';for(let d=0;d<DAYS;d++){const on=p.asn.has(d),pto=p.pto.has(d);const cls=pto?'pto':on?(p.line==='night'?'n':'d'):'';const mk=pto?'OFF':on?(p.line==='night'?'N':'D'):'';cells+='<div class="calcell mine '+cls+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+(d===tday?' today':'')+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+mk+'</div>'+(isHoliday(d)?'<div class="holstar">★</div>':'')+'</div>';}
-  let h='<div style="padding:10px 12px 2px"><div class="caltiny">D = day · N = night · OFF = time off · ★ = holiday</div><div class="calgrid reqgrid">'+head+pad+cells+padT+'</div></div>';
-  const start=Math.max(0,tday);const days=[...p.asn].filter(d=>d>=start).sort((a,b)=>a-b).slice(0,8);
+  let cells='';for(let d=0;d<DAYS;d++){const on=p.asn.has(d),fl=p.float&&p.float.has(d),pto=p.pto.has(d);const cls=pto?'pto':on?(p.line==='night'?'n':'d'):fl?'flt':'';const mk=pto?'OFF':on?(p.line==='night'?'N':'D'):fl?'FLT':'';cells+='<div class="calcell mine '+cls+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+(d===tday?' today':'')+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+mk+'</div>'+(isHoliday(d)?'<div class="holstar">★</div>':'')+'</div>';}
+  let h='<div style="padding:10px 12px 2px"><div class="caltiny">D = day · N = night · FLT = floated off 10G · OFF = off · ★ = holiday</div><div class="calgrid reqgrid">'+head+pad+cells+padT+'</div></div>';
+  const start=Math.max(0,tday);const days=[...p.asn,...(p.float||[])].filter(d=>d>=start).sort((a,b)=>a-b).slice(0,8);
   const fairMsg=(p.ledger||0)>=3?'<div style="padding:11px 16px;background:var(--teal-soft);font-size:13.5px;color:var(--teal-deep);font-weight:600">⚖️ You’re owed fairer shifts — you’ll get first pick next cycle.</div>':'';
   h+='<div class="sect" style="margin:8px 14px 4px">Upcoming shifts</div>'+fairMsg;
-  h+=days.length?days.map(d=>{const dt=dateOf(d);const given=openShifts.some(o=>o.fromId===p.id&&o.day===d&&(o.status==='open'||o.status==='claimed'));return '<div class="rule"><div class="rl"><b>'+dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+'</b><span>'+(p.line==='day'?'Day 7a–7p':'Night 7p–7a')+' · '+shiftReason(p,d)+(isHoliday(d)?' · ★':'')+'</span></div>'+(given?'<span class="tobadge pend">Given up</span>':'<div style="display:flex;gap:6px;margin-left:auto;flex:0 0 auto"><button class="swapbtn" data-swap="'+d+'">⇄ Swap</button><button class="swapbtn gv" data-giveup="'+d+'">Give up</button></div>')+'</div>';}).join(''):'<div style="padding:16px;color:var(--faint)">No upcoming shifts yet. Your manager builds the schedule.</div>';
+  h+=days.length?days.map(d=>{const dt=dateOf(d);const fl=p.float&&p.float.has(d);const given=openShifts.some(o=>o.fromId===p.id&&o.day===d&&(o.status==='open'||o.status==='claimed'));return '<div class="rule"><div class="rl"><b>'+dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+'</b><span>'+(p.line==='day'?'Day 7a–7p':'Night 7p–7a')+' · '+shiftReason(p,d)+(isHoliday(d)?' · ★':'')+'</span></div>'+(given?'<span class="tobadge pend">Given up</span>':fl?'<span class="tobadge pend" style="background:#f5ecd6;color:#9a6a12">Float · off 10G</span>':'<div style="display:flex;gap:6px;margin-left:auto;flex:0 0 auto"><button class="swapbtn" data-swap="'+d+'">⇄ Swap</button><button class="swapbtn gv" data-giveup="'+d+'">Give up</button></div>')+'</div>';}).join(''):'<div style="padding:16px;color:var(--faint)">No upcoming shifts yet. Your manager builds the schedule.</div>';
   $('myShiftsCard').innerHTML=h;
 }
 function renderOpenShifts(p){
@@ -1988,9 +2034,9 @@ function staffTile(key,ic,label,badge){return '<button class="tile" data-tile="'
 function applyStaffView(){const v=staffView||'home';if($('staffHome'))$('staffHome').classList.toggle('hide',v!=='home');if($('staffBack'))$('staffBack').classList.toggle('hide',v==='home');['clock','schedule','hours','requests','timeoff','swaps','openshifts'].forEach(s=>{const el=$('sec-'+s);if(el)el.classList.toggle('hide',v!==s);});}
 function fmtRange(a,b){const f=iso=>{const p=(iso||'').split('-').map(Number);return new Date(p[0],p[1]-1,p[2]).toLocaleDateString(undefined,{month:'short',day:'numeric'});};return a===b?f(a):f(a)+' – '+f(b);}
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function hlp(t){return '<span class="help" tabindex="0">?<span class="tip">'+esc(t)+'</span></span>';}
-function hlpL(t){return '<span class="help help-l" tabindex="0">?<span class="tip">'+esc(t)+'</span></span>';}
-document.addEventListener('click',function(e){const h=e.target.closest&&e.target.closest('.help');if(!h)return;e.preventDefault();e.stopPropagation();const tip=h.querySelector('.tip');const pop=document.getElementById('helpPop'),txt=document.getElementById('helpPopTxt');if(pop&&txt){txt.textContent=tip?tip.textContent:'';pop.classList.add('show');}},true);
+function hlp(t){return '<button type="button" class="help" data-tip="'+esc(t)+'">?</button>';}
+function hlpL(t){return hlp(t);}
+document.addEventListener('click',function(e){const h=e.target.closest&&e.target.closest('.help');if(!h)return;e.preventDefault();e.stopPropagation();const txt=h.getAttribute('data-tip')||'';const anchor=h.closest('.rule')||h.closest('.flag')||h.closest('.gpri')||h.closest('div')||h.parentElement;const cur=document.querySelector('.tipline');const same=cur&&cur._anchor===anchor;if(cur)cur.remove();if(same)return;const tl=document.createElement('div');tl.className='tipline';tl.textContent=txt;tl._anchor=anchor;tl.onclick=function(){tl.remove();};if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(tl,anchor.nextSibling);},true);
 function isoToIdx(iso){if(!iso)return -1;const a=iso.split('-').map(Number);return Math.round((new Date(a[0],a[1]-1,a[2])-parseStart())/86400000);}
 function renderTimeoff(p){
   const mine=timeOff.filter(t=>t.sid===p.id).sort((a,b)=>(b.created||0)-(a.created||0));
@@ -2078,13 +2124,13 @@ function renderMyHours(p){
   else h+=`<div style="padding:10px 16px 16px;color:var(--faint);font-size:14px">No clock-ins yet. Use <b>Clock in for duty</b> above and your hours will add up here.</div>`;
   $('myHoursCard').innerHTML=h;
 }
-function weekendCountP(p){let n=0;p.asn.forEach(d=>{if(isColWE(d))n++;});return n;}
+function weekendCountP(p){let n=0;p.asn.forEach(d=>{if(isColWE(d))n++;});if(p.float)p.float.forEach(d=>{if(isColWE(d))n++;});return n;}
 function holidayCountP(p){let n=0;p.asn.forEach(d=>{if(isHoliday(d))n++;});return n;}
 function deniedWantsP(p){let n=0;p.picks.forEach(d=>{if(!p.asn.has(d)&&!p.pto.has(d))n++;});return n;}
 function workedAvoidsP(p){let n=0;(p.avoid||new Set()).forEach(d=>{if(p.asn.has(d))n++;});return n;}
 function grantedWantsP(p){let n=0;p.picks.forEach(d=>{if(p.asn.has(d))n++;});return n;}
 function cycleEquity(p){const we=p.wtw?0:weekendCountP(p);return deniedWantsP(p)*2+workedAvoidsP(p)*2+holidayCountP(p)*3+we-grantedWantsP(p)*0.5;}
-function shiftReason(p,d){return p.picks.has(d)?'you asked for it':isHoliday(d)?'holiday rotation':isColWE(d)?'weekend coverage':'unit coverage';}
+function shiftReason(p,d){if(p.float&&p.float.has(d))return 'floated off 10G';return p.picks.has(d)?'you asked for it':isHoliday(d)?'holiday rotation':isColWE(d)?'weekend coverage':'unit coverage';}
 function periodKey(){return (settings.startISO||'')+'|'+(settings.weeks||6);}
 function bankCycle(){
   const active=staff.filter(p=>p.asn.size>0);
@@ -2187,7 +2233,7 @@ function renderClockSetup(){
   let h=`<div style="padding:14px 16px 4px"><b style="font-size:15px">Staff app & clock-in</b><div class="sub">Choose what this unit uses.</div></div>`;
   h+=`<div class="toggle" style="padding:10px 16px"><div><b>Staff submit requests?</b><span>Off = you build the schedule top-down (no staff requests)</span></div><button class="sw-toggle ${s.selfSchedule?'on':''}" data-tog="self"><i></i></button></div>`;
   h+=`<div class="toggle" style="padding:10px 16px"><div><b>Clock-in & timekeeping?</b><span>Off = scheduling only. Hides the time clock, Hours and Today.</span></div><button class="sw-toggle ${(settings.useTimekeeping!==false)?'on':''}" data-tog="timekeeping"><i></i></button></div>`;
-  h+=`<div class="rule"><div class="rl"><b>Manager code</b><span>${s.mgrPin?'Set ✓ · staff can’t switch to manager':'Not set — anyone can become manager'}</span></div><button class="bigaction grey" id="setPin" style="width:auto;padding:11px 13px;min-height:auto;font-size:13px">${s.mgrPin?'Change':'Set code'}</button></div>`;
+  h+=`<div class="rule"><div class="rl"><b>Manager code</b><span>Required to manage on any phone${(s.mgrPinHash||s.mgrPin)?' · custom code set':''}</span></div><button class="bigaction grey" id="setPin" style="width:auto;padding:11px 13px;min-height:auto;font-size:13px">Change</button></div>`;
   h+=`<div class="rule"><div class="rl"><b>Unit name</b></div><input id="unitNameInp" value="${(s.unitName||'').replace(/"/g,'&quot;')}" style="${INP};max-width:130px"></div>`;
   const tk=settings.useTimekeeping!==false;
   if(tk){
@@ -2238,16 +2284,13 @@ function renderToday(){
   $('todayCard').innerHTML=h;
 }
 /* listeners */
-$('switchBtn').onclick=()=>{sayBye();openLogin(false);};
-$('lockBtn').onclick=()=>{sayBye();openLogin(true);};
-$('pinSetGo').onclick=()=>{const a=($('pinSet1').value||'').trim(),b=($('pinSet2').value||'').trim();if(a.length<4){toast('Use at least 4 characters');return;}if(a!==b){toast('The two codes don\u2019t match');return;}settings.mgrPin=a;save();$('pinSetupOverlay').classList.remove('show');$('pinSet1').value='';$('pinSet2').value='';renderClockSetup();toast('Manager code set — keep it safe');if(!(currentUser&&currentUser.role==='manager'))enterManager();if(!settings.setupDone)openSetup();};
+$('switchBtn').onclick=()=>{forgetMgr();sayBye();openLogin(false);};
+$('lockBtn').onclick=()=>{forgetMgr();sayBye();openLogin(true);};
+$('pinSetGo').onclick=()=>{const a=($('pinSet1').value||'').trim(),b=($('pinSet2').value||'').trim();if(a.length<4){toast('Use at least 4 characters');return;}if(a!==b){toast('The two codes don\u2019t match');return;}settings.mgrPinHash=hashCode(a);delete settings.mgrPin;rememberMgr();save();$('pinSetupOverlay').classList.remove('show');$('pinSet1').value='';$('pinSet2').value='';renderClockSetup();toast('Manager code updated on this phone');};
 $('pinSet2').addEventListener('keydown',e=>{if(e.key==='Enter')$('pinSetGo').onclick();});
 function enterManager(){currentUser={role:'manager'};$('loginOverlay').classList.remove('show');applyRole();sayHello();}
-$('loginMgr').onclick=()=>{
-  if(!settings.mgrPin){if($('pinSet1'))$('pinSet1').value='';if($('pinSet2'))$('pinSet2').value='';$('pinSetupOverlay').classList.add('show');}
-  else{$('pinEntry').value='';$('pinEntryOverlay').classList.add('show');setTimeout(()=>{try{$('pinEntry').focus();}catch(e){}},50);}
-};
-$('pinEntryGo').onclick=()=>{const a=($('pinEntry').value||'').trim();if(a===settings.mgrPin){$('pinEntryOverlay').classList.remove('show');$('pinEntry').value='';enterManager();}else toast('Wrong code');};
+$('loginMgr').onclick=()=>{$('pinEntry').value='';$('pinEntryOverlay').classList.add('show');setTimeout(()=>{try{$('pinEntry').focus();}catch(e){}},50);};
+$('pinEntryGo').onclick=()=>{const a=($('pinEntry').value||'').trim();if(checkMgrCode(a)){$('pinEntryOverlay').classList.remove('show');$('pinEntry').value='';rememberMgr();enterManager();}else toast('That code is not right');};
 $('pinEntryCancel').onclick=()=>{$('pinEntryOverlay').classList.remove('show');$('pinEntry').value='';};
 $('pinEntry').addEventListener('keydown',e=>{if(e.key==='Enter')$('pinEntryGo').onclick();});
 $('loginSearch').addEventListener('input',e=>renderLoginList(e.target.value));
@@ -2300,7 +2343,7 @@ const hadData=load();
 try{if(localStorage.getItem('evenshift_roster_ver')!==ROSTER_VER){staff=seed();swaps=[];timeOff=[];openShifts=[];localStorage.setItem('evenshift_roster_ver',ROSTER_VER);save();}}catch(e){}
 applyTheme();applyPeriod();picksSource=staff.some(p=>p.imported)?'imported':'sample';
 if(!hadData){$('welcomeOverlay').classList.add('show');}
-show('people');openLogin(false);
+if(mgrRemembered()){enterManager();}else{show('people');openLogin(false);}
 </script>
 </body>
 </html>

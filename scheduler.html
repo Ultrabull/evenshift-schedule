@@ -41,9 +41,14 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .help{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--teal-soft);color:var(--teal-deep);font-size:11px;font-weight:800;line-height:1;cursor:pointer;vertical-align:middle;margin-left:6px;position:relative;user-select:none;align-self:center}
 .help .tip{display:none;position:absolute;left:-6px;top:165%;width:250px;max-width:74vw;background:var(--ink);color:#fff;font-size:12.5px;font-weight:500;line-height:1.45;text-align:left;padding:11px 13px;border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.30);z-index:130;white-space:normal;letter-spacing:.1px}
 .help .tip::before{content:'';position:absolute;left:11px;top:-6px;border:6px solid transparent;border-bottom-color:var(--ink);border-top:0}
-.help.show .tip{display:block}
+.helppop{position:fixed;inset:0;background:rgba(16,32,46,.5);z-index:210;display:none;align-items:center;justify-content:center;padding:26px}
+.helppop.show{display:flex}
+.helppop-card{background:var(--ink);color:#fff;border-radius:16px;padding:18px 18px 14px;max-width:330px;width:100%;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.helppop-card .txt{font-size:14px;line-height:1.5}
+.helppop-ok{margin-top:15px;width:100%;background:rgba(255,255,255,.16);color:#fff;border:none;border-radius:11px;padding:12px;font-size:14.5px;font-weight:600;font-family:inherit}
 .buildtag{text-align:center;color:var(--faint);font-size:11px;margin:18px 0 2px}
-.pplsec{font-size:12px;font-weight:800;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin:18px 4px 9px}
+.pplsec{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:800;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;margin:16px 4px 8px}
+.ppln{font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:10px;padding:1px 8px;font-size:11px;letter-spacing:0}
 .help.help-l .tip{left:auto;right:-6px}
 .help.help-l .tip::before{left:auto;right:11px}
 *{box-sizing:border-box}
@@ -129,12 +134,13 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .fchip{padding:9px 14px;border-radius:20px;border:1px solid var(--line-strong);background:#fff;font-size:14px;font-weight:500;color:var(--muted);min-height:40px}
 .fchip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
 .countline{font-size:13px;color:var(--faint);margin:2px 4px 10px}
-.ppl-list{display:flex;flex-direction:column;gap:8px}
-.ppl-row{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px 14px;box-shadow:var(--shadow);cursor:pointer}
+.ppl-list{display:flex;flex-direction:column;gap:7px}
+.ppl-main{flex:1;min-width:0}
+.ppl-row{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px 13px;box-shadow:var(--shadow);cursor:pointer}
 .ppl-row:active{background:#fafbfc}
-.ava{width:40px;height:40px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff}
+.ava{width:36px;height:36px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;color:#fff}
 .ava.rn{background:var(--teal)}.ava.pct{background:#5a8a3f}.ava.huc{background:#a06a2c}
-.ppl-row .nm{font-weight:600;font-size:15.5px}
+.ppl-row .nm{font-weight:600;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ppl-row .meta{font-size:12.5px;color:var(--muted);margin-top:1px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .tag{font-size:10px;padding:2px 7px;border-radius:6px;font-weight:600}
 .tag.day{background:var(--teal-soft);color:var(--teal-deep)}
@@ -189,6 +195,14 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .daybody{padding:12px 14px 16px}
 .shiftcard{border:1px solid var(--line);border-radius:13px;margin-bottom:12px;overflow:hidden}
 .shiftcard.short{border-color:#e7c4c1}
+.cktier{padding:15px 16px 7px;font-weight:700;font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
+.cktier.first{border-top:none}
+.ckrow{display:flex;gap:12px;align-items:flex-start;padding:11px 16px;border-bottom:1px solid var(--line)}
+.ckrow:last-child{border-bottom:none}
+.ckdot{flex:0 0 auto;width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;margin-top:1px}
+.ck-ok{background:var(--green)}.ck-warn{background:var(--amber)}.ck-rev{background:#6b7fd7}.ck-off{background:#c3c8cf}
+.cktext{display:flex;flex-direction:column;gap:2px}.cktext b{font-size:14.5px;font-weight:600}
+.ckdet{font-size:12.5px;color:var(--muted);line-height:1.35}
 .sc-h{display:flex;align-items:center;gap:9px;padding:13px;background:#fbfcfd;border-bottom:1px solid var(--line)}
 .sc-h .ttl{font-weight:600;font-size:15px}.sc-h .ttl small{font-weight:500;color:var(--faint);font-size:12px;margin-left:3px}
 .sc-h .cnt{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px}
@@ -507,7 +521,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <div id="timeoffReview"></div>
     <div id="openReview"></div>
     <div id="healthBanner" class="health ok"></div>
-    <div class="viewtabs" id="schedViewTabs" style="margin-bottom:14px"><button data-sv="month" class="on">📅 Month</button><button data-sv="day">📋 Day</button><button data-sv="req">📝 Requests</button><button data-sv="today">🕐 Today</button><button data-sv="hours">⏱ Hours</button><button data-sv="fair">⚖️ Fairness</button></div>
+    <div class="viewtabs" id="schedViewTabs" style="margin-bottom:14px"><button data-sv="month" class="on">📅 Month</button><button data-sv="day">📋 Day</button><button data-sv="req">📝 Requests</button><button data-sv="today">🕐 Today</button><button data-sv="hours">⏱ Hours</button><button data-sv="fair">⚖️ Fairness</button><button data-sv="check">✅ Check</button></div>
     <div id="dayWrap">
     <div class="card ribbon-card">
       <div class="ribbon-wrap"><div class="ribbon-inner"><div class="rlabels"><span class="sp"></span><span>Day</span><span>Night</span><span class="aide">aides</span></div><div class="ribbon" id="ribbon"></div></div></div>
@@ -535,6 +549,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <div class="card hide" id="todayCard"></div>
     <div class="card hide" id="hoursCard"></div>
     <div class="card hide" id="fairCard"></div>
+    <div class="card hide" id="checkCard"></div>
     <div class="card flagcard">
       <div class="card-h"><h2>Things to fix</h2><span class="tag2" id="flagCount"></span></div>
       <div id="flags"></div>
@@ -688,6 +703,9 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <div id="preceptWrap">
       <div class="toggle" style="margin-top:8px"><div><b>Can precept</b><span>Can train an orientee</span></div><button class="sw-toggle" id="f_precept"><i></i></button></div>
     </div>
+    <div id="seniorWrap">
+      <div class="toggle" style="margin-top:8px"><div><b>Senior / experienced</b><span>Seasoned staff who can anchor a shift for newer nurses</span></div><button class="sw-toggle" id="f_senior"><i></i></button></div>
+    </div>
     <div id="wtwWrap">
       <div class="toggle" style="margin-top:8px"><div><b>Weekend program (WTW)</b><span>Works weekends by choice — won't be moved off them</span></div><button class="sw-toggle" id="f_wtw"><i></i></button></div>
     </div>
@@ -763,6 +781,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 </div></div>
 <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,text/csv" style="display:none">
 
+<div id="helpPop" class="helppop" onclick="this.classList.remove('show')"><div class="helppop-card"><div class="txt" id="helpPopTxt"></div><button class="helppop-ok">Got it</button></div></div>
 <div class="toast" id="toast"></div>
 <div id="greetbar"></div>
 
@@ -978,8 +997,8 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.name)p.name=shortenName(p.name);return p;}
-function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(p.name)p.name=shortenName(p.name);return p;}
+function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,senior:false,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
     if(c){const cs=JSON.parse(c);if(cs.pctIdeal!=null&&cs.pctDayIdeal==null){cs.pctDayIdeal=cs.pctIdeal;cs.pctDayMin=(cs.pctMin!=null?cs.pctMin:Math.max(1,cs.pctIdeal-1));}settings=Object.assign(settings,cs);}
@@ -991,7 +1010,7 @@ function load(){
   staff=seed();return false;
 }
 function save(){try{
-  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0}))));
+  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
   localStorage.setItem(KEY_SW,JSON.stringify(swaps));
   localStorage.setItem(KEY_TO,JSON.stringify(timeOff));
@@ -1032,7 +1051,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-guide="1"><span class="tile-ic">🧭</span><span class="tile-l">How it works</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 26c</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 26g</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1058,15 +1077,19 @@ function renderPeople(){
   $('pplCount').textContent=`${list.length} ${list.length===1?'person':'people'}`;
   const rowHtml=p=>{
     const av=p.role.toLowerCase();
-    const shift=`<span class="tag ${p.line}">${p.line==='day'?'Day':'Night'}</span>`;
     return `<div class="ppl-row" data-id="${p.id}">
       <div class="ava ${av}">${initials(p.name)||'?'}</div>
-      <div><div class="nm">${p.name}</div><div class="meta">${roleWord(p.role)} ${shift}${p.charge?'<span class="tag chg">CHG</span>':''}${p.precept?'<span class="tag" style="background:#e6f0fb;color:#2c5aa0">PRE</span>':''}${p.wtw?'<span class="tag" style="background:var(--teal-soft);color:var(--teal-deep)">WTW</span>':''}${p.orientee?'<span class="tag" style="background:#fdeede;color:#9a5d11">ORI</span>':''}<span class="tag fte">${fteWord(p.fte)}</span></div></div>
+      <div class="ppl-main"><div class="nm">${p.name}</div><div class="meta">${p.charge?'<span class="tag chg">CHG</span>':''}${p.precept?'<span class="tag" style="background:#e6f0fb;color:#2c5aa0">PRE</span>':''}${p.senior?'<span class="tag" style="background:#ede7fb;color:#5b46b8">SR</span>':''}${p.wtw?'<span class="tag" style="background:var(--teal-soft);color:var(--teal-deep)">WTW</span>':''}${p.orientee?'<span class="tag" style="background:#fdeede;color:#9a5d11">ORI</span>':''}<span class="tag fte">${fteWord(p.fte)}</span></div></div>
       <div class="go">›</div></div>`;
   };
-  const dayL=list.filter(p=>p.line==='day'),nightL=list.filter(p=>p.line==='night');
-  const sec=(label,arr)=>arr.length?`<div class="pplsec">${label} · ${arr.length}</div>`+arr.map(rowHtml).join(''):'';
-  $('pplList').innerHTML=list.length?(sec('Day',dayL)+sec('Night',nightL)):`<div class="card" style="padding:26px;text-align:center;color:var(--muted)">No one here yet. Tap <b>＋ Add person</b>.</div>`;
+  const grp=(label,arr)=>arr.length?`<div class="pplsec">${label}<span class="ppln">${arr.length}</span></div>`+arr.map(rowHtml).join(''):'';
+  let H='';
+  [['RN','Nurses'],['PCT','PCTs'],['HUC','HUCs']].forEach(([role,rlabel])=>{
+    const rl=list.filter(p=>p.role===role);if(!rl.length)return;
+    if(role==='HUC'){H+=grp(rlabel,rl);return;}
+    H+=grp(rlabel+' · Day',rl.filter(p=>p.line==='day'))+grp(rlabel+' · Night',rl.filter(p=>p.line==='night'));
+  });
+  $('pplList').innerHTML=list.length?H:`<div class="card" style="padding:26px;text-align:center;color:var(--muted)">No one here yet. Tap <b>＋ Add person</b>.</div>`;
 }
 const roleWord=r=>r==='RN'?'Nurse':r==='PCT'?'PCT':'HUC';
 const fteWord=f=>f==='FT'?'Full-time':f==='PT'?'Part-time':'PRN';
@@ -1224,10 +1247,11 @@ function renderSched(){
   $('todayCard').classList.toggle('hide',v!=='today');
   $('hoursCard').classList.toggle('hide',v!=='hours');
   $('fairCard').classList.toggle('hide',v!=='fair');
+  $('checkCard').classList.toggle('hide',v!=='check');
   const ssOff=!settings.selfSchedule;
   $('picksCard').classList.toggle('hide',ssOff);
   const reqTab=$('schedViewTabs').querySelector('[data-sv=\"req\"]');if(reqTab)reqTab.classList.toggle('hide',ssOff);
-  if(v==='month')renderCalendar();else if(v==='req')renderRequests();else if(v==='today')renderToday();else if(v==='hours')renderHoursMgr();else if(v==='fair')renderFairness();else{renderRibbon();renderDay();}
+  if(v==='month')renderCalendar();else if(v==='req')renderRequests();else if(v==='today')renderToday();else if(v==='hours')renderHoursMgr();else if(v==='fair')renderFairness();else if(v==='check')renderChecklist();else{renderRibbon();renderDay();}
   renderSwapReview();renderTimeoffReview();renderOpenReview();
   renderHealth();
   renderFlags();
@@ -1250,6 +1274,52 @@ function renderRequests(){
     row+='</div>';return row;}).join('');
   if(people.length>40)h+='<div style="padding:10px 16px;color:var(--faint);font-size:13px">+'+(people.length-40)+' more people\u2026</div>';
   $('reqCard').innerHTML=h;
+}
+function renderChecklist(){
+  const active=staff.filter(p=>!p.orientee);
+  const usePCT=roleOn('PCT'),useHUC=roleOn('HUC'),useCh=settings.useCharge!==false;
+  let shortSlots=0;for(let d=0;d<DAYS;d++){
+    if(shiftCount('RN','day',d)<reqEff('RN','day',d).min)shortSlots++;
+    if(shiftCount('RN','night',d)<reqEff('RN','night',d).min)shortSlots++;
+    if(usePCT){if(shiftCount('PCT','day',d)<reqEff('PCT','day',d).min)shortSlots++;if(shiftCount('PCT','night',d)<reqEff('PCT','night',d).min)shortSlots++;}
+    if(useHUC&&shiftCount('HUC','day',d)<reqEff('HUC','day',d).min)shortSlots++;}
+  let chgShort=0;if(useCh)for(let d=0;d<DAYS;d++){if(chargeCount('day',d)<settings.chargeMin)chgShort++;if(chargeCount('night',d)<settings.chargeMin)chgShort++;}
+  let expShort=0;for(let d=0;d<DAYS;d++)for(const line of ['day','night']){if(shiftCount('RN',line,d)===0)continue;const has=staff.some(p=>p.role==='RN'&&p.line===line&&!p.orientee&&(p.senior||p.charge||p.precept)&&p.asn.has(d));if(!has)expShort++;}
+  let ptoViol=0;staff.forEach(p=>p.asn.forEach(d=>{if(p.pto.has(d))ptoViol++;}));
+  let weShort=0;for(let d=0;d<DAYS;d++){
+    if(isDayWE(d)){if(shiftCount('RN','day',d)<reqEff('RN','day',d).min)weShort++;if(usePCT&&shiftCount('PCT','day',d)<reqEff('PCT','day',d).min)weShort++;}
+    if(isNightWE(d)){if(shiftCount('RN','night',d)<reqEff('RN','night',d).min)weShort++;if(usePCT&&shiftCount('PCT','night',d)<reqEff('PCT','night',d).min)weShort++;}}
+  const ft=active.filter(p=>p.fte==='FT');const weC=ft.map(p=>{let n=0;p.asn.forEach(d=>{if(lineWEof(p.line,d))n++;});return n;});
+  const weRange=weC.length?Math.max(...weC)-Math.min(...weC):0;
+  const oris=staff.filter(p=>p.orientee);let oriBad=0;oris.forEach(o=>{const pr=staff.find(x=>x.id===o.preceptor);if(!pr){oriBad++;return;}[...(o.oriDays||[])].forEach(d=>{if(!pr.asn.has(d))oriBad++;});});
+  let under=0;active.forEach(p=>{if(roleOn(p.role)&&p.asn.size<targetShifts(p))under++;});
+  let surplus=0;for(let d=0;d<DAYS;d++)for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){if(!roleOn(r))continue;if(shiftCount(r,l,d)>reqEff(r,l,d).ideal)surplus++;}
+  const anySenior=staff.some(p=>p.senior);
+  let supportShort=0;for(let d=0;d<DAYS;d++)for(const line of ['day','night']){const pres=staff.filter(p=>p.role==='RN'&&p.line===line&&!p.orientee&&p.asn.has(d));if(!pres.length)continue;const ex=pres.filter(p=>p.senior||p.charge||p.precept).length;if((pres.length-ex)>ex)supportShort++;}
+  let fatigue=0;active.forEach(p=>{if(maxRun(p.asn)>settings.maxConsec)fatigue++;});
+  let wT=0,wG=0;staff.forEach(p=>p.picks.forEach(d=>{wT++;if(p.asn.has(d))wG++;}));
+  const reqPct=wT?Math.round(wG/wT*100):null;const imp=staff.some(p=>p.imported);
+  const S={ok:['ck-ok','\u2713'],warn:['ck-warn','!'],rev:['ck-rev','\ud83d\udc41'],off:['ck-off','\u2013']};
+  const row=(st,t,d)=>`<div class="ckrow"><span class="ckdot ${S[st][0]}">${S[st][1]}</span><div class="cktext"><b>${t}</b>${d?'<span class="ckdet">'+d+'</span>':''}</div></div>`;
+  const pl=(n)=>n>1?'s':'';
+  let h='<div style="padding:13px 16px 4px"><b>Schedule check</b><div class="sub">Built top to bottom \u2014 anything higher always wins. \u2713 passed \u00b7 ! needs a look \u00b7 \ud83d\udc41 a human should confirm.</div></div>';
+  h+='<div class="cktier first">\ud83d\udee1\ufe0f Safety \u2014 must be true</div>';
+  h+=row(shortSlots?'warn':'ok','Safe numbers on every shift',shortSlots?shortSlots+' shift'+pl(shortSlots)+' below the safe minimum \u2014 see Things to fix':'Every day & night meets the minimum');
+  h+=row(!useCh?'off':(chgShort?'warn':'ok'),'A charge nurse on every shift',!useCh?'Charge tracking is off':(chgShort?chgShort+' shift'+pl(chgShort)+' without a charge nurse':'Covered on every day & night'));
+  h+=row(expShort?'warn':'ok','An experienced nurse on every shift',expShort?expShort+' shift'+pl(expShort)+' have no senior/charge/preceptor nurse':'No shift is all-new \u2014 based on senior, charge & preceptor flags');
+  h+=row(ptoViol?'warn':'ok','Approved time off protected',ptoViol?ptoViol+' shift'+pl(ptoViol)+' land on someone\u2019s time off':'No one is scheduled on their approved time off');
+  h+='<div class="cktier">\ud83e\udde9 Right people in the right spots</div>';
+  h+=row(weShort?'warn':'ok','Weekends covered & shared',weShort?weShort+' weekend slot'+pl(weShort)+' below minimum':(weRange>2?'Covered \u2014 but some carry '+weRange+' more weekend shifts than others, worth a look':'Covered and shared fairly'));
+  h+=row(!oris.length?'off':(oriBad?'warn':'ok'),'Preceptors paired with orientees',!oris.length?'No orientees this cycle':(oriBad?oriBad+' orientee day not matched to a preceptor':'Every orientee shadows their preceptor, counted as extra'));
+  h+=row(!anySenior?'rev':(supportShort?'warn':'ok'),'New nurses spread out & supported',!anySenior?'Mark your senior nurses on the People tab to switch this check on':(supportShort?supportShort+' shift'+pl(supportShort)+' have more new nurses than seasoned ones \u2014 worth rebalancing':'Every shift has enough seasoned staff for the newer nurses'));
+  h+='<div class="cktier">\u2696\ufe0f Fairness & requests</div>';
+  h+=row(under?'warn':'ok','Everyone works their FTE days',under?under+' '+(under>1?'people are':'person is')+' under their days (short-staffed there, or lots of time off)':'Full-time 3/wk \u00b7 part-time 2/wk \u00b7 PRN ~1/mo \u00b7 HUC 5/wk');
+  if(surplus)h+=row('rev','Some shifts are overstaffed',surplus+' shift'+pl(surplus)+' have more staff than the target \u2014 fine to keep, or trim if you don\u2019t need them');
+  h+=row(fatigue?'warn':'ok','Fatigue limits respected',fatigue?fatigue+' '+(fatigue>1?'people':'person')+' over '+settings.maxConsec+' in a row':'No one works more than '+settings.maxConsec+' shifts in a row');
+  h+=row('rev','Hard shifts shared over time','Weekends, nights & holidays even out across cycles in the Fairness ledger');
+  h+=row(reqPct==null?'off':(reqPct>=80?'ok':'warn'),'Requested days granted',reqPct==null?'No requests yet \u2014 import MyTime picks':reqPct+'% of requested days granted'+(imp?'':' (sample picks for now)'));
+  h+=row('rev','Holidays on a fair rotation','Worked a holiday last year \u2192 off this year. Tracked across cycles.');
+  $('checkCard').innerHTML=h;
 }
 function renderRibbon(){const r=$('ribbon');r.innerHTML='';
   for(let d=0;d<DAYS;d++){const c=coverage[d];
@@ -1564,6 +1634,8 @@ function paintDraft(){
   $('f_charge').classList.toggle('on',!!draft.charge);
   $('preceptWrap').classList.toggle('hide',huc||draft.orientee);
   $('f_precept').classList.toggle('on',!!draft.precept);
+  $('seniorWrap').classList.toggle('hide',draft.orientee);
+  $('f_senior').classList.toggle('on',!!draft.senior);
   $('wtwWrap').classList.toggle('hide',huc||draft.orientee);
   $('f_wtw').classList.toggle('on',!!draft.wtw);
   $('orienteeWrap').classList.toggle('hide',huc);
@@ -1578,8 +1650,8 @@ function paintDraft(){
 }
 function openPerson(id){
   editId=id;
-  if(id==null){draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,wtw:false,orientee:false,preceptor:null};$('personTitle').textContent='Add a person';$('f_name').value='';$('personDelete').classList.add('hide');}
-  else{const p=staff.find(x=>x.id===id);draft={role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:!!p.precept,wtw:!!p.wtw,orientee:!!p.orientee,preceptor:p.preceptor??null};$('personTitle').textContent='Edit person';$('f_name').value=p.name;$('personDelete').classList.remove('hide');}
+  if(id==null){draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,senior:false,wtw:false,orientee:false,preceptor:null};$('personTitle').textContent='Add a person';$('f_name').value='';$('personDelete').classList.add('hide');}
+  else{const p=staff.find(x=>x.id===id);draft={role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:!!p.precept,senior:!!p.senior,wtw:!!p.wtw,orientee:!!p.orientee,preceptor:p.preceptor??null};$('personTitle').textContent='Edit person';$('f_name').value=p.name;$('personDelete').classList.remove('hide');}
   paintDraft();$('personOverlay').classList.add('show');
 }
 $('personOverlay').addEventListener('click',e=>{
@@ -1590,6 +1662,7 @@ $('personOverlay').addEventListener('click',e=>{
   if(fte){draft.fte=fte.dataset.fte;paintDraft();}
   if(e.target.closest('#f_charge')){draft.charge=!draft.charge;paintDraft();}
   if(e.target.closest('#f_precept')){draft.precept=!draft.precept;paintDraft();}
+  if(e.target.closest('#f_senior')){draft.senior=!draft.senior;paintDraft();}
   if(e.target.closest('#f_wtw')){draft.wtw=!draft.wtw;paintDraft();}
   if(e.target.closest('#f_orientee')){draft.orientee=!draft.orientee;if(draft.orientee)draft.charge=false;paintDraft();}
 });
@@ -1598,8 +1671,8 @@ $('personCancel').onclick=()=>$('personOverlay').classList.remove('show');
 $('personSave').onclick=()=>{
   const name=$('f_name').value.trim();if(!name){toast('Please type a name');return;}
   if(editId==null){const id=staff.length?Math.max(...staff.map(p=>p.id))+1:0;
-    staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0}));toast('Added '+firstName(name));}
-  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor});toast('Saved');}
+    staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0}));toast('Added '+firstName(name));}
+  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor});toast('Saved');}
   $('personOverlay').classList.remove('show');rosterChanged();
 };
 $('personDelete').onclick=()=>{if(editId==null)return;if(!confirm('Remove this person? Their shifts will be reassigned.'))return;staff=staff.filter(p=>p.id!==editId);$('personOverlay').classList.remove('show');rosterChanged();toast('Removed — schedule updated');};
@@ -1917,7 +1990,7 @@ function fmtRange(a,b){const f=iso=>{const p=(iso||'').split('-').map(Number);re
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function hlp(t){return '<span class="help" tabindex="0">?<span class="tip">'+esc(t)+'</span></span>';}
 function hlpL(t){return '<span class="help help-l" tabindex="0">?<span class="tip">'+esc(t)+'</span></span>';}
-let _helpT;document.addEventListener('click',function(e){const h=e.target.closest&&e.target.closest('.help');document.querySelectorAll('.help.show').forEach(x=>{if(x!==h)x.classList.remove('show');});clearTimeout(_helpT);if(h){e.stopPropagation();const open=!h.classList.contains('show');h.classList.toggle('show');if(open)_helpT=setTimeout(()=>h.classList.remove('show'),6000);}},true);
+document.addEventListener('click',function(e){const h=e.target.closest&&e.target.closest('.help');if(!h)return;e.preventDefault();e.stopPropagation();const tip=h.querySelector('.tip');const pop=document.getElementById('helpPop'),txt=document.getElementById('helpPopTxt');if(pop&&txt){txt.textContent=tip?tip.textContent:'';pop.classList.add('show');}},true);
 function isoToIdx(iso){if(!iso)return -1;const a=iso.split('-').map(Number);return Math.round((new Date(a[0],a[1]-1,a[2])-parseStart())/86400000);}
 function renderTimeoff(p){
   const mine=timeOff.filter(t=>t.sid===p.id).sort((a,b)=>(b.created||0)-(a.created||0));

@@ -58,6 +58,19 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .preflegend i.lk{background:var(--teal)}.preflegend i.av{background:#e6c477}.preflegend i.ct{background:#e8a7a0}
 .prefcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin:0 0 12px;box-shadow:var(--shadow)}
 .steptile{display:flex;align-items:center;gap:12px;width:100%;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 9px;box-shadow:var(--shadow);font-family:inherit;cursor:pointer;text-align:left}
+.attsec{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+.menutitle{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+.laytog{display:inline-flex;gap:2px;background:#eef1f3;border-radius:9px;padding:2px}
+.layb{border:0;background:transparent;border-radius:7px;padding:4px 9px;font-size:11.5px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--muted);text-transform:none;letter-spacing:0}
+.layb.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:6px}
+.dtile{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 12px;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:7px;text-align:left}
+.dtile:active{transform:scale(.99)}
+.dtile-ic{font-size:23px;line-height:1}
+.dtile-l{font-size:13.5px;font-weight:700;color:var(--ink)}
+.dtile-b{position:absolute;top:9px;right:11px;font-size:14px;font-weight:800;color:var(--muted)}
+.dtile.amber{border-color:#f0d9a8}.dtile.amber .dtile-b{color:var(--amber)}
+.dtile.red{border-color:#e6b0a8}.dtile.red .dtile-b{color:#c0392b}
 .steptile:active{background:#fafbfc}
 .stepn{flex:0 0 auto;width:25px;height:25px;border-radius:50%;background:var(--teal);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
 .steptile .tile-ic{font-size:22px;flex:0 0 auto;line-height:1}
@@ -546,7 +559,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 
 <!-- SCHEDULE -->
 <div class="screen hide" id="screen-sched">
-  <div class="screen-h"><h1>Schedule</h1><p>Tap Build to make a fair schedule. Then flip through it day by day.</p></div>
+  <div class="screen-h"><h1 id="schedTitle">Schedule</h1><p id="schedSubt">Tap Build to make a fair schedule. Then flip through it day by day.</p></div>
   <div class="card" id="picksCard" style="padding:13px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <div style="flex:1;min-width:150px"><b style="font-size:14.5px">Staff picks</b><div id="picksSrc" style="font-size:12.5px;color:var(--muted);margin-top:1px">Using sample picks</div></div>
     <button class="bigaction grey" id="importBtn" style="flex:0 0 auto;width:auto;padding:12px 16px;min-height:auto;font-size:14px">📥 Import</button>
@@ -734,8 +747,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 <!-- TAB BAR -->
 <div class="tabbar" id="tabbar">
   <button id="tab-home" class="on" data-screen="home"><span class="ic">🏠</span>Home</button>
-  <button id="tab-people" data-screen="people"><span class="ic">👥</span>People</button>
   <button id="tab-rules" data-screen="rules"><span class="ic">⚙️</span>Rules</button>
+  <button id="tab-people" data-screen="people"><span class="ic">👥</span>People</button>
   <button id="tab-sched" data-screen="sched"><span class="ic">📅</span>Schedule</button>
 </div>
 
@@ -1160,11 +1173,11 @@ function renderHome(){
   if($('homeHi'))$('homeHi').textContent=(settings.unitName||'10G')+' dashboard';
   if($('homeSub'))$('homeSub').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
   const stat=(go,sv,ic,label,value,sev)=>'<button class="homecard '+(sev||'')+'" data-go="'+go+'"'+(sv?' data-sv="'+sv+'"':'')+'><span class="hc-ic">'+ic+'</span><div class="hc-t"><b>'+label+'</b></div><span class="hc-v">'+value+'</span></button>';
-  let h='<div class="sect" style="margin-top:2px">Needs your attention</div>';
-  h+=stat('sched','month','🛠️','Things to fix',built?(gaps?gaps+' to review':'All solved ✓'):'Build first',gaps?'red':'');
-  h+=stat('sched','month','🔄','Swap requests',String(pendSwaps),pendSwaps?'amber':'');
-  h+=stat('sched','month','✈️','Time-off requests',String(pendTO),pendTO?'amber':'');
-  h+=stat('sched','month','📣','Open-shift pickups',String(pendOS),pendOS?'amber':'');
+  const lay=settings.dashLayout||'tiles';
+  let h='<div class="sect attsec">Needs your attention<span class="laytog"><button class="layb'+(lay==='tiles'?' on':'')+'" data-lay="tiles">▦ Tiles</button><button class="layb'+(lay==='cards'?' on':'')+'" data-lay="cards">▤ Cards</button></span></div>';
+  const items=[['sched','check','🛠️','Things to fix',built?(gaps?String(gaps):'✓'):'—',gaps?'red':''],['sched','month','🔄','Swaps',String(pendSwaps),pendSwaps?'amber':''],['sched','month','✈️','Time off',String(pendTO),pendTO?'amber':''],['sched','month','📣','Pickups',String(pendOS),pendOS?'amber':'']];
+  if(lay==='cards'){items.forEach(it=>{h+=stat(it[0],it[1],it[2],it[3],it[4],it[5]);});}
+  else{h+='<div class="dgrid">';items.forEach(it=>{h+='<button class="dtile '+(it[5]||'')+'" data-go="'+it[0]+'" data-sv="'+it[1]+'"><span class="dtile-b">'+it[4]+'</span><span class="dtile-ic">'+it[2]+'</span><span class="dtile-l">'+it[3]+'</span></button>';});h+='</div>';}
   h+='<div class="sect">Make a schedule</div>';
   const step=(n,go,sv,gd,ic,t,sub)=>'<button class="steptile"'+(gd?' data-guide="1"':' data-go="'+go+'"'+(sv?' data-sv="'+sv+'"':''))+'><span class="stepn">'+n+'</span><span class="tile-ic">'+ic+'</span><div class="step-t"><b>'+t+'</b><span>'+sub+'</span></div><span class="stepgo">›</span></button>';
   h+=step(1,'','',true,'🧭','How it works','A quick 1-minute tour');
@@ -1175,7 +1188,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 26s</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 26v</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1358,6 +1371,7 @@ function renderSched(){
   $('buildBtn').textContent=built?'↻ Build again':'✨ Build schedule';
   const ni=staff.filter(p=>p.imported).length;$('picksSrc').textContent=ni?`Using imported picks (${ni} people)`:'Using sample picks';
   const v=schedView;
+  const VT={month:['Schedule','The whole month at a glance'],day:['Day view','One shift at a time'],req:['Requests','Staff picks & imported requests'],today:['Today','Who\u2019s on right now'],hours:['Hours','Scheduled hours per person'],fair:['Fairness','Weekends, holidays & floats — shared fairly'],check:['Check','A safety & fairness review of the draft']};const _vt=VT[v]||VT.month;if($('schedTitle'))$('schedTitle').textContent=_vt[0];if($('schedSubt'))$('schedSubt').textContent=_vt[1];
   const _code=(currentUser&&currentUser.role==='manager'&&settings.useTimekeeping!==false)?activeCode():'';
   $('todayCodeBar').innerHTML=_code?`<div class="codebar">🔑 Today’s clock-in code: <b>${_code}</b><span>changes at midnight</span></div>`:'';
   $('schedViewTabs').querySelectorAll('[data-sv]').forEach(b=>b.classList.toggle('on',b.dataset.sv===v));
@@ -1744,7 +1758,7 @@ $('dayBody').addEventListener('click',e=>{
 $('prevDay').onclick=()=>{curDay=(curDay-1+DAYS)%DAYS;openPicker=null;renderRibbon();renderDay();};
 $('nextDayBtn').onclick=()=>{curDay=(curDay+1)%DAYS;openPicker=null;renderRibbon();renderDay();};
 document.querySelectorAll('.tabbar [data-screen]').forEach(b=>b.onclick=()=>show(b.dataset.screen));
-$('screen-home').addEventListener('click',e=>{const gd=e.target.closest('[data-guide]');if(gd){$('guideOverlay').classList.add('show');return;}const g=e.target.closest('[data-go]');if(!g)return;if(g.dataset.sv)schedView=g.dataset.sv;show(g.dataset.go);});
+$('screen-home').addEventListener('click',e=>{const gd=e.target.closest('[data-guide]');if(gd){$('guideOverlay').classList.add('show');return;}const ly=e.target.closest('[data-lay]');if(ly){settings.dashLayout=ly.dataset.lay;save();renderHome();return;}const g=e.target.closest('[data-go]');if(!g)return;if(g.dataset.sv)schedView=g.dataset.sv;show(g.dataset.go);});
 $('themeCard').addEventListener('click',e=>{const t=e.target.closest('[data-pick]');if(t){settings.theme=t.dataset.pick;applyTheme();save();renderTheme();toast(settings.theme==='premium'?'Premium look on':'Friendly look on');return;}const g=e.target.closest('[data-tone]');if(g){settings.greetTone=g.dataset.tone;save();renderTheme();toast('Greetings set to '+g.dataset.tone);return;}});
 $('buildBtn').onclick=()=>{if(!staff.length){toast('Add some people first 🙂');return;}staff.forEach(p=>{if(!p.imported)genPicks(p);});build();built=true;curDay=0;openPicker=null;renderSched();toast('Schedule built!');};
 $('exportBtn').onclick=exportCSV;
@@ -2152,18 +2166,22 @@ function renderStaff(){
   const pendSwaps=swaps.filter(s=>(s.status==='pending'||s.status==='mgr')&&Object.values(s).includes(p.id)).length;
   const pendTO=timeOff.filter(t=>t.sid===p.id&&t.status==='pending').length;
   const rcl=p.clock[todayISO()]||{},onDutyNow=rcl.in&&!rcl.out;
-  const TLS=[];
-  if(tkOn)TLS.push(staffTile('clock','🕐','Clock In / Out',onDutyNow?'On':''));
-  TLS.push(staffTile('schedule','📅','My Schedule',''));
-  if(settings.selfSchedule!==false)TLS.push(staffTile('requests','✏️','Ask for Days',''));
-  TLS.push(staffTile('timeoff','✈️','Time Off',pendTO?String(pendTO):''));
-  TLS.push(staffTile('swaps','🔄','Swaps',pendSwaps?String(pendSwaps):''));
   const eligOpen=openShifts.filter(o=>o.status==='open'&&o.role===p.role&&o.line===p.line&&o.fromId!==p.id&&!p.asn.has(o.day)&&!p.pto.has(o.day)&&consecIfAdd(p,o.day)<=settings.maxConsec).length;
-  TLS.push(staffTile('openshifts','📣','Open Shifts',eligOpen?String(eligOpen):''));
-  if(tkOn)TLS.push(staffTile('hours','⏱️','My Hours',''));
-  TLS.push(staffTile('howto','🧭','How it works',''));
+  const ITEMS=[];
+  if(tkOn)ITEMS.push(['clock','🕐','Clock In / Out',onDutyNow?'On':'']);
+  ITEMS.push(['schedule','📅','My Schedule','']);
+  if(settings.selfSchedule!==false)ITEMS.push(['requests','✏️','Ask for Days','']);
+  ITEMS.push(['timeoff','✈️','Time Off',pendTO?String(pendTO):'']);
+  ITEMS.push(['swaps','🔄','Swaps',pendSwaps?String(pendSwaps):'']);
+  ITEMS.push(['openshifts','📣','Open Shifts',eligOpen?String(eligOpen):'']);
+  if(tkOn)ITEMS.push(['hours','⏱️','My Hours','']);
+  ITEMS.push(['howto','🧭','How it works','']);
+  const slay=settings.staffLayout||'tiles';
   const owedB=(p.ledger||0)>=3?'<div class="owedhome">⚖️ You’re owed fairer shifts — first pick next cycle.</div>':'';
-  $('staffHome').innerHTML=owedB+'<div class="tilegrid">'+TLS.join('')+'</div>';
+  let body='<div class="attsec" style="margin-bottom:8px"><span class="menutitle">Menu</span><span class="laytog"><button class="layb'+(slay==='tiles'?' on':'')+'" data-slay="tiles">▦ Tiles</button><button class="layb'+(slay==='cards'?' on':'')+'" data-slay="cards">▤ Cards</button></span></div>';
+  if(slay==='cards'){body+=ITEMS.map(it=>'<button class="homecard" data-tile="'+it[0]+'"><span class="hc-ic">'+it[1]+'</span><div class="hc-t"><b>'+it[2]+'</b></div><span class="hc-v">'+(it[3]?it[3]:'›')+'</span></button>').join('');}
+  else{body+='<div class="tilegrid">'+ITEMS.map(it=>staffTile(it[0],it[1],it[2],it[3])).join('')+'</div>';}
+  $('staffHome').innerHTML=owedB+body;
   applyStaffView();
 }
 function osLabel(o){const dt=dateOf(o.day);return dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+' · '+(o.line==='day'?'Day 7a–7p':'Night 7p–7a')+' · '+roleWord(o.role);}
@@ -2475,6 +2493,7 @@ $('loginSearch').addEventListener('input',e=>renderLoginList(e.target.value));
 $('loginOverlay').addEventListener('click',e=>{const rec=e.target.closest('[data-rec]');if(rec){signInStaff(rec.dataset.rec);return;}const li=e.target.closest('[data-lid]');if(li){signInStaff(li.dataset.lid);return;}});
 $('screen-staff').addEventListener('click',e=>{
   const p=meUser();if(!p)return;
+  const sly=e.target.closest('[data-slay]');if(sly){settings.staffLayout=sly.dataset.slay;save();renderStaff();return;}
   const tl=e.target.closest('[data-tile]');if(tl){if(tl.dataset.tile==='howto'){$('guideStaffOverlay').classList.add('show');return;}staffView=tl.dataset.tile;renderStaff();return;}
   if(e.target.closest('#staffBack')){staffView='home';renderStaff();return;}
   if(e.target.closest('#reqTimeoffBtn')){openTimeoff();return;}

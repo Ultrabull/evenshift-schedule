@@ -57,6 +57,14 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .preflegend i{width:11px;height:11px;border-radius:3px;display:inline-block}
 .preflegend i.lk{background:var(--teal)}.preflegend i.av{background:#e6c477}.preflegend i.ct{background:#e8a7a0}
 .prefcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin:0 0 12px;box-shadow:var(--shadow)}
+.steptile{display:flex;align-items:center;gap:12px;width:100%;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 9px;box-shadow:var(--shadow);font-family:inherit;cursor:pointer;text-align:left}
+.steptile:active{background:#fafbfc}
+.stepn{flex:0 0 auto;width:25px;height:25px;border-radius:50%;background:var(--teal);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.steptile .tile-ic{font-size:22px;flex:0 0 auto;line-height:1}
+.step-t{flex:1;min-width:0}
+.step-t b{font-size:15px;display:block}
+.step-t span{font-size:12px;color:var(--muted);display:block;margin-top:1px}
+.stepgo{flex:0 0 auto;color:var(--faint);font-size:20px;font-weight:700}
 .importbtn{width:calc(100% - 32px);margin:2px 16px 4px;padding:11px;border:1px dashed var(--teal);background:var(--teal-soft);color:var(--teal-deep);border-radius:12px;font-weight:800;font-size:13.5px;font-family:inherit;cursor:pointer}
 .importbtn:active{filter:brightness(.97)}
 .impmap{font-size:13.5px;color:var(--ink);margin:12px 0 2px;background:#f4f8f7;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
@@ -68,6 +76,8 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .impsel{flex:0 0 auto;max-width:54%;padding:8px 8px;border:1px solid var(--line);border-radius:9px;background:#fff;font-family:inherit;font-size:13px;color:var(--ink)}
 .howrow{display:flex;gap:12px;align-items:flex-start;padding:13px 2px;border-top:1px solid var(--line)}
 .howrow:first-of-type{border-top:0}
+.gsub{font-size:12px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--teal-deep);background:var(--teal-soft);border-radius:9px;padding:8px 11px;margin:15px 0 2px}
+.howrow+.gsub{margin-top:16px}
 .howic{font-size:23px;flex:0 0 auto;width:34px;text-align:center;line-height:1.2}
 .howrow b{font-size:15px}
 .howrow p{margin:3px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
@@ -787,36 +797,46 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 <div class="overlay welcome" id="welcomeOverlay">
   <div class="sheet">
     <h2>Welcome! 👋</h2>
-    <div class="lead">Make a fair nurse schedule in 3 easy steps.</div>
-    <div class="wstep"><div class="wnum">1</div><div><b>👥 People</b><p>Add everyone who works here. Tap ➕, type a name, pick their job and shift.</p></div></div>
-    <div class="wstep"><div class="wnum">2</div><div><b>⚙️ Rules</b><p>Say how many you need each shift using ➖ and ➕.</p></div></div>
-    <div class="wstep"><div class="wnum">3</div><div><b>📅 Schedule</b><p>Tap one big button and the schedule builds itself. Fix anything by tapping.</p></div></div>
+    <div class="lead">Build a fair nurse schedule in 3 steps. You can change anything later.</div>
+    <div class="wstep"><div class="wnum">1</div><div><b>⚙️ Set the rules</b><p>Say how many people each shift needs, using ➖ and ➕.</p></div></div>
+    <div class="wstep"><div class="wnum">2</div><div><b>👥 Choose requests from people</b><p>Tap a nurse and tap their days off and requests — or import them all from Kronos.</p></div></div>
+    <div class="wstep"><div class="wnum">3</div><div><b>✨ Build the schedule</b><p>One tap fills everyone’s days. Check it, and tap any day to fix.</p></div></div>
+    <div class="gnote" style="margin-top:12px">New here? Tap <b>🧭 How it works</b> on the Home screen any time for the full tour.</div>
     <div class="sheet-actions"><button class="bigaction" id="welcomeGo">Let’s go →</button></div>
   </div>
 </div>
 
 <div class="overlay" id="guideOverlay"><div class="sheet">
   <h2>How EvenShift works 🧭</h2>
-  <div class="lead">The whole thing, super simple.</div>
-  <div class="howrow"><div class="howic">👥</div><div><b>We know everyone</b><p>The app has all your nurses and helpers, and how many days each one works.</p></div></div>
-  <div class="howrow"><div class="howic">🛡️</div><div><b>Safe first</b><p>Every shift gets enough people, and a charge nurse is always there. This rule beats all the others.</p></div></div>
-  <div class="howrow"><div class="howic">🏠</div><div><b>Only what fits</b><p>10G has room for just so many. Extra people “float” — they help another floor that day — so nobody is squished in.</p></div></div>
-  <div class="howrow"><div class="howic">↗️</div><div><b>Float takes turns</b><p>The app shares the floating fairly, so the same people aren’t always sent away.</p></div></div>
-  <div class="howrow"><div class="howic">💚</div><div><b>Wishes</b><p>People pick days they like, days they’d rather not, and days they just can’t. The app grants as many wishes as it can — and “can’t” days are always kept free.</p></div></div>
+  <div class="lead">First how to use it, then what it does.</div>
+  <div class="gsub">① Using the app</div>
+  <div class="howrow"><div class="howic">🏠</div><div><b>Start on Home</b><p>The home screen lists your steps in order, top to bottom. Just go down the list.</p></div></div>
+  <div class="howrow"><div class="howic">⚙️</div><div><b>Step 1 — Set the rules</b><p>Tap “Set the rules” to choose how many people each shift needs and the fairness limits.</p></div></div>
+  <div class="howrow"><div class="howic">👥</div><div><b>Step 2 — Choose requests from people</b><p>Tap “Choose requests from people.” Tap a nurse, then tap their days off and requests — or upload them all from Kronos at once.</p></div></div>
+  <div class="howrow"><div class="howic">✨</div><div><b>Step 3 — Build the schedule</b><p>Tap “Build the schedule” and the app fills in everyone’s days.</p></div></div>
+  <div class="howrow"><div class="howic">✅</div><div><b>Step 4 — Check & tidy</b><p>Open the schedule and tap the <b>Check</b> tab. Green ticks mean good; it flags anything to look at. Drag any day to change it.</p></div></div>
+  <div class="howrow"><div class="howic">🧭</div><div><b>The bottom buttons</b><p>Home · People · Rules · Schedule sit at the bottom and jump you anywhere, any time.</p></div></div>
+  <div class="gsub">② What the app does</div>
+  <div class="howrow"><div class="howic">🛡️</div><div><b>Safe first</b><p>Every shift gets enough people and always a charge nurse. This rule beats all the others.</p></div></div>
+  <div class="howrow"><div class="howic">🏠</div><div><b>Only what fits</b><p>10G holds just so many. Extra people “float” to another floor that day, so nobody is squished in — and floating is shared in turns.</p></div></div>
+  <div class="howrow"><div class="howic">💚</div><div><b>Wishes</b><p>People say which days they like, rather not, or can’t work. The app grants as many as it can; “can’t” days are always kept free.</p></div></div>
   <div class="howrow"><div class="howic">⚖️</div><div><b>Fair turns</b><p>Weekends, holidays, and floating get shared. Whoever missed out last time goes first this time.</p></div></div>
-  <div class="howrow"><div class="howic">✅</div><div><b>You check it</b><p>Tap <b>Build</b> and the whole schedule fills in. The <b>Check</b> tab shows a green tick for what’s good and points out anything to look at. Drag to change any day.</p></div></div>
-  <div class="gnote">Anything your staff send you — swaps, time off, picking up shifts — waits until you tap <b>yes</b>. Nothing changes on its own.</div>
+  <div class="gnote">Anything your staff send you — swaps, time off, picking up shifts — waits until you tap <b>yes</b>.</div>
   <div class="sheet-actions"><button class="bigaction" id="guideClose">Got it 👍</button></div>
 </div></div>
 <div class="overlay" id="guideStaffOverlay"><div class="sheet">
   <h2>How EvenShift works 🧭</h2>
-  <div class="lead">Your app, super simple.</div>
-  <div class="howrow"><div class="howic">📅</div><div><b>Your days</b><p><b>My Schedule</b> shows when you work. Green is a day shift, dark is a night shift.</p></div></div>
+  <div class="lead">First how to use it, then what it does.</div>
+  <div class="gsub">① Using the app</div>
+  <div class="howrow"><div class="howic">🏠</div><div><b>Your home screen</b><p>Buttons for everything — tap one to open it, and the back arrow to come back.</p></div></div>
+  <div class="howrow"><div class="howic">📅</div><div><b>My Schedule</b><p>See your days. Green is a day shift, dark is a night shift, FLT means float.</p></div></div>
   <div class="howrow"><div class="howic">✍️</div><div><b>Ask for days</b><p>Tap a weekday to say you <b>like</b> it, you’d <b>rather not</b>, or you <b>can’t</b> work it. You can also tap exact dates.</p></div></div>
-  <div class="howrow"><div class="howic">↗️</div><div><b>Float (FLT)</b><p>Some days the unit is full, so you help another floor for the day. It still counts as your work.</p></div></div>
-  <div class="howrow"><div class="howic">⚖️</div><div><b>Fair turns</b><p>Everyone shares weekends, holidays, and floating. If you miss out once, you go first next time.</p></div></div>
   <div class="howrow"><div class="howic">🕐</div><div><b>Clock in and out</b><p>Tap <b>Clock In</b> when you start and <b>Clock Out</b> when you finish.</p></div></div>
-  <div class="howrow"><div class="howic">🔄</div><div><b>Trade or give up</b><p>Want to switch a day? Use <b>Swaps</b>. Can’t work one? <b>Give it up</b> and a teammate can grab it — your manager says yes.</p></div></div>
+  <div class="howrow"><div class="howic">🔄</div><div><b>Swaps & open shifts</b><p>Trade a day with <b>Swaps</b>, or grab a free one in <b>Open Shifts</b>. Your manager says yes.</p></div></div>
+  <div class="gsub">② What the app does</div>
+  <div class="howrow"><div class="howic">↗️</div><div><b>Float (FLT)</b><p>Some days the unit is full, so you help another floor. It still counts as your work, and it’s shared fairly.</p></div></div>
+  <div class="howrow"><div class="howic">💚</div><div><b>Wishes</b><p>The app tries to give everyone the days they asked for, as much as it can.</p></div></div>
+  <div class="howrow"><div class="howic">⚖️</div><div><b>Fair turns</b><p>Weekends, holidays, and floating are shared. Miss out once, go first next time.</p></div></div>
   <div class="gnote">Your manager builds the schedule. The more you tell the app, the better it fits you. 💚</div>
   <div class="sheet-actions"><button class="bigaction" id="guideStaffClose">Got it 👍</button></div>
 </div></div>
@@ -1145,14 +1165,17 @@ function renderHome(){
   h+=stat('sched','month','🔄','Swap requests',String(pendSwaps),pendSwaps?'amber':'');
   h+=stat('sched','month','✈️','Time-off requests',String(pendTO),pendTO?'amber':'');
   h+=stat('sched','month','📣','Open-shift pickups',String(pendOS),pendOS?'amber':'');
-  h+='<div class="sect">Quick actions</div><div class="tilegrid">';
-  h+='<button class="tile" data-go="sched" data-sv="month"><span class="tile-ic">'+(built?'📅':'✨')+'</span><span class="tile-l">'+(built?'Open schedule':'Build schedule')+'</span></button>';
-  h+='<button class="tile" data-go="people"><span class="tile-ic">👥</span><span class="tile-l">People</span></button>';
-  h+='<button class="tile" data-go="rules"><span class="tile-ic">⚙️</span><span class="tile-l">Rules</span></button>';
+  h+='<div class="sect">Make a schedule</div>';
+  const step=(n,go,sv,gd,ic,t,sub)=>'<button class="steptile"'+(gd?' data-guide="1"':' data-go="'+go+'"'+(sv?' data-sv="'+sv+'"':''))+'><span class="stepn">'+n+'</span><span class="tile-ic">'+ic+'</span><div class="step-t"><b>'+t+'</b><span>'+sub+'</span></div><span class="stepgo">›</span></button>';
+  h+=step(1,'','',true,'🧭','How it works','A quick 1-minute tour');
+  h+=step(2,'rules','',false,'⚙️','Set the rules','Coverage, fairness & limits');
+  h+=step(3,'people','',false,'👥','Choose requests from people','Time off & day requests · import from Kronos');
+  h+=step(4,'sched','month',false,built?'📅':'✨',built?'Open the schedule':'Build the schedule',built?'View, edit & check the draft':'Make the draft, then check it');
+  h+='<div class="sect">Also</div><div class="tilegrid">';
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
-  h+='<button class="tile" data-guide="1"><span class="tile-ic">🧭</span><span class="tile-l">How it works</span></button>';
+  h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 26p</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 26s</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}

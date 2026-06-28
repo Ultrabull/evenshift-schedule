@@ -909,7 +909,7 @@ function workedHoursTotal(p){let h=0;const c=p.clock||{};for(const iso in c)h+=r
 function otTotal(p){return weekRanges().reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-(settings.otThreshold||40)),0);}
 
 /* ============ settings ============ */
-let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:2,pctNightMin:1,usePCT:true,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
+let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:4,pctNightMin:3,usePCT:true,coverVer:2,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
 function req(role,line){const cm=(settings.useCharge===false?0:(settings.chargeMin||0));if(role==='RN')return line==='day'?{ideal:settings.rnDayIdeal+cm,min:settings.rnDayMin+cm}:{ideal:settings.rnNightIdeal+cm,min:settings.rnNightMin+cm};if(role==='PCT')return line==='day'?{ideal:settings.pctDayIdeal,min:settings.pctDayMin}:{ideal:settings.pctNightIdeal,min:settings.pctNightMin};return{ideal:settings.hucNeed,min:settings.hucNeed};}
 function roleOn(role){if(role==='PCT')return settings.usePCT!==false;if(role==='HUC')return settings.useHUC!==false;return true;}
 function isoOf(d){const dt=dateOf(d);return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
@@ -1127,7 +1127,7 @@ function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.av
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,senior:false,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
-    if(c){const cs=JSON.parse(c);if(cs.pctIdeal!=null&&cs.pctDayIdeal==null){cs.pctDayIdeal=cs.pctIdeal;cs.pctDayMin=(cs.pctMin!=null?cs.pctMin:Math.max(1,cs.pctIdeal-1));}settings=Object.assign(settings,cs);}
+    if(c){const cs=JSON.parse(c);if(cs.pctIdeal!=null&&cs.pctDayIdeal==null){cs.pctDayIdeal=cs.pctIdeal;cs.pctDayMin=(cs.pctMin!=null?cs.pctMin:Math.max(1,cs.pctIdeal-1));}settings=Object.assign(settings,cs);if((settings.coverVer||0)<2){settings.pctNightIdeal=4;settings.pctNightMin=3;settings.coverVer=2;}}
     const w=localStorage.getItem(KEY_SW);if(w)swaps=JSON.parse(w)||[];
     const to=localStorage.getItem(KEY_TO);if(to)timeOff=JSON.parse(to)||[];
     const os=localStorage.getItem(KEY_OS);if(os)openShifts=JSON.parse(os)||[];
@@ -1188,7 +1188,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 26v</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 26x</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1416,17 +1416,19 @@ function renderRequests(){
 function renderChecklist(){
   const active=staff.filter(p=>!p.orientee);
   const usePCT=roleOn('PCT'),useHUC=roleOn('HUC'),useCh=settings.useCharge!==false;
-  let shortSlots=0;for(let d=0;d<DAYS;d++){
-    if(shiftCount('RN','day',d)<reqEff('RN','day',d).min)shortSlots++;
-    if(shiftCount('RN','night',d)<reqEff('RN','night',d).min)shortSlots++;
-    if(usePCT){if(shiftCount('PCT','day',d)<reqEff('PCT','day',d).min)shortSlots++;if(shiftCount('PCT','night',d)<reqEff('PCT','night',d).min)shortSlots++;}
-    if(useHUC&&shiftCount('HUC','day',d)<reqEff('HUC','day',d).min)shortSlots++;}
-  let chgShort=0;if(useCh)for(let d=0;d<DAYS;d++){if(chargeCount('day',d)<settings.chargeMin)chgShort++;if(chargeCount('night',d)<settings.chargeMin)chgShort++;}
-  let expShort=0;for(let d=0;d<DAYS;d++)for(const line of ['day','night']){if(shiftCount('RN',line,d)===0)continue;const has=staff.some(p=>p.role==='RN'&&p.line===line&&!p.orientee&&(p.senior||p.charge||p.precept)&&p.asn.has(d));if(!has)expShort++;}
-  let ptoViol=0;staff.forEach(p=>p.asn.forEach(d=>{if(p.pto.has(d))ptoViol++;}));
-  let weShort=0;for(let d=0;d<DAYS;d++){
-    if(isDayWE(d)){if(shiftCount('RN','day',d)<reqEff('RN','day',d).min)weShort++;if(usePCT&&shiftCount('PCT','day',d)<reqEff('PCT','day',d).min)weShort++;}
-    if(isNightWE(d)){if(shiftCount('RN','night',d)<reqEff('RN','night',d).min)weShort++;if(usePCT&&shiftCount('PCT','night',d)<reqEff('PCT','night',d).min)weShort++;}}
+  const dd=d=>dateOf(d).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+  const fmtL=arr=>arr.length?arr.slice(0,8).join(' \u00b7 ')+(arr.length>8?' \u00b7 +'+(arr.length-8)+' more':''):'';
+  let shortSlots=0;const shortList=[];for(let d=0;d<DAYS;d++){
+    if(shiftCount('RN','day',d)<reqEff('RN','day',d).min){shortSlots++;shortList.push(dd(d)+' (RN day)');}
+    if(shiftCount('RN','night',d)<reqEff('RN','night',d).min){shortSlots++;shortList.push(dd(d)+' (RN night)');}
+    if(usePCT){if(shiftCount('PCT','day',d)<reqEff('PCT','day',d).min){shortSlots++;shortList.push(dd(d)+' (PCT day)');}if(shiftCount('PCT','night',d)<reqEff('PCT','night',d).min){shortSlots++;shortList.push(dd(d)+' (PCT night)');}}
+    if(useHUC&&shiftCount('HUC','day',d)<reqEff('HUC','day',d).min){shortSlots++;shortList.push(dd(d)+' (HUC)');}}
+  let chgShort=0;const chgList=[];if(useCh)for(let d=0;d<DAYS;d++){if(chargeCount('day',d)<settings.chargeMin){chgShort++;chgList.push(dd(d)+' (day)');}if(chargeCount('night',d)<settings.chargeMin){chgShort++;chgList.push(dd(d)+' (night)');}}
+  let expShort=0;const expList=[];for(let d=0;d<DAYS;d++)for(const line of ['day','night']){if(shiftCount('RN',line,d)===0)continue;const has=staff.some(p=>p.role==='RN'&&p.line===line&&!p.orientee&&(p.senior||p.charge||p.precept)&&p.asn.has(d));if(!has){expShort++;expList.push(dd(d)+' ('+line+')');}}
+  let ptoViol=0;const ptoList=[];staff.forEach(p=>p.asn.forEach(d=>{if(p.pto.has(d)){ptoViol++;ptoList.push(firstName(p.name)+' '+dd(d));}}));
+  let weShort=0;const weList=[];for(let d=0;d<DAYS;d++){
+    if(isDayWE(d)){if(shiftCount('RN','day',d)<reqEff('RN','day',d).min){weShort++;weList.push(dd(d)+' (RN day)');}if(usePCT&&shiftCount('PCT','day',d)<reqEff('PCT','day',d).min){weShort++;weList.push(dd(d)+' (PCT day)');}}
+    if(isNightWE(d)){if(shiftCount('RN','night',d)<reqEff('RN','night',d).min){weShort++;weList.push(dd(d)+' (RN night)');}if(usePCT&&shiftCount('PCT','night',d)<reqEff('PCT','night',d).min){weShort++;weList.push(dd(d)+' (PCT night)');}}}
   const ft=active.filter(p=>p.fte==='FT');const weC=ft.map(p=>{let n=0;p.asn.forEach(d=>{if(lineWEof(p.line,d))n++;});return n;});
   const weRange=weC.length?Math.max(...weC)-Math.min(...weC):0;
   const oris=staff.filter(p=>p.orientee);let oriBad=0;oris.forEach(o=>{const pr=staff.find(x=>x.id===o.preceptor);if(!pr){oriBad++;return;}[...(o.oriDays||[])].forEach(d=>{if(!pr.asn.has(d))oriBad++;});});
@@ -1437,7 +1439,7 @@ function renderChecklist(){
   let surplus=0;for(let d=0;d<DAYS;d++)for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){if(!roleOn(r))continue;if(shiftCount(r,l,d)>reqEff(r,l,d).ideal)surplus++;}
   const anySenior=staff.some(p=>p.senior);
   let supportShort=0;for(let d=0;d<DAYS;d++)for(const line of ['day','night']){const pres=staff.filter(p=>p.role==='RN'&&p.line===line&&!p.orientee&&p.asn.has(d));if(!pres.length)continue;const ex=pres.filter(p=>p.senior||p.charge||p.precept).length;if((pres.length-ex)>ex)supportShort++;}
-  let fatigue=0;active.forEach(p=>{if(maxRun(p.asn)>settings.maxConsec)fatigue++;});
+  let fatigue=0;const fatigueList=[];active.forEach(p=>{if(maxRun(p.asn)>settings.maxConsec){fatigue++;fatigueList.push(firstName(p.name));}});
   let wT=0,wG=0;staff.forEach(p=>p.picks.forEach(d=>{wT++;if(p.asn.has(d))wG++;}));
   const reqPct=wT?Math.round(wG/wT*100):null;const imp=staff.some(p=>p.imported);
   const S={ok:['ck-ok','\u2713'],warn:['ck-warn','!'],rev:['ck-rev','\ud83d\udc41'],off:['ck-off','\u2013']};
@@ -1445,12 +1447,12 @@ function renderChecklist(){
   const pl=(n)=>n>1?'s':'';
   let h='<div style="padding:13px 16px 4px"><b>Schedule check</b><div class="sub">Built top to bottom \u2014 anything higher always wins. \u2713 passed \u00b7 ! needs a look \u00b7 \ud83d\udc41 a human should confirm.</div></div>';
   h+='<div class="cktier first">\ud83d\udee1\ufe0f Safety \u2014 must be true</div>';
-  h+=row(shortSlots?'warn':'ok','Safe numbers on every shift',shortSlots?shortSlots+' shift'+pl(shortSlots)+' below the safe minimum \u2014 see Things to fix':'Every day & night meets the minimum');
-  h+=row(!useCh?'off':(chgShort?'warn':'ok'),'A charge nurse on every shift',!useCh?'Charge tracking is off':(chgShort?chgShort+' shift'+pl(chgShort)+' without a charge nurse':'Covered on every day & night'));
-  h+=row(expShort?'warn':'ok','An experienced nurse on every shift',expShort?expShort+' shift'+pl(expShort)+' have no senior/charge/preceptor nurse':'No shift is all-new \u2014 based on senior, charge & preceptor flags');
-  h+=row(ptoViol?'warn':'ok','Approved time off protected',ptoViol?ptoViol+' shift'+pl(ptoViol)+' land on someone\u2019s time off':'No one is scheduled on their approved time off');
+  h+=row(shortSlots?'warn':'ok','Safe numbers on every shift',shortSlots?shortSlots+' shift'+pl(shortSlots)+' below the safe minimum: '+fmtL(shortList):'Every day & night meets the minimum');
+  h+=row(!useCh?'off':(chgShort?'warn':'ok'),'A charge nurse on every shift',!useCh?'Charge tracking is off':(chgShort?chgShort+' shift'+pl(chgShort)+' without a charge nurse: '+fmtL(chgList):'Covered on every day & night'));
+  h+=row(expShort?'warn':'ok','An experienced nurse on every shift',expShort?expShort+' shift'+pl(expShort)+' have no senior/charge/preceptor nurse: '+fmtL(expList):'No shift is all-new \u2014 based on senior, charge & preceptor flags');
+  h+=row(ptoViol?'warn':'ok','Approved time off protected',ptoViol?ptoViol+' shift'+pl(ptoViol)+' land on time off: '+fmtL(ptoList):'No one is scheduled on their approved time off');
   h+='<div class="cktier">\ud83e\udde9 Right people in the right spots</div>';
-  h+=row(weShort?'warn':'ok','Weekends covered & shared',weShort?weShort+' weekend slot'+pl(weShort)+' below minimum':(weRange>2?'Covered \u2014 but some carry '+weRange+' more weekend shifts than others, worth a look':'Covered and shared fairly'));
+  h+=row(weShort?'warn':'ok','Weekends covered & shared',weShort?weShort+' weekend slot'+pl(weShort)+' below minimum: '+fmtL(weList):(weRange>2?'Covered \u2014 but some carry '+weRange+' more weekend shifts than others, worth a look':'Covered and shared fairly'));
   h+=row(!oris.length?'off':(oriBad?'warn':'ok'),'Preceptors paired with orientees',!oris.length?'No orientees this cycle':(oriBad?oriBad+' orientee day not matched to a preceptor':'Every orientee shadows their preceptor, counted as extra'));
   h+=row(!anySenior?'rev':(supportShort?'warn':'ok'),'New nurses spread out & supported',!anySenior?'Mark your senior nurses on the People tab to switch this check on':(supportShort?supportShort+' shift'+pl(supportShort)+' have more new nurses than seasoned ones \u2014 worth rebalancing':'Every shift has enough seasoned staff for the newer nurses'));
   h+='<div class="cktier">\u2696\ufe0f Fairness & requests</div>';
@@ -1458,7 +1460,7 @@ function renderChecklist(){
   if(surplus)h+=row('rev','Some shifts are overstaffed',surplus+' shift'+pl(surplus)+' have more staff than the target \u2014 fine to keep, or trim if you don\u2019t need them');
   if(floated)h+=row('rev','Some days are floated off 10G',floated+' shift'+pl(floated)+' are worked off the unit \u2014 10G was already full those days, so the extra hands go to another unit (still counts toward their days & hours)');
   if(prefPpl)h+=row(prefOver>prefPpl?'warn':'ok','Day preferences honored',prefClean+' of '+prefPpl+' got their preferred days with no clash'+(prefOver?'; '+prefOver+' shift'+pl(prefOver)+' landed on a \u201crather not\u201d day \u2014 those people are first in line next cycle':' \u2014 nicely matched'));
-  h+=row(fatigue?'warn':'ok','Fatigue limits respected',fatigue?fatigue+' '+(fatigue>1?'people':'person')+' over '+settings.maxConsec+' in a row':'No one works more than '+settings.maxConsec+' shifts in a row');
+  h+=row(fatigue?'warn':'ok','Fatigue limits respected',fatigue?fatigue+' '+(fatigue>1?'people':'person')+' over '+settings.maxConsec+' in a row: '+fmtL(fatigueList):'No one works more than '+settings.maxConsec+' shifts in a row');
   h+=row('rev','Hard shifts shared over time','Weekends, nights & holidays even out across cycles in the Fairness ledger');
   h+=row(reqPct==null?'off':(reqPct>=80?'ok':'warn'),'Requested days granted',reqPct==null?'No requests yet \u2014 import MyTime picks':reqPct+'% of requested days granted'+(imp?'':' (sample picks for now)'));
   h+=row('rev','Holidays on a fair rotation','Worked a holiday last year \u2192 off this year. Tracked across cycles.');

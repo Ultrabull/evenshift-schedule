@@ -46,6 +46,31 @@ body[data-theme="premium"] .tile,body[data-theme="premium"] .card,body[data-them
 .buildtag{text-align:center;color:var(--faint);font-size:11px;margin:18px 0 2px}
 ".pplsec{display:flex;align-items:center;gap:9px;width:100%;font-size:12.5px;font-weight:800;letter-spacing:.4px;color:var(--ink);text-transform:uppercase;margin:11px 0 0;padding:13px 14px;background:#fff;border:1px solid var(--line);border-radius:13px;font-family:inherit;cursor:pointer;box-shadow:var(--shadow);text-align:left}
 .pplsec:active{background:#fafbfc}
+.prefsub{font-size:12px;color:var(--muted);margin:2px 0 6px}
+.dowrow{display:flex;gap:5px;margin:4px 0 2px}
+.dowchip{flex:1;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 0;font-size:12px;font-weight:800;color:var(--muted);font-family:inherit;cursor:pointer}
+.dowchip.like{background:var(--teal-soft);border-color:var(--teal);color:var(--teal-deep)}
+.dowchip.avoid{background:#fdf0d8;border-color:#e6c477;color:#9a6a12}
+.dowchip.cant{background:#fde2e0;border-color:#e8a7a0;color:#b23b30}
+.preflegend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:2px 0 4px}
+.preflegend span{display:flex;align-items:center;gap:4px}
+.preflegend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.preflegend i.lk{background:var(--teal)}.preflegend i.av{background:#e6c477}.preflegend i.ct{background:#e8a7a0}
+.prefcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin:0 0 12px;box-shadow:var(--shadow)}
+.importbtn{width:calc(100% - 32px);margin:2px 16px 4px;padding:11px;border:1px dashed var(--teal);background:var(--teal-soft);color:var(--teal-deep);border-radius:12px;font-weight:800;font-size:13.5px;font-family:inherit;cursor:pointer}
+.importbtn:active{filter:brightness(.97)}
+.impmap{font-size:13.5px;color:var(--ink);margin:12px 0 2px;background:#f4f8f7;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.impmap .bad{color:#b23b30;font-weight:700}
+.impmap ul{margin:4px 0 0;padding-left:18px;color:var(--muted)}
+.impfix{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.impfixn{flex:1;font-weight:700;font-size:13.5px;min-width:0}
+.impfixn span{display:block;font-weight:600;color:var(--muted);font-size:11.5px}
+.impsel{flex:0 0 auto;max-width:54%;padding:8px 8px;border:1px solid var(--line);border-radius:9px;background:#fff;font-family:inherit;font-size:13px;color:var(--ink)}
+.howrow{display:flex;gap:12px;align-items:flex-start;padding:13px 2px;border-top:1px solid var(--line)}
+.howrow:first-of-type{border-top:0}
+.howic{font-size:23px;flex:0 0 auto;width:34px;text-align:center;line-height:1.2}
+.howrow b{font-size:15px}
+.howrow p{margin:3px 0 0;font-size:13.5px;color:var(--muted);line-height:1.45}
 .grpcv{color:var(--faint);font-size:13px;transition:transform .2s;flex:0 0 auto}
 .pplsec.open .grpcv{transform:rotate(180deg)}
 .pplgrp{display:none;flex-direction:column;gap:7px;padding-top:7px;padding-bottom:4px}
@@ -456,6 +481,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 <div class="screen hide" id="screen-people">
   <div class="screen-h"><h1>People</h1><p>Everyone who works on your unit. Tap ➕ to add, or tap a person to change them.</p></div>
   <div class="searchbar"><input id="search" placeholder="Search a name…" inputmode="search"></div>
+  <button class="importbtn" id="importBtn">⬆️ Import requests from Kronos</button>
   <div class="chips" id="filters"></div>
   <div class="countline" id="pplCount"></div>
   <div class="ppl-list" id="pplList"></div>
@@ -598,6 +624,19 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 </div>
 
 <!-- PIN SETUP -->
+<div class="overlay" id="importOverlay"><div class="sheet">
+  <h2>Import from Kronos ⬆️</h2>
+  <div class="lead">Bring in time off and day requests without re-typing.</div>
+  <p class="gp">Export your time-off / request report from Kronos as a <b>CSV</b>, then upload it or paste it below. Names and dates are matched to this schedule automatically. Best with columns: <b>Name</b>, <b>Date</b> (or <b>Start</b> &amp; <b>End</b>), and <b>Type</b> (PTO / Prefer off / Want).</p>
+  <input type="file" id="impFile" accept=".csv,.txt,text/csv" class="tinput">
+  <div class="flabel" style="margin-top:10px">… or paste rows here</div>
+  <textarea id="impText" class="tinput" rows="6" placeholder="Name, Date, Type&#10;Maria G, 2026-06-24, PTO&#10;John S, 6/27/2026, Prefer off"></textarea>
+  <div id="impResult"></div>
+  <div class="sheet-actions">
+    <button class="bigaction grey" id="impCancel" style="flex:0 0 auto;width:auto;padding:17px 20px">Close</button>
+    <button class="bigaction" id="impRun">Import</button>
+  </div>
+</div></div>
 <div class="overlay" id="timeoffOverlay"><div class="sheet">
   <div style="font-size:17px;font-weight:700;margin-bottom:14px">✈️ Request time off</div>
   <label class="tolab">From</label><input type="date" id="toFrom" class="toinput">
@@ -720,6 +759,20 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
       <div class="flabel">Paired with (preceptor)</div>
       <select class="tinput" id="f_precsel"></select>
     </div>
+    <div id="prefWrap">
+      <div class="flabel" style="margin-top:6px">Day preferences</div>
+      <div class="prefsub">Tap a day to cycle: likes \u2192 rather not \u2192 can\u2019t \u2192 clear</div>
+      <div class="preflegend"><span><i class="lk"></i>likes</span><span><i class="av"></i>rather not</span><span><i class="ct"></i>can\u2019t (max 3)</span></div>
+      <div id="f_dow"></div>
+      <div class="flabel" style="margin-top:12px">Shift grouping</div>
+      <div class="pickrow" id="f_clu"></div>
+    </div>
+    <div id="reqWrap">
+      <div class="flabel" style="margin-top:6px">Time off & day requests</div>
+      <div class="prefsub">Pick a tag, then tap days \u2014 copy a nurse\u2019s Kronos time off and requests here.</div>
+      <div class="brushrow" id="f_brush"></div>
+      <div id="f_reqcal"></div>
+    </div>
     <div class="flabel">Hours</div>
     <div class="pickrow" id="f_fte"></div>
     <div class="sheet-actions">
@@ -744,27 +797,28 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 
 <div class="overlay" id="guideOverlay"><div class="sheet">
   <h2>How EvenShift works 🧭</h2>
-  <div class="lead">The whole app, in plain words.</div>
-  <div class="gsec" style="border-top:0;padding-top:2px">📋 Making a schedule — 3 steps</div>
-  <div class="wstep"><div class="wnum">1</div><div><b>👥 People</b><p>Everyone on the unit is here — day staff and night staff, kept separate.</p></div></div>
-  <div class="wstep"><div class="wnum">2</div><div><b>⚙️ Rules</b><p>Set how many you need each shift with ➖ and ➕. Tap any “?” to learn what a setting means.</p></div></div>
-  <div class="wstep"><div class="wnum">3</div><div><b>📅 Schedule</b><p>Tap <b>Build</b> and the whole schedule fills in at once. If a shift is short, <b>Things to fix</b> shows it with one-tap helpers.</p></div></div>
-  <div class="gsec">🙋 How it honors what people ask for</div>
-  <p class="gp">Think of it like a coach making the team lineup. Players say which games they want and which they can’t play. EvenShift does the same with shifts.</p>
-  <p class="gp">When you tap <b>Build</b>, it follows this order, top to bottom:</p>
-  <div class="gpri"><span class="gn">1</span><div><b>Keep every shift safe.</b> It never drops below the safe minimum of staff. This always comes first.</div></div>
-  <div class="gpri"><span class="gn">2</span><div><b>Always give needed days off.</b> Approved time off is locked — no one is ever put on a day they have off.</div></div>
-  <div class="gpri"><span class="gn">3</span><div><b>Be fair.</b> Whoever got stuck with the rough shifts last time gets first pick this time. The app remembers — that’s the fairness number.</div></div>
-  <div class="gpri"><span class="gn">4</span><div><b>Grant wishes.</b> Then it gives people the days they asked for — as many as it possibly can.</div></div>
-  <div class="gnote"><b>So “honoring requests” means:</b> the app starts by trying to give everyone the days they want. Then it checks — is every shift covered? Is it fair? If one wish would leave a shift empty or pile the bad shifts on one person, it changes just that one and keeps all the rest.</div>
-  <p class="gp"><b>Three kinds of requests:</b></p>
-  <div class="gpri"><span class="gn" style="background:var(--red)">✓</span><div><b>Need off</b> (time off you approve) → <b>always</b> honored.</div></div>
-  <div class="gpri"><span class="gn" style="background:var(--amber)">~</span><div><b>Rather not</b> work a day → avoided <i>when it’s safe to</i>.</div></div>
-  <div class="gpri"><span class="gn">★</span><div><b>Want</b> to work a day → given as much as possible.</div></div>
-  <p class="gp">There’s a dial in <b>Rules → Fairness &amp; limits → Honor staff picks</b>. Turn it up to grant more wishes; turn it down for more even coverage.</p>
-  <div class="gsec">🔁 After the schedule is posted</div>
-  <p class="gp">Nurses ask for <b>swaps</b>, <b>time off</b>, and <b>open shifts</b> from their own phones. Each request lands on your <b>Home</b> screen for a yes or no — nothing changes until you approve it.</p>
+  <div class="lead">The whole thing, super simple.</div>
+  <div class="howrow"><div class="howic">👥</div><div><b>We know everyone</b><p>The app has all your nurses and helpers, and how many days each one works.</p></div></div>
+  <div class="howrow"><div class="howic">🛡️</div><div><b>Safe first</b><p>Every shift gets enough people, and a charge nurse is always there. This rule beats all the others.</p></div></div>
+  <div class="howrow"><div class="howic">🏠</div><div><b>Only what fits</b><p>10G has room for just so many. Extra people “float” — they help another floor that day — so nobody is squished in.</p></div></div>
+  <div class="howrow"><div class="howic">↗️</div><div><b>Float takes turns</b><p>The app shares the floating fairly, so the same people aren’t always sent away.</p></div></div>
+  <div class="howrow"><div class="howic">💚</div><div><b>Wishes</b><p>People pick days they like, days they’d rather not, and days they just can’t. The app grants as many wishes as it can — and “can’t” days are always kept free.</p></div></div>
+  <div class="howrow"><div class="howic">⚖️</div><div><b>Fair turns</b><p>Weekends, holidays, and floating get shared. Whoever missed out last time goes first this time.</p></div></div>
+  <div class="howrow"><div class="howic">✅</div><div><b>You check it</b><p>Tap <b>Build</b> and the whole schedule fills in. The <b>Check</b> tab shows a green tick for what’s good and points out anything to look at. Drag to change any day.</p></div></div>
+  <div class="gnote">Anything your staff send you — swaps, time off, picking up shifts — waits until you tap <b>yes</b>. Nothing changes on its own.</div>
   <div class="sheet-actions"><button class="bigaction" id="guideClose">Got it 👍</button></div>
+</div></div>
+<div class="overlay" id="guideStaffOverlay"><div class="sheet">
+  <h2>How EvenShift works 🧭</h2>
+  <div class="lead">Your app, super simple.</div>
+  <div class="howrow"><div class="howic">📅</div><div><b>Your days</b><p><b>My Schedule</b> shows when you work. Green is a day shift, dark is a night shift.</p></div></div>
+  <div class="howrow"><div class="howic">✍️</div><div><b>Ask for days</b><p>Tap a weekday to say you <b>like</b> it, you’d <b>rather not</b>, or you <b>can’t</b> work it. You can also tap exact dates.</p></div></div>
+  <div class="howrow"><div class="howic">↗️</div><div><b>Float (FLT)</b><p>Some days the unit is full, so you help another floor for the day. It still counts as your work.</p></div></div>
+  <div class="howrow"><div class="howic">⚖️</div><div><b>Fair turns</b><p>Everyone shares weekends, holidays, and floating. If you miss out once, you go first next time.</p></div></div>
+  <div class="howrow"><div class="howic">🕐</div><div><b>Clock in and out</b><p>Tap <b>Clock In</b> when you start and <b>Clock Out</b> when you finish.</p></div></div>
+  <div class="howrow"><div class="howic">🔄</div><div><b>Trade or give up</b><p>Want to switch a day? Use <b>Swaps</b>. Can’t work one? <b>Give it up</b> and a teammate can grab it — your manager says yes.</p></div></div>
+  <div class="gnote">Your manager builds the schedule. The more you tell the app, the better it fits you. 💚</div>
+  <div class="sheet-actions"><button class="bigaction" id="guideStaffClose">Got it 👍</button></div>
 </div></div>
 
 <!-- IMPORT PICKS -->
@@ -846,18 +900,24 @@ function workedCount(p){return p.asn.size+(p.float?p.float.size:0);}
 const weekCount=(p,d)=>{const w=weekOf(d);let n=0;for(const x of p.asn)if(weekOf(x)===w)n++;if(p.float)for(const x of p.float)if(weekOf(x)===w)n++;return n;};
 const weekendQuota=p=>p.fte==='PRN'?settings.wkPRN:p.fte==='PT'?settings.wkPT:settings.wkFT;
 function genPicks(p){
-  const want=targetShifts(p)+1;const pool=[];for(let d=0;d<DAYS;d++)if(!p.pto.has(d))pool.push(d);
-  const sc=d=>{let s=Math.random();if(p.wtw)s+=lineWEof(p.line,d)?3:-1.5;else s+=lineWEof(p.line,d)?.15:.6;return s;};
+  const want=targetShifts(p)+1;const pool=[];for(let d=0;d<DAYS;d++)if(!p.pto.has(d)&&!(p.hardDOW&&p.hardDOW.has(wd(d))))pool.push(d);
+  const sc=d=>{let s=Math.random();const w=wd(d);if(p.prefDOW&&p.prefDOW.has(w))s+=3;if(p.avoidDOW&&p.avoidDOW.has(w))s-=3;if(p.wtw)s+=lineWEof(p.line,d)?3:-1.5;else s+=lineWEof(p.line,d)?.15:.6;return s;};
   pool.sort((a,b)=>sc(b)-sc(a));
   const weDays=pool.filter(d=>lineWEof(p.line,d));const q=weekendQuota(p);const chosen=new Set();
   for(let i=0;i<q&&i<weDays.length;i++)chosen.add(weDays[i]);
   for(const d of pool){if(chosen.size>=want)break;chosen.add(d);}p.picks=chosen;
 }
 const consecIfAdd=(p,d)=>{let r=1,x=d-1;while(x>=0&&worked(p,x)){r++;x--;}x=d+1;while(x<DAYS&&worked(p,x)){r++;x++;}return r;};
-const available=(p,d)=>!p.pto.has(d)&&!worked(p,d)&&workedCount(p)<maxShifts(p)&&weekCount(p,d)<weekCap(p)&&consecIfAdd(p,d)<=settings.maxConsec;
-const availableOT=(p,d)=>!p.pto.has(d)&&!worked(p,d)&&consecIfAdd(p,d)<=settings.maxConsec;
+const hardOff=(p,d)=>!!(p.hardDOW&&p.hardDOW.has(wd(d)));
+const available=(p,d)=>!p.pto.has(d)&&!hardOff(p,d)&&!worked(p,d)&&workedCount(p)<maxShifts(p)&&weekCount(p,d)<weekCap(p)&&consecIfAdd(p,d)<=settings.maxConsec;
+const availableOT=(p,d)=>!p.pto.has(d)&&!hardOff(p,d)&&!worked(p,d)&&consecIfAdd(p,d)<=settings.maxConsec;
 let cycleSeed=0;
 function score(p,d){let v=0;if(p.picks.has(d))v+=100;if(p.avoid&&p.avoid.has(d))v-=80;v+=(targetShifts(p)-workedCount(p))*6;
+  const _w=wd(d);
+  if(p.prefDOW&&p.prefDOW.has(_w))v+=60;
+  if(p.avoidDOW&&p.avoidDOW.has(_w))v-=60;
+  if(p.cluster==='block'){if(worked(p,d-1)||worked(p,d+1))v+=22;else v-=6;}
+  else if(p.cluster==='spread'){if(worked(p,d-1)||worked(p,d+1))v-=18;}
   const L=(p.ledger||0);if(p.picks.has(d))v+=L*3;if((isColWE(d)||isHoliday(d))&&!p.picks.has(d))v-=L*3;
   if(lineWEof(p.line,d)){const need=weekendQuota(p)-p.weCount;if(p.wtw)v+=40;if(need>0)v+=need*9;else v-=12;}
   v-=((p.seniority+cycleSeed)%Math.max(1,staff.length))*0.04;return v;}
@@ -1030,7 +1090,7 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();if(p.name)p.name=shortenName(p.name);return p;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,senior:false,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
@@ -1043,7 +1103,7 @@ function load(){
   staff=seed();return false;
 }
 function save(){try{
-  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0}))));
+  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any'}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
   localStorage.setItem(KEY_SW,JSON.stringify(swaps));
   localStorage.setItem(KEY_TO,JSON.stringify(timeOff));
@@ -1092,7 +1152,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-guide="1"><span class="tile-ic">🧭</span><span class="tile-l">How it works</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 26l</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 26p</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1335,6 +1395,8 @@ function renderChecklist(){
   const oris=staff.filter(p=>p.orientee);let oriBad=0;oris.forEach(o=>{const pr=staff.find(x=>x.id===o.preceptor);if(!pr){oriBad++;return;}[...(o.oriDays||[])].forEach(d=>{if(!pr.asn.has(d))oriBad++;});});
   let under=0;active.forEach(p=>{if(roleOn(p.role)&&workedCount(p)<targetShifts(p))under++;});
   let floated=0;staff.forEach(p=>{floated+=(p.float?p.float.size:0);});
+  let prefPpl=0,prefClean=0,prefOver=0;
+  active.forEach(p=>{if(p.orientee||!roleOn(p.role))return;const st=prefStats(p);if(!st.hasPref&&!st.hasAvoid)return;prefPpl++;if(st.against===0&&(!st.hasPref||st.got>0))prefClean++;prefOver+=st.against;});
   let surplus=0;for(let d=0;d<DAYS;d++)for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){if(!roleOn(r))continue;if(shiftCount(r,l,d)>reqEff(r,l,d).ideal)surplus++;}
   const anySenior=staff.some(p=>p.senior);
   let supportShort=0;for(let d=0;d<DAYS;d++)for(const line of ['day','night']){const pres=staff.filter(p=>p.role==='RN'&&p.line===line&&!p.orientee&&p.asn.has(d));if(!pres.length)continue;const ex=pres.filter(p=>p.senior||p.charge||p.precept).length;if((pres.length-ex)>ex)supportShort++;}
@@ -1358,6 +1420,7 @@ function renderChecklist(){
   h+=row(under?'warn':'ok','Everyone works their FTE days',under?under+' '+(under>1?'people are':'person is')+' under their days (short-staffed there, or lots of time off)':'Full-time 3/wk \u00b7 part-time 2/wk \u00b7 PRN ~1/mo \u00b7 HUC 5/wk');
   if(surplus)h+=row('rev','Some shifts are overstaffed',surplus+' shift'+pl(surplus)+' have more staff than the target \u2014 fine to keep, or trim if you don\u2019t need them');
   if(floated)h+=row('rev','Some days are floated off 10G',floated+' shift'+pl(floated)+' are worked off the unit \u2014 10G was already full those days, so the extra hands go to another unit (still counts toward their days & hours)');
+  if(prefPpl)h+=row(prefOver>prefPpl?'warn':'ok','Day preferences honored',prefClean+' of '+prefPpl+' got their preferred days with no clash'+(prefOver?'; '+prefOver+' shift'+pl(prefOver)+' landed on a \u201crather not\u201d day \u2014 those people are first in line next cycle':' \u2014 nicely matched'));
   h+=row(fatigue?'warn':'ok','Fatigue limits respected',fatigue?fatigue+' '+(fatigue>1?'people':'person')+' over '+settings.maxConsec+' in a row':'No one works more than '+settings.maxConsec+' shifts in a row');
   h+=row('rev','Hard shifts shared over time','Weekends, nights & holidays even out across cycles in the Fairness ledger');
   h+=row(reqPct==null?'off':(reqPct>=80?'ok':'warn'),'Requested days granted',reqPct==null?'No requests yet \u2014 import MyTime picks':reqPct+'% of requested days granted'+(imp?'':' (sample picks for now)'));
@@ -1664,6 +1727,14 @@ $('buildBtn').onclick=()=>{if(!staff.length){toast('Add some people first 🙂')
 $('exportBtn').onclick=exportCSV;
 $('helpBtn').onclick=()=>$('guideOverlay').classList.add('show');
 $('guideClose').onclick=()=>$('guideOverlay').classList.remove('show');
+$('guideStaffClose').onclick=()=>$('guideStaffOverlay').classList.remove('show');
+if($('importBtn'))$('importBtn').onclick=()=>{$('impText').value='';$('impResult').innerHTML='';if($('impFile'))$('impFile').value='';$('importOverlay').classList.add('show');};
+if($('impCancel'))$('impCancel').onclick=()=>$('importOverlay').classList.remove('show');
+if($('impRun'))$('impRun').onclick=()=>importKronos($('impText').value);
+if($('impFile'))$('impFile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('impText').value=r.result;toast('Loaded '+f.name+' — tap Import');};r.readAsText(f);});
+if($('importOverlay'))$('importOverlay').addEventListener('click',e=>{if(e.target===$('importOverlay'))$('importOverlay').classList.remove('show');});
+if($('importOverlay'))$('importOverlay').addEventListener('change',e=>{const s=e.target.closest('[data-fix]');if(!s)return;const pid=+s.value;if(pid)applyImportFix(+s.dataset.fix,pid);});
+$('guideStaffOverlay').addEventListener('click',e=>{if(e.target===$('guideStaffOverlay'))$('guideStaffOverlay').classList.remove('show');});
 $('guideOverlay').addEventListener('click',e=>{if(e.target===$('guideOverlay'))$('guideOverlay').classList.remove('show');});
 $('welcomeGo').onclick=()=>{$('welcomeOverlay').classList.remove('show');};
 
@@ -1671,6 +1742,70 @@ $('welcomeGo').onclick=()=>{$('welcomeOverlay').classList.remove('show');};
 const ROLE_OPTS=[['RN','Nurse'],['PCT','PCT'],['HUC','HUC']];
 const LINE_OPTS=[['day','Days'],['night','Nights']];
 const FTE_OPTS=[['FT','Full-time'],['PT','Part-time'],['PRN','PRN']];
+const DOWL=['Su','Mo','Tu','We','Th','Fr','Sa'];
+const CLUO=[['block','Back-to-back'],['spread','Spread out'],['any','No preference']];
+function prefStateOf(o,w){return (o.hardDOW&&o.hardDOW.has(w))?'cant':(o.prefDOW&&o.prefDOW.has(w))?'like':(o.avoidDOW&&o.avoidDOW.has(w))?'avoid':'';}
+function dowChipsHTML(o){return '<div class="dowrow">'+[0,1,2,3,4,5,6].map(w=>{const s=prefStateOf(o,w);return '<button type="button" class="dowchip '+s+'" data-dow="'+w+'">'+DOWL[w]+'</button>';}).join('')+'</div>';}
+function cluChipsHTML(o){const c=o.cluster||'any';return CLUO.map(([k,l])=>'<button type="button" class="pickbtn'+(c===k?' on':'')+'" data-clu="'+k+'">'+l+'</button>').join('');}
+function prefLegendHTML(){return '<div class="preflegend"><span><i class="lk"></i>likes</span><span><i class="av"></i>rather not</span><span><i class="ct"></i>can\u2019t (max 3)</span></div>';}
+function cyclePref(o,w){o.prefDOW=o.prefDOW||new Set();o.avoidDOW=o.avoidDOW||new Set();o.hardDOW=o.hardDOW||new Set();
+  if(o.hardDOW.has(w)){o.hardDOW.delete(w);}
+  else if(o.avoidDOW.has(w)){o.avoidDOW.delete(w);if(o.hardDOW.size<3)o.hardDOW.add(w);else toast('Up to 3 \u201ccan\u2019t work\u201d days');}
+  else if(o.prefDOW.has(w)){o.prefDOW.delete(w);o.avoidDOW.add(w);}
+  else{o.prefDOW.add(w);}}
+function prefStats(p){const w=[...p.asn,...(p.float||[])];const got=w.filter(d=>p.prefDOW&&p.prefDOW.has(wd(d))).length;const against=w.filter(d=>p.avoidDOW&&p.avoidDOW.has(wd(d))).length;return {got,against,hasPref:!!(p.prefDOW&&p.prefDOW.size),hasAvoid:!!(p.avoidDOW&&p.avoidDOW.size)};}
+let mgrReqBrush='pto';
+const MBRUSHES=[['pto','Time off'],['off','Prefer off'],['want','Want to work'],['clear','Clear']];
+function reqGridHTML(o){
+  const WDh=['S','M','T','W','T','F','S'],head=WDh.map(w=>'<div class="calhd">'+w+'</div>').join('');
+  const lead=START_DOW,trail=(7-((lead+DAYS)%7))%7;
+  let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
+  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(o,d);cells+='<div class="calcell req '+st+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+'" data-rd="'+d+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+(st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':'')+'</div></div>';}
+  return '<div class="calgrid reqgrid">'+head+pad+cells+padT+'</div>';
+}
+function splitCSV(line,delim){const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(q){if(c==='"'){if(line[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}else{if(c==='"')q=true;else if(c===delim){out.push(cur);cur='';}else cur+=c;}}out.push(cur);return out;}
+function kronosKey(full){let s=(full||'').trim();if(s.includes(',')){const a=s.split(',');s=(a[1]||'').trim()+' '+(a[0]||'').trim();}s=s.toLowerCase().replace(/[^a-z\s]/g,' ').replace(/\s+/g,' ').trim();const w=s.split(' ').filter(Boolean);if(!w.length)return '';return w[0]+'|'+(w.length>1?w[w.length-1][0]:'');}
+function kronosDate(s){s=(s||'').trim();if(!s)return null;let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return{y:+m[1],m:+m[2],d:+m[3]};m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);if(m){let y=+m[3];if(y<100)y+=2000;return{y,m:+m[1],d:+m[2]};}return null;}
+function dayIndexFor(y,mo,da){for(let d=0;d<DAYS;d++){const dt=dateOf(d);if(dt.getFullYear()===y&&dt.getMonth()+1===mo&&dt.getDate()===da)return d;}return -1;}
+function kronosType(s){s=(s||'').toLowerCase();if(/want|prefer to work|available|avail/.test(s))return 'want';if(/prefer off|rather not|unavail|soft/.test(s))return 'off';return 'pto';}
+let pendingImport=[],impSummary={applied:0,ppl:new Set(),outside:0};
+function importKronos(text){
+  text=(text||'').trim();if(!text){$('impResult').innerHTML='<div class="impmap bad">Paste or upload some data first.</div>';return;}
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;
+  const delim=lines[0].indexOf('\t')>=0?'\t':',';
+  const rows=lines.map(l=>splitCSV(l,delim).map(c=>c.trim()));
+  const hdr=rows[0].map(s=>s.toLowerCase());
+  const looksHeader=hdr.some(h=>/name|employee|staff|date|start|type|request|reason|status|paycode|pay code/.test(h));
+  const find=(...keys)=>{for(let i=0;i<hdr.length;i++)if(keys.some(k=>hdr[i].includes(k)))return i;return -1;};
+  let ci=looksHeader?{name:find('name','employee','staff'),date:find('date'),start:find('start','from','begin'),end:find('end','thru','through'),type:find('type','request','reason','category','paycode','pay code','code','status')}:{name:0,date:1,start:-1,end:-1,type:2};
+  if(ci.date<0&&ci.start>=0)ci.date=ci.start;
+  const body=looksHeader?rows.slice(1):rows;
+  const idx={};staff.forEach(p=>{const k=kronosKey(p.name);if(k)(idx[k]=idx[k]||[]).push(p);});
+  const rowDays=r=>{let dis=[];if(ci.start>=0&&ci.end>=0&&r[ci.end]){const a=kronosDate(r[ci.start]),b=kronosDate(r[ci.end]);if(a&&b){const s=new Date(a.y,a.m-1,a.d),e2=new Date(b.y,b.m-1,b.d);for(let t=new Date(s);t<=e2;t.setDate(t.getDate()+1)){const di=dayIndexFor(t.getFullYear(),t.getMonth()+1,t.getDate());di>=0?dis.push(di):impSummary.outside++;}}}else{const a=kronosDate(r[ci.date]);if(a){const di=dayIndexFor(a.y,a.m,a.d);di>=0?dis.push(di):impSummary.outside++;}}return dis;};
+  pendingImport=[];impSummary={applied:0,ppl:new Set(),outside:0};
+  const pend={};
+  for(const r of body){const nm=(r[ci.name]||'').trim();if(!nm)continue;
+    const tp=kronosType(ci.type>=0?r[ci.type]:'');const dis=rowDays(r);if(!dis.length)continue;
+    const cand=idx[kronosKey(nm)];
+    if(cand&&cand.length===1){const p=cand[0];dis.forEach(di=>{setReqState(p,di,tp);impSummary.applied++;impSummary.ppl.add(p.id);});}
+    else{const key=nm.toLowerCase();const e=pend[key]||(pend[key]={name:nm,why:(cand&&cand.length>1)?'two matches':'no match',items:[]});dis.forEach(di=>e.items.push({d:di,type:tp}));}
+  }
+  pendingImport=Object.values(pend);
+  save();renderImportResult();
+  if(screen==='people')renderPeople();
+}
+function renderImportResult(){
+  let h='<div class="impmap"><b>Imported '+impSummary.applied+' day'+(impSummary.applied===1?'':'s')+'</b> for '+impSummary.ppl.size+' '+(impSummary.ppl.size===1?'person':'people')+'.';
+  if(impSummary.outside)h+='<div style="margin-top:5px;color:var(--muted)">'+impSummary.outside+' date'+(impSummary.outside===1?'':'s')+' outside this schedule period (skipped).</div>';
+  if(pendingImport.length){
+    const opts='<option value="">\u2014 pick a person \u2014</option>'+staff.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>'<option value="'+p.id+'">'+esc(p.name)+' \u00b7 '+p.role+' '+p.line+'</option>').join('');
+    h+='<div class="bad" style="margin-top:9px">Match '+pendingImport.length+' name'+(pendingImport.length===1?'':'s')+' by hand:</div>';
+    h+=pendingImport.map((e,i)=>'<div class="impfix"><div class="impfixn">'+esc(e.name)+' <span>'+e.items.length+' day'+(e.items.length===1?'':'s')+' \u00b7 '+e.why+'</span></div><select class="impsel" data-fix="'+i+'">'+opts+'</select></div>').join('');
+  }else if(impSummary.applied){h+='<div style="margin-top:7px;color:var(--teal-deep);font-weight:700">All names matched \u2705</div>';}
+  h+='<div style="margin-top:9px;color:var(--muted)">Open the schedule and tap <b>Build</b> to apply.</div></div>';
+  $('impResult').innerHTML=h;
+}
+function applyImportFix(i,pid){const e=pendingImport[i];const p=staff.find(x=>x.id===pid);if(!e||!p)return;e.items.forEach(it=>setReqState(p,it.d,it.type));impSummary.applied+=e.items.length;impSummary.ppl.add(pid);pendingImport.splice(i,1);save();renderImportResult();if(screen==='people')renderPeople();toast('Added '+e.items.length+' day'+(e.items.length===1?'':'s')+' for '+firstName(p.name));}
 function paintDraft(){
   $('f_role').innerHTML=ROLE_OPTS.map(([k,l])=>`<button class="pickbtn${draft.role===k?' on':''}" data-role="${k}">${l}</button>`).join('');
   const huc=draft.role==='HUC';
@@ -1693,11 +1828,16 @@ function paintDraft(){
     $('f_precsel').innerHTML='<option value="">— choose a preceptor —</option>'+cands.map(p=>`<option value="${p.id}" ${draft.preceptor==p.id?'selected':''}>${p.name}</option>`).join('');
   }
   $('f_fte').innerHTML=FTE_OPTS.map(([k,l])=>`<button class="pickbtn${draft.fte===k?' on':''}" data-fte="${k}">${l}</button>`).join('');
+  $('prefWrap').classList.toggle('hide',draft.orientee);
+  $('f_dow').innerHTML=dowChipsHTML(draft);
+  $('f_clu').innerHTML=cluChipsHTML(draft);
+  $('f_brush').innerHTML=MBRUSHES.map(([k,l])=>'<button type="button" class="brush '+k+(mgrReqBrush===k?' on':'')+'" data-mbrush="'+k+'">'+l+'</button>').join('');
+  $('f_reqcal').innerHTML=reqGridHTML(draft);
 }
 function openPerson(id){
   editId=id;
-  if(id==null){draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,senior:false,wtw:false,orientee:false,preceptor:null};$('personTitle').textContent='Add a person';$('f_name').value='';$('personDelete').classList.add('hide');}
-  else{const p=staff.find(x=>x.id===id);draft={role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:!!p.precept,senior:!!p.senior,wtw:!!p.wtw,orientee:!!p.orientee,preceptor:p.preceptor??null};$('personTitle').textContent='Edit person';$('f_name').value=p.name;$('personDelete').classList.remove('hide');}
+  if(id==null){draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,senior:false,wtw:false,orientee:false,preceptor:null,prefDOW:new Set(),avoidDOW:new Set(),hardDOW:new Set(),cluster:'any',pto:new Set(),picks:new Set(),avoid:new Set()};$('personTitle').textContent='Add a person';$('f_name').value='';$('personDelete').classList.add('hide');}
+  else{const p=staff.find(x=>x.id===id);draft={role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:!!p.precept,senior:!!p.senior,wtw:!!p.wtw,orientee:!!p.orientee,preceptor:p.preceptor??null,prefDOW:new Set(p.prefDOW||[]),avoidDOW:new Set(p.avoidDOW||[]),hardDOW:new Set(p.hardDOW||[]),cluster:p.cluster||'any',pto:new Set(p.pto||[]),picks:new Set(p.picks||[]),avoid:new Set(p.avoid||[])};$('personTitle').textContent='Edit person';$('f_name').value=p.name;$('personDelete').classList.remove('hide');}
   paintDraft();$('personOverlay').classList.add('show');
 }
 $('personOverlay').addEventListener('click',e=>{
@@ -1711,14 +1851,18 @@ $('personOverlay').addEventListener('click',e=>{
   if(e.target.closest('#f_senior')){draft.senior=!draft.senior;paintDraft();}
   if(e.target.closest('#f_wtw')){draft.wtw=!draft.wtw;paintDraft();}
   if(e.target.closest('#f_orientee')){draft.orientee=!draft.orientee;if(draft.orientee)draft.charge=false;paintDraft();}
+  const _dw=e.target.closest('[data-dow]');if(_dw){cyclePref(draft,+_dw.dataset.dow);paintDraft();}
+  const _cl=e.target.closest('[data-clu]');if(_cl){draft.cluster=_cl.dataset.clu;paintDraft();}
+  const _mb=e.target.closest('[data-mbrush]');if(_mb){mgrReqBrush=_mb.dataset.mbrush;paintDraft();return;}
+  const _rd=e.target.closest('[data-rd]');if(_rd){setReqState(draft,+_rd.dataset.rd,mgrReqBrush==='clear'?'':mgrReqBrush);paintDraft();return;}
 });
 $('f_precsel').addEventListener('change',e=>{draft.preceptor=e.target.value?+e.target.value:null;});
 $('personCancel').onclick=()=>$('personOverlay').classList.remove('show');
 $('personSave').onclick=()=>{
   const name=$('f_name').value.trim();if(!name){toast('Please type a name');return;}
   if(editId==null){const id=staff.length?Math.max(...staff.map(p=>p.id))+1:0;
-    staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0}));toast('Added '+firstName(name));}
-  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor});toast('Saved');}
+    staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0,prefDOW:[...draft.prefDOW],avoidDOW:[...draft.avoidDOW],hardDOW:[...draft.hardDOW],cluster:draft.cluster,pto:[...draft.pto],picks:[...draft.picks],avoid:[...draft.avoid]}));toast('Added '+firstName(name));}
+  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,prefDOW:new Set(draft.prefDOW),avoidDOW:new Set(draft.avoidDOW),hardDOW:new Set(draft.hardDOW),cluster:draft.cluster,pto:new Set(draft.pto),picks:new Set(draft.picks),avoid:new Set(draft.avoid)});toast('Saved');}
   $('personOverlay').classList.remove('show');rosterChanged();
 };
 $('personDelete').onclick=()=>{if(editId==null)return;if(!confirm('Remove this person? Their shifts will be reassigned.'))return;staff=staff.filter(p=>p.id!==editId);$('personOverlay').classList.remove('show');rosterChanged();toast('Removed — schedule updated');};
@@ -1994,6 +2138,7 @@ function renderStaff(){
   const eligOpen=openShifts.filter(o=>o.status==='open'&&o.role===p.role&&o.line===p.line&&o.fromId!==p.id&&!p.asn.has(o.day)&&!p.pto.has(o.day)&&consecIfAdd(p,o.day)<=settings.maxConsec).length;
   TLS.push(staffTile('openshifts','📣','Open Shifts',eligOpen?String(eligOpen):''));
   if(tkOn)TLS.push(staffTile('hours','⏱️','My Hours',''));
+  TLS.push(staffTile('howto','🧭','How it works',''));
   const owedB=(p.ledger||0)>=3?'<div class="owedhome">⚖️ You’re owed fairer shifts — first pick next cycle.</div>':'';
   $('staffHome').innerHTML=owedB+'<div class="tilegrid">'+TLS.join('')+'</div>';
   applyStaffView();
@@ -2008,6 +2153,14 @@ function renderMySchedule(p){
   let h='<div style="padding:10px 12px 2px"><div class="caltiny">D = day · N = night · FLT = floated off 10G · OFF = off · ★ = holiday</div><div class="calgrid reqgrid">'+head+pad+cells+padT+'</div></div>';
   const start=Math.max(0,tday);const days=[...p.asn,...(p.float||[])].filter(d=>d>=start).sort((a,b)=>a-b).slice(0,8);
   const fairMsg=(p.ledger||0)>=3?'<div style="padding:11px 16px;background:var(--teal-soft);font-size:13.5px;color:var(--teal-deep);font-weight:600">⚖️ You’re owed fairer shifts — you’ll get first pick next cycle.</div>':'';
+  if((p.prefDOW&&p.prefDOW.size)||(p.avoidDOW&&p.avoidDOW.size)||(p.hardDOW&&p.hardDOW.size)){
+    const st=prefStats(p);let msg='';
+    if(st.hasPref)msg+='You got '+st.got+' shift'+(st.got===1?'':'s')+' on your preferred days. ';
+    if(st.against)msg+=st.against+' landed on a day you\u2019d rather not \u2014 you\u2019re owed one back. \u2696\ufe0f';
+    else if(st.hasAvoid)msg+='None on days you wanted to skip. \u2705';
+    else if(p.hardDOW&&p.hardDOW.size)msg+='Your can\u2019t-work days are all protected. \u2705';
+    h+='<div style="padding:11px 16px;background:#f4f8f7;font-size:13px;color:var(--ink)">\ud83d\udccb '+msg+'</div>';
+  }
   h+='<div class="sect" style="margin:8px 14px 4px">Upcoming shifts</div>'+fairMsg;
   h+=days.length?days.map(d=>{const dt=dateOf(d);const fl=p.float&&p.float.has(d);const given=openShifts.some(o=>o.fromId===p.id&&o.day===d&&(o.status==='open'||o.status==='claimed'));return '<div class="rule"><div class="rl"><b>'+dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+'</b><span>'+(p.line==='day'?'Day 7a–7p':'Night 7p–7a')+' · '+shiftReason(p,d)+(isHoliday(d)?' · ★':'')+'</span></div>'+(given?'<span class="tobadge pend">Given up</span>':fl?'<span class="tobadge pend" style="background:#f5ecd6;color:#9a6a12">Float · off 10G</span>':'<div style="display:flex;gap:6px;margin-left:auto;flex:0 0 auto"><button class="swapbtn" data-swap="'+d+'">⇄ Swap</button><button class="swapbtn gv" data-giveup="'+d+'">Give up</button></div>')+'</div>';}).join(''):'<div style="padding:16px;color:var(--faint)">No upcoming shifts yet. Your manager builds the schedule.</div>';
   $('myShiftsCard').innerHTML=h;
@@ -2064,7 +2217,9 @@ function renderMyReq(p){
   let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
   let cells='';for(let d=0;d<DAYS;d++){const st=reqState(p,d);const dem=offDemand(p,d);cells+=`<div class="calcell req ${st}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':''}</div>${dem>0?`<div class="cdem ${dem>=3?'hi':dem>=2?'mid':'lo'}">${dem}</div>`:''}</div>`;}
   const brushes=[['off','Prefer off'],['want','Want to work'],['pto','Time off'],['clear','Clear']];
-  let h=`<div style="padding:12px 14px 4px"><div class="sub" style="margin-bottom:8px">Pick a tag, then tap or swipe across days — mark your whole schedule in seconds.</div>`;
+  let h='<div style="padding:12px 14px 4px">';
+  h+='<div class="prefcard"><div class="sub" style="margin-bottom:2px">Your usual preferences</div><div class="prefsub">Tap a day to cycle: likes \u2192 rather not \u2192 can\u2019t \u2192 clear</div>'+prefLegendHTML()+dowChipsHTML(p)+'<div class="sub" style="margin:10px 0 4px">Shift grouping</div><div class="pickrow clurow">'+cluChipsHTML(p)+'</div></div>';
+  h+='<div class="sub" style="margin-bottom:8px">Or mark specific days below — pick a tag, then tap or swipe across days.</div>';
   h+=`<div class="brushrow">${brushes.map(([k,l])=>`<button class="brush ${k}${reqBrush===k?' on':''}" data-brush="${k}">${l}</button>`).join('')}</div>`;
   h+=`<div class="quickrow"><button class="qbtn" data-quick="weoff">Weekends off</button><button class="qbtn" data-quick="clearall">Clear all</button></div></div>`;
   const owed=(p.ledger||0)>=3;
@@ -2297,7 +2452,7 @@ $('loginSearch').addEventListener('input',e=>renderLoginList(e.target.value));
 $('loginOverlay').addEventListener('click',e=>{const rec=e.target.closest('[data-rec]');if(rec){signInStaff(rec.dataset.rec);return;}const li=e.target.closest('[data-lid]');if(li){signInStaff(li.dataset.lid);return;}});
 $('screen-staff').addEventListener('click',e=>{
   const p=meUser();if(!p)return;
-  const tl=e.target.closest('[data-tile]');if(tl){staffView=tl.dataset.tile;renderStaff();return;}
+  const tl=e.target.closest('[data-tile]');if(tl){if(tl.dataset.tile==='howto'){$('guideStaffOverlay').classList.add('show');return;}staffView=tl.dataset.tile;renderStaff();return;}
   if(e.target.closest('#staffBack')){staffView='home';renderStaff();return;}
   if(e.target.closest('#reqTimeoffBtn')){openTimeoff();return;}
   const pu=e.target.closest('[data-pickup]');if(pu){const o=openShifts.find(x=>x.id===pu.dataset.pickup);if(o&&o.status==='open'){o.claimedBy=p.id;o.status='claimed';o.claimedAt=Date.now();save();renderStaff();toast('Requested — your manager will confirm.');}return;}
@@ -2315,6 +2470,8 @@ function endReqPaint(){if(reqPainting){reqPainting=false;save();}}
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>$('myReqCard').addEventListener(ev,endReqPaint));
 $('myReqCard').addEventListener('click',e=>{
   const b=e.target.closest('[data-brush]');if(b){reqBrush=b.dataset.brush;renderMyReq(meUser());return;}
+  const dw=e.target.closest('[data-dow]');if(dw){const p=meUser();if(!p)return;cyclePref(p,+dw.dataset.dow);save();renderMyReq(p);return;}
+  const cl=e.target.closest('[data-clu]');if(cl){const p=meUser();if(!p)return;p.cluster=cl.dataset.clu;save();renderMyReq(p);return;}
   const q=e.target.closest('[data-quick]');if(q){const p=meUser();if(!p)return;
     if(q.dataset.quick==='clearall'){for(let d=0;d<DAYS;d++)setReqState(p,d,'');toast('Cleared all');}
     else if(q.dataset.quick==='weoff'){for(let d=0;d<DAYS;d++)if(isColWE(d))setReqState(p,d,'off');toast('Weekends marked off');}

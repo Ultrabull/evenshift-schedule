@@ -1000,12 +1000,14 @@ function isLocked(p,d){return !!((p.locked&&p.locked.has(d))||(p.workDOW&&p.work
 const weekCount=(p,d)=>{const w=weekOf(d);let n=0;for(const x of p.asn)if(weekOf(x)===w)n++;if(p.float)for(const x of p.float)if(weekOf(x)===w)n++;return n;};
 const weekendQuota=p=>p.fte==='PRN'?settings.wkPRN:p.fte==='PT'?settings.wkPT:settings.wkFT;
 function genPicks(p){
-  const want=targetShifts(p)+1;const pool=[];for(let d=0;d<DAYS;d++)if(!p.pto.has(d)&&!(p.hardDOW&&p.hardDOW.has(wd(d))))pool.push(d);
+  const cap=Math.max(1,weekCap(p)),total=targetShifts(p);const chosen=new Set();const W=Math.ceil(DAYS/7);
   const sc=d=>{let s=Math.random();const w=wd(d);if(p.prefDOW&&p.prefDOW.has(w))s+=3;if(p.avoidDOW&&p.avoidDOW.has(w))s-=3;if(p.wtw)s+=lineWEof(p.line,d)?3:-1.5;else s+=lineWEof(p.line,d)?.15:.6;return s;};
-  pool.sort((a,b)=>sc(b)-sc(a));
-  const weDays=pool.filter(d=>lineWEof(p.line,d));const q=weekendQuota(p);const chosen=new Set();
-  for(let i=0;i<q&&i<weDays.length;i++)chosen.add(weDays[i]);
-  for(const d of pool){if(chosen.size>=want)break;chosen.add(d);}p.picks=chosen;
+  for(let w=0;w<W&&chosen.size<total;w++){
+    const days=[];for(let d=w*7;d<Math.min(DAYS,w*7+7);d++)if(!p.pto.has(d)&&!(p.hardDOW&&p.hardDOW.has(wd(d))))days.push(d);
+    days.sort((a,b)=>sc(b)-sc(a));
+    for(let i=0;i<cap&&i<days.length&&chosen.size<total;i++)chosen.add(days[i]);
+  }
+  p.picks=chosen;
 }
 const consecIfAdd=(p,d)=>{let r=1,x=d-1;while(x>=0&&worked(p,x)){r++;x--;}x=d+1;while(x<DAYS&&worked(p,x)){r++;x++;}return r;};
 const hardOff=(p,d)=>!!(p.hardDOW&&p.hardDOW.has(wd(d)));
@@ -1027,7 +1029,7 @@ function floatAssign(p,d){p.asn.delete(d);(p.float=p.float||new Set()).add(d);}
 function build(){
   cycleSeed++;staff.forEach(p=>{p.asn=new Set();p.float=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();if(!p.picks||!p.picks.size)genPicks(p);});
   const _protN=Math.max(0,settings.protected||0);staff.forEach(p=>{p._prot=new Set();if(_protN&&p.avoid&&p.avoid.size){const bw={};[...p.avoid].sort((a,b)=>a-b).forEach(d=>{(bw[weekOf(d)]=bw[weekOf(d)]||[]).push(d);});Object.values(bw).forEach(arr=>arr.slice(0,_protN).forEach(d=>p._prot.add(d)));}});
-  staff.forEach(p=>{if(p.workDOW&&p.workDOW.size){const _cap=weekCap(p),_pw={};for(let d=0;d<DAYS;d++){if(p.workDOW.has(wd(d))&&!p.pto.has(d)&&!worked(p,d)){const w=weekOf(d);if((_pw[w]||0)>=_cap)continue;_pw[w]=(_pw[w]||0)+1;assign(p,d);}}}if(p.locked)p.locked.forEach(d=>{if(!p.pto.has(d)&&!worked(p,d))assign(p,d);});}); // locked weekdays/days first (capped at weekly FTE)
+  staff.forEach(p=>{const _cap=weekCap(p),_pw={},_ld=[];for(let d=0;d<DAYS;d++){if(!p.pto.has(d)&&((p.workDOW&&p.workDOW.has(wd(d)))||(p.locked&&p.locked.has(d))))_ld.push(d);}_ld.sort((a,b)=>a-b);_ld.forEach(d=>{const w=weekOf(d);if((_pw[w]||0)>=_cap)return;if(!worked(p,d)){_pw[w]=(_pw[w]||0)+1;assign(p,d);}});}); // locked weekdays + locked days, capped at weekly FTE
   const fill=(role,line,d,target,wantCharge)=>{
     const have=()=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
     if(wantCharge){let pool=staff.filter(p=>p.role===role&&p.line===line&&p.charge&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d));
@@ -1044,8 +1046,19 @@ function build(){
         if(shiftCount(role,line,d)>=tf(rq))continue;
         const cand=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d))[0];
         if(cand){assign(cand,d);imp=true;}}}}};
-  sweep(rq=>rq.min);   // minimums everywhere first, spread evenly
-  sweep(rq=>rq.ideal); // then top up toward ideal where staff remain
+  // HONOR PICKS helper: seat people on the exact days they asked to work — most-owed, then fewest-requests
+  // first — up to the "Honor staff picks" share of each shift, within their FTE.
+  const honorCap=Math.max(.5,Math.min(1,(settings.honor||85)/100));
+  const honorPicks=(pred)=>{const order=staff.filter(p=>!p.orientee&&roleOn(p.role)&&pred(p)).sort((a,b)=>((b.ledger||0)-(a.ledger||0))||((a.picks?a.picks.size:0)-(b.picks?b.picks.size:0)));
+    for(const p of order){if(!p.picks||!p.picks.size)continue;
+      for(const d of [...p.picks].sort((a,b)=>a-b)){if(!available(p,d))continue;
+        const rq=reqEff(p.role,p.line,d);if(!rq||rq.off)continue;
+        if(shiftCount(p.role,p.line,d)>=Math.max(rq.min,Math.round(rq.ideal*honorCap)))continue;
+        assign(p,d);}}};
+  honorPicks(p=>p.fte!=='FT');  // 1) grant the light requesters (PRN/PT) their few days first
+  sweep(rq=>rq.min);            // 2) lock in safe minimums (plenty of full-timers still free)
+  honorPicks(()=>true);         // 3) honor the full-timers' picks up to the honor cap
+  sweep(rq=>rq.ideal);          // 4) fill toward ideal where staff remain
   // FTE top-up with FLOAT overflow: bring everyone to their contracted days, but only fill 10G up to its
   // capacity (your coverage numbers). Days beyond what the unit can hold become FLOAT (worked off 10G).
   {let imp=true,g=0;
@@ -1258,7 +1271,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 27j</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 27o</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1954,12 +1967,12 @@ function dowLockChipsHTML(o){return '<div class="dowrow">'+[0,1,2,3,4,5,6].map(w
 function cycleLock(o,w){o.workDOW=o.workDOW||new Set();o.hardDOW=o.hardDOW||new Set();if(o.workDOW.has(w)){o.workDOW.delete(w);o.hardDOW.add(w);}else if(o.hardDOW.has(w)){o.hardDOW.delete(w);}else{o.workDOW.add(w);}}
 function prefStats(p){const w=[...p.asn,...(p.float||[])];const got=w.filter(d=>p.prefDOW&&p.prefDOW.has(wd(d))).length;const against=w.filter(d=>p.avoidDOW&&p.avoidDOW.has(wd(d))).length;return {got,against,hasPref:!!(p.prefDOW&&p.prefDOW.size),hasAvoid:!!(p.avoidDOW&&p.avoidDOW.size)};}
 let mgrReqBrush='pto';
-const MBRUSHES=[['pto','Time off'],['off','Prefer off'],['want','Want to work'],['clear','Clear all']];
+const MBRUSHES=[['pto','Time off'],['off','Prefer off'],['want','Want to work'],['lock','🔒 Lock'],['clear','Clear all']];
 function reqGridHTML(o){
   const WDh=['S','M','T','W','T','F','S'],head=WDh.map(w=>'<div class="calhd">'+w+'</div>').join('');
   const lead=START_DOW,trail=(7-((lead+DAYS)%7))%7;
   let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
-  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(o,d);cells+='<div class="calcell req '+st+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+'" data-rd="'+d+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+(st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':'')+'</div></div>';}
+  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(o,d);cells+='<div class="calcell req '+st+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+'" data-rd="'+d+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+(st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':st==='lock'?'🔒':'')+'</div></div>';}
   return '<div class="calgrid reqgrid">'+head+pad+cells+padT+'</div>';
 }
 function splitCSV(line,delim){const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(q){if(c==='"'){if(line[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}else{if(c==='"')q=true;else if(c===delim){out.push(cur);cur='';}else cur+=c;}}out.push(cur);return out;}

@@ -521,6 +521,16 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .rgc.rq-ok{box-shadow:inset 0 0 0 2px var(--green)}
 .rgc.rq-no{box-shadow:inset 0 0 0 2px var(--red)}
 .rgc.rq-got{background:#dff3e7}
+.rgshift td{background:var(--teal);color:#fff;font-weight:800;font-size:13px;padding:7px 9px;text-align:left!important;position:sticky;left:0}
+.rgrole td{background:#e6eef1;color:#2b3a44;font-weight:700;font-size:11px;letter-spacing:.03em;padding:3px 10px;text-align:left!important;position:sticky;left:0}
+.rgrc{display:inline-block;background:#cdd9de;color:#4a5b65;border-radius:8px;padding:0 6px;font-size:10px;margin-left:5px}
+.rgrid-wrap.week{overflow-x:visible}
+.rgrid-wrap.week .rgrid{width:100%;table-layout:fixed}
+.rgrid-wrap.week .rgn{min-width:0;max-width:none;width:auto;font-size:13px;padding:7px 8px!important}
+.rgrid-wrap.week .rgh{padding:6px 0;font-size:11px}
+.rgrid-wrap.week .rgh span{font-size:13px}
+.rgrid-wrap.week .rgc{height:38px;font-size:15px}
+.rgrid-wrap.week .rgshift td,.rgrid-wrap.week .rgrole td{position:static}
 .roff{margin-top:10px;background:#eafaf1;border:1px solid #bce8cf;color:#1d7a45;border-radius:11px;padding:9px 12px;font-size:12.5px}
 </style>
 </head>
@@ -646,9 +656,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <div class="card hide" id="rosterCard">
       <div id="rHonor" class="rhonor"></div>
       <div class="rmode" id="rmodeBar">
-        <button id="rmode_day" data-rmode="day" class="on">Day</button>
-        <button id="rmode_week" data-rmode="week">Week</button>
-        <button id="rmode_all" data-rmode="all">Whole</button>
+        <button id="rmode_week" data-rmode="week" class="on">This week</button>
+        <button id="rmode_all" data-rmode="all">Whole schedule</button>
       </div>
       <div id="rNav" class="daynav">
         <button class="arrow" id="rPrev">‹</button>
@@ -1271,7 +1280,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 27o</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 27p</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1633,9 +1642,9 @@ $('payCard').addEventListener('click',e=>{const o=e.target.closest('[data-otstep
   if(o){settings.otThreshold=Math.max(24,Math.min(80,(settings.otThreshold||40)+(+o.dataset.otstep)*4));save();renderPay();if(built)renderSched();return;}
   if(dw){settings.payStartDow=+dw.dataset.paydow;save();renderPay();if(built)renderSched();return;}});
 function roleTag(r){return r==='RN'?'RN':r==='PCT'?'PCT':r==='HUC'?'HUC':r;}
-let rosterMode='day';
+let rosterMode='week';
 function renderRoster(){
-  ['day','week','all'].forEach(m=>{const _b=$('rmode_'+m);if(_b)_b.classList.toggle('on',rosterMode===m);});
+  ['week','all'].forEach(m=>{const _b=$('rmode_'+m);if(_b)_b.classList.toggle('on',rosterMode===m);});
   if($('rNav'))$('rNav').style.display=rosterMode==='all'?'none':'';
   let rT=0,rOk=0;
   staff.forEach(p=>{if(p.orientee)return;
@@ -1645,7 +1654,6 @@ function renderRoster(){
   });
   const honor=rT?Math.round(rOk/rT*100):100;
   if($('rHonor'))$('rHonor').innerHTML=rT?`📊 Requests honored this period: <b>${honor}%</b> <span class="rhsub">(${rOk} of ${rT} kept)</span>`:'📊 No specific day-requests entered yet';
-  if(rosterMode==='day')return rosterDay();
   const w=weekOf(curDay);
   const a=rosterMode==='week'?w*7:0, b=rosterMode==='week'?Math.min(DAYS-1,w*7+6):DAYS-1;
   if($('rWd'))$('rWd').textContent=rosterMode==='week'?('Week '+(w+1)+' of '+(DAYS/7)):'Whole schedule';
@@ -1681,28 +1689,26 @@ function rosterGrid(a,b){
   let head='<th class="rgn">Name</th>';
   for(let d=a;d<=b;d++){const we=isColWE(d)||isHoliday(d);head+=`<th class="rgh${we?' we':''}">${DOW[wd(d)]}<span>${dateOf(d).getDate()}</span></th>`;}
   const span=b-a+2;let body='';
-  [['day','☀️ Day shift'],['night','🌙 Night shift']].forEach(([line,ttl])=>{
-    const grp=staff.filter(p=>p.line===line&&!p.orientee).sort((x,y)=>(x.role.localeCompare(y.role))||x.name.localeCompare(y.name));
-    if(!grp.length)return;
-    body+=`<tr class="rgsub"><td colspan="${span}">${ttl}</td></tr>`;
-    grp.forEach(p=>{
-      let cells='';
-      for(let d=a;d<=b;d++){
-        const fl=p.float&&p.float.has(d),on=p.asn.has(d),pto=p.pto&&p.pto.has(d),st=reqState(p,d);
-        let c='',cl='';
-        if(on){c=line==='night'?'N':'D';cl=line;}
-        else if(fl){c='F';cl='flt';}
-        else if(pto){c='·';cl='off';}
-        let rq='';
-        if(st==='want'&&(on||fl))rq=' rq-ok';
-        else if(st==='off'&&(on||fl))rq=' rq-no';
-        else if((st==='off'||st==='pto')&&!on&&!fl)rq=' rq-got';
-        cells+=`<td class="rgc ${cl}${rq}">${c}</td>`;
-      }
-      body+=`<tr><td class="rgn">${p.charge?'<i class="cd2"></i>':''}${esc(firstName(p.name))}</td>${cells}</tr>`;
+  const cellOf=(p,d,line)=>{
+    const fl=p.float&&p.float.has(d),on=p.asn.has(d),pto=p.pto&&p.pto.has(d),st=reqState(p,d);
+    let c='',cl='';
+    if(on){c=line==='night'?'N':'D';cl=line;}else if(fl){c='F';cl='flt';}else if(pto){c='·';cl='off';}
+    let rq='';
+    if(st==='want'&&(on||fl))rq=' rq-ok';else if(st==='off'&&(on||fl))rq=' rq-no';else if((st==='off'||st==='pto')&&!on&&!fl)rq=' rq-got';
+    return `<td class="rgc ${cl}${rq}">${c}</td>`;
+  };
+  const ROLN={RN:'Nurses',PCT:'PCTs',HUC:'HUCs'};
+  [['day','☀️ Day shift',['RN','PCT','HUC']],['night','🌙 Night shift',['RN','PCT']]].forEach(([line,ttl,roles])=>{
+    if(!staff.some(p=>p.line===line&&!p.orientee))return;
+    body+=`<tr class="rgshift"><td colspan="${span}">${ttl}</td></tr>`;
+    roles.forEach(role=>{
+      const grp=staff.filter(p=>p.line===line&&p.role===role&&!p.orientee).sort((x,y)=>x.name.localeCompare(y.name));
+      if(!grp.length)return;
+      body+=`<tr class="rgrole"><td colspan="${span}">${ROLN[role]||role} <span class="rgrc">${grp.length}</span></td></tr>`;
+      grp.forEach(p=>{let cells='';for(let d=a;d<=b;d++)cells+=cellOf(p,d,line);body+=`<tr><td class="rgn">${p.charge?'<i class="cd2"></i>':''}${esc(firstName(p.name))}</td>${cells}</tr>`;});
     });
   });
-  $('rosterBody').innerHTML=`<div class="rgrid-wrap"><table class="rgrid"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+  $('rosterBody').innerHTML=`<div class="rgrid-wrap ${rosterMode}"><table class="rgrid"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 function renderDay(){
   const d=curDay;$('dvWd').textContent=WDF[wd(d)]+(isHoliday(d)?' · 🎉 '+holidayName(d):(isColWE(d)?' · weekend':''));$('dvDt').textContent=fmtDate(d)+' · Day '+(d+1);

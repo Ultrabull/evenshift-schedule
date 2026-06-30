@@ -1215,7 +1215,7 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();if(!p.locked)p.locked=new Set(p.locked||[]);if(!p.workDOW)p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,senior:false,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
@@ -1280,7 +1280,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 27p</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 27q</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}

@@ -358,6 +358,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .calcell.edit.pto{background:repeating-linear-gradient(45deg,#f0f2f5,#f0f2f5 4px,#e6eaef 4px,#e6eaef 8px);cursor:not-allowed}
 ".calcell.edit.pto .cmark{font-size:10px;color:var(--faint)}
 .calcell.edit.flt{background:#f5ecd6;border-color:#e0c98f}.calcell.edit.flt .cmark{color:#9a6a12;font-size:11px}
+.calcell.req.lock{background:#ece9fb;border-color:#b9aef0}.calcell.req.lock .cmark{color:#5b46b8;font-size:15px}
 .calcell.mine.flt{background:#f5ecd6;border-color:#e0c98f}.calcell.mine.flt .cmark{color:#9a6a12;font-size:10px}
 .crole{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:600;font-size:11px;line-height:1.2;border-radius:5px;padding:1px 0;margin-top:2px;width:90%;text-align:center;font-variant-numeric:tabular-nums}
 .crole.sv-ok{color:var(--green)}
@@ -909,7 +910,7 @@ function workedHoursTotal(p){let h=0;const c=p.clock||{};for(const iso in c)h+=r
 function otTotal(p){return weekRanges().reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-(settings.otThreshold||40)),0);}
 
 /* ============ settings ============ */
-let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:4,pctNightMin:3,usePCT:true,coverVer:2,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
+let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:4,pctNightMin:3,usePCT:true,useWeekend:true,weRn:9,weRnMin:8,wePct:5,wePctMin:4,coverVer:3,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:2,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
 function req(role,line){const cm=(settings.useCharge===false?0:(settings.chargeMin||0));if(role==='RN')return line==='day'?{ideal:settings.rnDayIdeal+cm,min:settings.rnDayMin+cm}:{ideal:settings.rnNightIdeal+cm,min:settings.rnNightMin+cm};if(role==='PCT')return line==='day'?{ideal:settings.pctDayIdeal,min:settings.pctDayMin}:{ideal:settings.pctNightIdeal,min:settings.pctNightMin};return{ideal:settings.hucNeed,min:settings.hucNeed};}
 function roleOn(role){if(role==='PCT')return settings.usePCT!==false;if(role==='HUC')return settings.useHUC!==false;return true;}
 function isoOf(d){const dt=dateOf(d);return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
@@ -919,6 +920,9 @@ function reqEff(role,line,d){if(!roleOn(role))return{ideal:0,min:0,off:true};con
   if(d!=null&&isHoliday(d)){const cm=(settings.useCharge===false?0:(settings.chargeMin||0));
     if(role==='RN'){const h=(line==='day'?settings.holRnDay:settings.holRnNight)+cm;ideal=h;min=h;}
     else if(role==='PCT'){ideal=settings.holPct;min=settings.holPct;}}
+  else if(d!=null&&settings.useWeekend!==false&&(line==='day'?isDayWE(d):isNightWE(d))){
+    if(role==='RN'){ideal=settings.weRn;min=settings.weRnMin;}
+    else if(role==='PCT'){ideal=settings.wePct;min=settings.wePctMin;}}
   (settings.customRules||[]).forEach(c=>{if(!c.note&&c.role===role&&(c.line==='both'||c.line===line)){ideal=Math.max(ideal,c.min);min=Math.max(min,c.min);}});
   return{ideal,min};}
 
@@ -959,6 +963,7 @@ function unassign(p,d){p.asn.delete(d);if(lineWEof(p.line,d))p.weCount--;if(p.li
 function floatAssign(p,d){p.asn.delete(d);(p.float=p.float||new Set()).add(d);}
 function build(){
   cycleSeed++;staff.forEach(p=>{p.asn=new Set();p.float=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();if(!p.picks||!p.picks.size)genPicks(p);});
+  staff.forEach(p=>{if(p.locked)p.locked.forEach(d=>{if(!p.pto.has(d)&&!worked(p,d))assign(p,d);});}); // fixed (locked) days first
   const fill=(role,line,d,target,wantCharge)=>{
     const have=()=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
     if(wantCharge){let pool=staff.filter(p=>p.role===role&&p.line===line&&p.charge&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d));
@@ -1017,6 +1022,7 @@ function build(){
             if(H.float.size-L.float.size<=1)continue;
             if(!L.asn.has(d))continue;
             if(L.charge&&r==='RN'&&chargeCount(l,d)<=settings.chargeMin)continue;
+            if(L.locked&&L.locked.has(d))continue;
             assign(H,d);floatAssign(L,d);swapped=true;break;}
           if(swapped)break;}
         if(swapped){changed=true;break;}
@@ -1123,11 +1129,11 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();if(!p.locked)p.locked=new Set(p.locked||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,senior:false,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
-    if(c){const cs=JSON.parse(c);if(cs.pctIdeal!=null&&cs.pctDayIdeal==null){cs.pctDayIdeal=cs.pctIdeal;cs.pctDayMin=(cs.pctMin!=null?cs.pctMin:Math.max(1,cs.pctIdeal-1));}settings=Object.assign(settings,cs);if((settings.coverVer||0)<2){settings.pctNightIdeal=4;settings.pctNightMin=3;settings.coverVer=2;}}
+    if(c){const cs=JSON.parse(c);if(cs.pctIdeal!=null&&cs.pctDayIdeal==null){cs.pctDayIdeal=cs.pctIdeal;cs.pctDayMin=(cs.pctMin!=null?cs.pctMin:Math.max(1,cs.pctIdeal-1));}settings=Object.assign(settings,cs);if((settings.coverVer||0)<2){settings.pctNightIdeal=4;settings.pctNightMin=3;settings.coverVer=2;}if((settings.coverVer||0)<3){if(settings.useWeekend==null)settings.useWeekend=true;if(settings.weRn==null)settings.weRn=9;if(settings.weRnMin==null)settings.weRnMin=8;if(settings.wePct==null)settings.wePct=5;if(settings.wePctMin==null)settings.wePctMin=4;settings.coverVer=3;}}
     const w=localStorage.getItem(KEY_SW);if(w)swaps=JSON.parse(w)||[];
     const to=localStorage.getItem(KEY_TO);if(to)timeOff=JSON.parse(to)||[];
     const os=localStorage.getItem(KEY_OS);if(os)openShifts=JSON.parse(os)||[];
@@ -1136,7 +1142,7 @@ function load(){
   staff=seed();return false;
 }
 function save(){try{
-  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any'}))));
+  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])]}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
   localStorage.setItem(KEY_SW,JSON.stringify(swaps));
   localStorage.setItem(KEY_TO,JSON.stringify(timeOff));
@@ -1188,7 +1194,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 26x</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 26z</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1239,8 +1245,10 @@ const RULES=[
   ['pctDayIdeal','PCTs — day','Patient care techs, day shift','PCTs can have different targets for day and night. In the month view it shows like “4·2” — that means 4 PCTs on days and 2 on nights.'],
   ['pctNightIdeal','PCTs — night','Patient care techs, night shift'],
   ['hucNeed','HUCs on days','8-hour shifts · about 6am–11pm','HUCs (unit coordinators) work 8-hour shifts covering roughly 6am–11pm — up to 2 during the day. There is no overnight HUC shift. When short, the unit flexes or pulls coverage.'],
+  ['weRn','Weekend nurses (total)','Whole floor incl. charge — Sat & Sun','On weekends you can staff up. This is the total nurses on the floor (charge included) for Saturday & Sunday shifts. Turn the switch off to use the same numbers as weekdays.'],
+  ['wePct','Weekend PCTs','Patient care techs — Sat & Sun'],
 ];
-const ROLE_TGL={chargeMin:'useCharge',pctDayIdeal:'usePCT',pctNightIdeal:'usePCT',hucNeed:'useHUC'};
+const ROLE_TGL={chargeMin:'useCharge',pctDayIdeal:'usePCT',pctNightIdeal:'usePCT',hucNeed:'useHUC',weRn:'useWeekend',wePct:'useWeekend'};
 function renderRules(){
   $('rulesCard').innerHTML=RULES.map(([k,t,s,tip])=>{
     const tk=ROLE_TGL[k];const on=tk?settings[tk]!==false:true;
@@ -1326,6 +1334,8 @@ function stepRule(k,delta){
     if(k==='rnNightIdeal')settings.rnNightMin=Math.max(1,v-1);
     if(k==='pctDayIdeal')settings.pctDayMin=Math.max(1,v-1);
     if(k==='pctNightIdeal')settings.pctNightMin=Math.max(1,v-1);
+    if(k==='weRn')settings.weRnMin=Math.max(1,v-1);
+    if(k==='wePct')settings.wePctMin=Math.max(1,v-1);
   }
   $('rv_'+k).textContent=settings[k];save();
 }
@@ -1434,6 +1444,7 @@ function renderChecklist(){
   const oris=staff.filter(p=>p.orientee);let oriBad=0;oris.forEach(o=>{const pr=staff.find(x=>x.id===o.preceptor);if(!pr){oriBad++;return;}[...(o.oriDays||[])].forEach(d=>{if(!pr.asn.has(d))oriBad++;});});
   let under=0;active.forEach(p=>{if(roleOn(p.role)&&workedCount(p)<targetShifts(p))under++;});
   let floated=0;staff.forEach(p=>{floated+=(p.float?p.float.size:0);});
+  let lockedN=0,lockMiss=0;staff.forEach(p=>{if(p.locked)p.locked.forEach(d=>{lockedN++;if(!p.asn.has(d))lockMiss++;});});
   let prefPpl=0,prefClean=0,prefOver=0;
   active.forEach(p=>{if(p.orientee||!roleOn(p.role))return;const st=prefStats(p);if(!st.hasPref&&!st.hasAvoid)return;prefPpl++;if(st.against===0&&(!st.hasPref||st.got>0))prefClean++;prefOver+=st.against;});
   let surplus=0;for(let d=0;d<DAYS;d++)for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){if(!roleOn(r))continue;if(shiftCount(r,l,d)>reqEff(r,l,d).ideal)surplus++;}
@@ -1459,6 +1470,7 @@ function renderChecklist(){
   h+=row(under?'warn':'ok','Everyone works their FTE days',under?under+' '+(under>1?'people are':'person is')+' under their days (short-staffed there, or lots of time off)':'Full-time 3/wk \u00b7 part-time 2/wk \u00b7 PRN ~1/mo \u00b7 HUC 5/wk');
   if(surplus)h+=row('rev','Some shifts are overstaffed',surplus+' shift'+pl(surplus)+' have more staff than the target \u2014 fine to keep, or trim if you don\u2019t need them');
   if(floated)h+=row('rev','Some days are floated off 10G',floated+' shift'+pl(floated)+' are worked off the unit \u2014 10G was already full those days, so the extra hands go to another unit (still counts toward their days & hours)');
+  if(lockedN)h+=row(lockMiss?'warn':'ok','Fixed (locked) days kept',lockMiss?lockMiss+' locked day'+pl(lockMiss)+' couldn\u2019t be placed \u2014 check for a time-off clash':lockedN+' locked day'+pl(lockedN)+' kept exactly as set');
   if(prefPpl)h+=row(prefOver>prefPpl?'warn':'ok','Day preferences honored',prefClean+' of '+prefPpl+' got their preferred days with no clash'+(prefOver?'; '+prefOver+' shift'+pl(prefOver)+' landed on a \u201crather not\u201d day \u2014 those people are first in line next cycle':' \u2014 nicely matched'));
   h+=row(fatigue?'warn':'ok','Fatigue limits respected',fatigue?fatigue+' '+(fatigue>1?'people':'person')+' over '+settings.maxConsec+' in a row: '+fmtL(fatigueList):'No one works more than '+settings.maxConsec+' shifts in a row');
   h+=row('rev','Hard shifts shared over time','Weekends, nights & holidays even out across cycles in the Fairness ledger');
@@ -1642,7 +1654,7 @@ function renderCalendar(){
   if(edit){
     banner=`<div class="caledit"><div>Editing <b>${firstName(p.name)}</b> — drag across days to add or remove shifts<br><span style="color:#9a6a12;font-size:11px">FLT = floated off 10G (worked, but on another unit)</span></div><button class="ghostbtn" id="calDone">Done</button></div>`;
     for(let d=0;d<DAYS;d++){const on=p.asn.has(d),fl=p.float&&p.float.has(d),pto=p.pto.has(d);
-      const _c=pto?'pto':on?(p.line==='night'?'n':'d'):fl?'flt':'';const _m=pto?'OFF':on?(p.line==='night'?'N':'D'):fl?'FLT':'';
+      const lk=p.locked&&p.locked.has(d);const _c=pto?'pto':on?(p.line==='night'?'n':'d'):fl?'flt':'';const _m=(pto?'OFF':on?(p.line==='night'?'N':'D'):fl?'FLT':'')+(lk?' 🔒':'');
       cells+=`<div class="calcell edit ${_c}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${_m}</div></div>`;}
   }else{
     banner=`<div class="calbar"><span>RN${usePCT?' &amp; PCT':''} per day (day·night). Tap to open.</span><select id="calPick" class="calsel"><option value="">✏️ Edit a person…</option>${[...staff].sort((a,b)=>a.name.localeCompare(b.name)).map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>`;
@@ -1794,12 +1806,12 @@ function cyclePref(o,w){o.prefDOW=o.prefDOW||new Set();o.avoidDOW=o.avoidDOW||ne
   else{o.prefDOW.add(w);}}
 function prefStats(p){const w=[...p.asn,...(p.float||[])];const got=w.filter(d=>p.prefDOW&&p.prefDOW.has(wd(d))).length;const against=w.filter(d=>p.avoidDOW&&p.avoidDOW.has(wd(d))).length;return {got,against,hasPref:!!(p.prefDOW&&p.prefDOW.size),hasAvoid:!!(p.avoidDOW&&p.avoidDOW.size)};}
 let mgrReqBrush='pto';
-const MBRUSHES=[['pto','Time off'],['off','Prefer off'],['want','Want to work'],['clear','Clear']];
+const MBRUSHES=[['pto','Time off'],['off','Prefer off'],['want','Want to work'],['lock','🔒 Lock'],['clear','Clear']];
 function reqGridHTML(o){
   const WDh=['S','M','T','W','T','F','S'],head=WDh.map(w=>'<div class="calhd">'+w+'</div>').join('');
   const lead=START_DOW,trail=(7-((lead+DAYS)%7))%7;
   let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
-  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(o,d);cells+='<div class="calcell req '+st+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+'" data-rd="'+d+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+(st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':'')+'</div></div>';}
+  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(o,d);cells+='<div class="calcell req '+st+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+'" data-rd="'+d+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+(st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':st==='lock'?'🔒':'')+'</div></div>';}
   return '<div class="calgrid reqgrid">'+head+pad+cells+padT+'</div>';
 }
 function splitCSV(line,delim){const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(q){if(c==='"'){if(line[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}else{if(c==='"')q=true;else if(c===delim){out.push(cur);cur='';}else cur+=c;}}out.push(cur);return out;}
@@ -1875,8 +1887,8 @@ function paintDraft(){
 }
 function openPerson(id){
   editId=id;
-  if(id==null){draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,senior:false,wtw:false,orientee:false,preceptor:null,prefDOW:new Set(),avoidDOW:new Set(),hardDOW:new Set(),cluster:'any',pto:new Set(),picks:new Set(),avoid:new Set()};$('personTitle').textContent='Add a person';$('f_name').value='';$('personDelete').classList.add('hide');}
-  else{const p=staff.find(x=>x.id===id);draft={role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:!!p.precept,senior:!!p.senior,wtw:!!p.wtw,orientee:!!p.orientee,preceptor:p.preceptor??null,prefDOW:new Set(p.prefDOW||[]),avoidDOW:new Set(p.avoidDOW||[]),hardDOW:new Set(p.hardDOW||[]),cluster:p.cluster||'any',pto:new Set(p.pto||[]),picks:new Set(p.picks||[]),avoid:new Set(p.avoid||[])};$('personTitle').textContent='Edit person';$('f_name').value=p.name;$('personDelete').classList.remove('hide');}
+  if(id==null){draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,senior:false,wtw:false,orientee:false,preceptor:null,prefDOW:new Set(),avoidDOW:new Set(),hardDOW:new Set(),cluster:'any',pto:new Set(),picks:new Set(),avoid:new Set(),locked:new Set()};$('personTitle').textContent='Add a person';$('f_name').value='';$('personDelete').classList.add('hide');}
+  else{const p=staff.find(x=>x.id===id);draft={role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:!!p.precept,senior:!!p.senior,wtw:!!p.wtw,orientee:!!p.orientee,preceptor:p.preceptor??null,prefDOW:new Set(p.prefDOW||[]),avoidDOW:new Set(p.avoidDOW||[]),hardDOW:new Set(p.hardDOW||[]),cluster:p.cluster||'any',pto:new Set(p.pto||[]),picks:new Set(p.picks||[]),avoid:new Set(p.avoid||[]),locked:new Set(p.locked||[])};$('personTitle').textContent='Edit person';$('f_name').value=p.name;$('personDelete').classList.remove('hide');}
   paintDraft();$('personOverlay').classList.add('show');
 }
 $('personOverlay').addEventListener('click',e=>{
@@ -1900,8 +1912,8 @@ $('personCancel').onclick=()=>$('personOverlay').classList.remove('show');
 $('personSave').onclick=()=>{
   const name=$('f_name').value.trim();if(!name){toast('Please type a name');return;}
   if(editId==null){const id=staff.length?Math.max(...staff.map(p=>p.id))+1:0;
-    staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0,prefDOW:[...draft.prefDOW],avoidDOW:[...draft.avoidDOW],hardDOW:[...draft.hardDOW],cluster:draft.cluster,pto:[...draft.pto],picks:[...draft.picks],avoid:[...draft.avoid]}));toast('Added '+firstName(name));}
-  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,prefDOW:new Set(draft.prefDOW),avoidDOW:new Set(draft.avoidDOW),hardDOW:new Set(draft.hardDOW),cluster:draft.cluster,pto:new Set(draft.pto),picks:new Set(draft.picks),avoid:new Set(draft.avoid)});toast('Saved');}
+    staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0,prefDOW:[...draft.prefDOW],avoidDOW:[...draft.avoidDOW],hardDOW:[...draft.hardDOW],cluster:draft.cluster,pto:[...draft.pto],picks:[...draft.picks],avoid:[...draft.avoid],locked:[...draft.locked]}));toast('Added '+firstName(name));}
+  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,prefDOW:new Set(draft.prefDOW),avoidDOW:new Set(draft.avoidDOW),hardDOW:new Set(draft.hardDOW),cluster:draft.cluster,pto:new Set(draft.pto),picks:new Set(draft.picks),avoid:new Set(draft.avoid),locked:new Set(draft.locked)});toast('Saved');}
   $('personOverlay').classList.remove('show');rosterChanged();
 };
 $('personDelete').onclick=()=>{if(editId==null)return;if(!confirm('Remove this person? Their shifts will be reassigned.'))return;staff=staff.filter(p=>p.id!==editId);$('personOverlay').classList.remove('show');rosterChanged();toast('Removed — schedule updated');};
@@ -2251,14 +2263,14 @@ function renderTimeoffReview(){
   h+='</div>';$('timeoffReview').innerHTML=h;
 }
 function applyTimeoffPto(t){const p=byId(t.sid);if(!p)return;const fi=isoToIdx(t.from),ti=isoToIdx(t.to);for(let d=Math.max(0,fi);d<=Math.min(DAYS-1,ti);d++){p.pto.add(d);p.asn.delete(d);}}
-function reqState(p,d){return p.pto.has(d)?'pto':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';}
-function setReqState(p,d,k){p.pto.delete(d);if(p.avoid)p.avoid.delete(d);p.picks.delete(d);if(k==='want')p.picks.add(d);else if(k==='off')(p.avoid=p.avoid||new Set()).add(d);else if(k==='pto')p.pto.add(d);p.imported=true;}
+function reqState(p,d){return p.pto.has(d)?'pto':(p.locked&&p.locked.has(d))?'lock':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';}
+function setReqState(p,d,k){p.pto.delete(d);if(p.avoid)p.avoid.delete(d);p.picks.delete(d);if(p.locked)p.locked.delete(d);if(k==='want')p.picks.add(d);else if(k==='off')(p.avoid=p.avoid||new Set()).add(d);else if(k==='pto')p.pto.add(d);else if(k==='lock')(p.locked=p.locked||new Set()).add(d);p.imported=true;}
 function offDemand(p,d){return staff.filter(q=>q.id!==p.id&&q.role===p.role&&q.line===p.line&&(()=>{const s=reqState(q,d);return s==='off'||s==='pto';})()).length;}
 function renderMyReq(p){
   const WDh=['S','M','T','W','T','F','S'],head=WDh.map(w=>`<div class="calhd">${w}</div>`).join('');
   const lead=START_DOW,trail=(7-((lead+DAYS)%7))%7;
   let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
-  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(p,d);const dem=offDemand(p,d);cells+=`<div class="calcell req ${st}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':''}</div>${dem>0?`<div class="cdem ${dem>=3?'hi':dem>=2?'mid':'lo'}">${dem}</div>`:''}</div>`;}
+  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(p,d);const dem=offDemand(p,d);cells+=`<div class="calcell req ${st}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':st==='lock'?'🔒':''}</div>${dem>0?`<div class="cdem ${dem>=3?'hi':dem>=2?'mid':'lo'}">${dem}</div>`:''}</div>`;}
   const brushes=[['off','Prefer off'],['want','Want to work'],['pto','Time off'],['clear','Clear']];
   let h='<div style="padding:12px 14px 4px">';
   h+='<div class="prefcard"><div class="sub" style="margin-bottom:2px">Your usual preferences</div><div class="prefsub">Tap a day to cycle: likes \u2192 rather not \u2192 can\u2019t \u2192 clear</div>'+prefLegendHTML()+dowChipsHTML(p)+'<div class="sub" style="margin:10px 0 4px">Shift grouping</div><div class="pickrow clurow">'+cluChipsHTML(p)+'</div></div>';
@@ -2270,9 +2282,9 @@ function renderMyReq(p){
   h+=`<div class="calgrid reqgrid">${head}${pad}${cells}${padT}</div>`;
   $('myReqCard').innerHTML=h;
 }
-function reqApply(d){const p=meUser();if(!p)return;setReqState(p,d,reqBrush==='clear'?'':reqBrush);
+function reqApply(d){const p=meUser();if(!p)return;if(p.locked&&p.locked.has(d)){toast('Your manager locked this day');return;}setReqState(p,d,reqBrush==='clear'?'':reqBrush);
   const cell=$('myReqCard').querySelector('.calcell.req[data-d="'+d+'"]');
-  if(cell){cell.classList.remove('want','off','pto');const st=reqState(p,d);if(st)cell.classList.add(st);const mk=cell.querySelector('.cmark');if(mk)mk.textContent=st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':'';}}
+  if(cell){cell.classList.remove('want','off','pto','lock');const st=reqState(p,d);if(st)cell.classList.add(st);const mk=cell.querySelector('.cmark');if(mk)mk.textContent=st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':st==='lock'?'🔒':'';}}
 function renderMySwaps(p){
   const incoming=swaps.filter(s=>s.bId==p.id&&s.status==='peer');
   const others=swaps.filter(s=>(s.aId==p.id||s.bId==p.id)&&!(s.bId==p.id&&s.status==='peer'));

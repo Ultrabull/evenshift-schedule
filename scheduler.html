@@ -423,8 +423,13 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .swapreview{margin-bottom:12px;border:2px solid var(--violet)}
 .swlbl{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:14px 0 6px}
 .loginlist{max-height:54vh;overflow-y:auto;margin-top:8px;border:1px solid var(--line);border-radius:12px}
-.loginhd{position:sticky;top:0;background:#eef3f5;color:#2b3a44;font-weight:800;font-size:12px;padding:6px 12px;border-bottom:1px solid var(--line);z-index:1}
+.loginhd{display:flex;justify-content:space-between;align-items:center;background:#eef3f5;color:#2b3a44;font-weight:800;font-size:13px;padding:12px;border-bottom:1px solid var(--line);cursor:pointer}
+.loginhd.open{background:#dfeaee}
 .loginhd .lhn{display:inline-block;background:#cdd9de;color:#4a5b65;border-radius:8px;padding:0 6px;font-size:10px;margin-left:4px}
+.lchev{color:#7c8a93;font-size:12px}
+.logingrid{display:grid;grid-template-columns:1fr 1fr}
+.logingrid .loginrow{border-bottom:1px solid var(--line)}
+.logingrid .loginrow:nth-child(odd){border-right:1px solid var(--line)}
 .loginrow{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid var(--line)}
 .loginrow:last-child{border-bottom:none}
 .loginrow:active{background:var(--teal-soft)}
@@ -523,6 +528,18 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .rgc.rq-ok{box-shadow:inset 0 0 0 2px var(--green)}
 .rgc.rq-no{box-shadow:inset 0 0 0 2px var(--red)}
 .rgc.rq-got{background:#dff3e7}
+.flg-h{display:flex;justify-content:space-between;align-items:center;background:#f0f4f6;font-weight:800;font-size:12.5px;color:#2b3a44;padding:7px 16px;margin-top:2px}
+.flg-ok{font-size:11px;font-weight:700;color:#1d7a45}
+.flg-warn{font-size:11px;font-weight:700;color:#b23b30}
+.flg-row{padding:7px 16px 9px;border-bottom:1px solid #eef2f4}
+.flg-nm{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+.flg-n{font-weight:700;font-size:13px;color:#243038}
+.flg-c{font-size:12px;font-weight:800;color:#9a6a12;background:#f9f1dd;border-radius:7px;padding:0 6px}
+.flg-days{display:flex;flex-direction:column;gap:4px}
+.flg-day{display:flex;align-items:center;gap:8px}
+.flg-dt{font-size:12px;color:#6b7a83;min-width:64px}
+.flg-in{flex:1;max-width:170px;padding:5px 9px;border:1px solid #d8e0e4;border-radius:8px;font-size:12px;color:#243038}
+.flg-in:focus{outline:none;border-color:var(--teal)}
 .calcell.edit{position:relative}
 .creq{position:absolute;top:3px;right:3px;font-size:8px;font-weight:800;padding:1px 4px;border-radius:5px;letter-spacing:.02em;line-height:1.3}
 .creq.want{background:#cdefd9;color:#1d7a45}
@@ -1128,10 +1145,32 @@ function build(){
       }
     }
   }
+  // Cross-cycle rotation: keep counts even, but hand the "extra" float to whoever floated LEAST last schedule.
+  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
+    if(!roleOn(r))continue;
+    const grp=staff.filter(p=>!p.orientee&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    if(grp.length<2)continue;
+    let guard=0,changed=true;
+    while(changed&&guard++<4000){changed=false;
+      for(const H of grp){for(const Lp of grp){
+        if(H===Lp)continue;
+        if(H.float.size-Lp.float.size!==1)continue;          // adjacent only, so evenness is preserved
+        if((H.floatCount||0)<=(Lp.floatCount||0))continue;    // only shift toward someone lighter historically
+        let done=false;
+        for(const d of H.float){
+          if(!Lp.asn.has(d))continue;
+          if(Lp.charge&&r==='RN'&&chargeCount(l,d)<=settings.chargeMin)continue;
+          if(isLocked(Lp,d))continue;
+          assign(H,d);floatAssign(Lp,d);changed=true;done=true;break;}
+        if(done)break;}
+        if(changed)break;}
+    }
+  }
   // orientees: extra on the floor, shadowing their preceptor (only on days the preceptor works)
   staff.filter(p=>p.orientee).forEach(o=>{const cap=targetShifts(o);const prec=staff.find(x=>x.id===o.preceptor);if(!prec)return;
     [...prec.asn].sort((a,b)=>a-b).forEach(d=>{if(o.oriDays.size>=cap)return;if(o.pto.has(d))return;o.oriDays.add(d);});});
   applyApprovedSwaps();
+  staff.forEach(p=>{p.floatCount=p.float?p.float.size:0;}); // remember this schedule's float load for next time
   computeCoverage();
 }
 const shiftCount=(role,line,d)=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
@@ -1228,7 +1267,7 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(!p.leaveType)p.leaveType={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(!p.leaveType)p.leaveType={};if(!p.floatTo)p.floatTo={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,senior:false,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
@@ -1241,7 +1280,7 @@ function load(){
   staff=seed();return false;
 }
 function save(){try{
-  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])],workDOW:[...(p.workDOW||[])],leaveType:p.leaveType||{}}))));
+  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])],workDOW:[...(p.workDOW||[])],leaveType:p.leaveType||{},floatTo:p.floatTo||{}}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
   localStorage.setItem(KEY_SW,JSON.stringify(swaps));
   localStorage.setItem(KEY_TO,JSON.stringify(timeOff));
@@ -1293,7 +1332,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 27t</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 27w</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1847,6 +1886,7 @@ function calApply(d){const p=editPerson();if(!p||p.pto.has(d))return;
   if(cell){cell.classList.remove('d','n','flt');const on=p.asn.has(d);if(on)cell.classList.add(p.line==='night'?'n':'d');const mk=cell.querySelector('.cmark');if(mk)mk.textContent=on?(p.line==='night'?'N':'D'):'';}
 }
 $('schedViewTabs').addEventListener('click',e=>{const b=e.target.closest('[data-sv]');if(!b)return;schedView=b.dataset.sv;if(schedView!=='month'){calMode='coverage';editPersonId=null;}renderSched();});
+if($('fairCard'))$('fairCard').addEventListener('input',e=>{const el=e.target.closest('.flg-in');if(!el)return;const p=staff.find(x=>x.id===+el.dataset.flp);if(!p)return;(p.floatTo=p.floatTo||{})[+el.dataset.fld]=el.value;save();});
 if($('rPrev'))$('rPrev').onclick=()=>{const s=rosterMode==='week'?7:1;curDay=Math.max(0,curDay-s);renderRoster();};
 if($('rNext'))$('rNext').onclick=()=>{const s=rosterMode==='week'?7:1;curDay=Math.min(DAYS-1,curDay+s);renderRoster();};
 if($('rmodeBar'))$('rmodeBar').addEventListener('click',e=>{const b=e.target.closest('[data-rmode]');if(!b)return;rosterMode=b.dataset.rmode;renderRoster();});
@@ -2320,12 +2360,13 @@ function rememberStaff(id){let r=recentStaff().filter(x=>x!=id);r.unshift(id);r=
 function signInStaff(id){currentUser={role:'staff',id:+id};staffView='home';$('loginOverlay').classList.remove('show');applyRole();sayHello();}
 function subLine(p){return p.role+(p.role!=='HUC'?' · '+(p.line==='day'?'Day':'Night'):'');}
 function renderLoginRecent(){$('loginRecent').innerHTML='';}
+let loginOpen=new Set();
 function renderLoginList(filter){
   const f=(filter||'').toLowerCase().trim();
-  const row=p=>`<div class="loginrow" data-lid="${p.id}"><span class="ava ${p.role.toLowerCase()}">${initials(p.name)||'?'}</span><div class="lrtxt"><b>${esc(p.name)}</b><span>${subLine(p)}</span></div></div>`;
+  const cell=(p,full)=>`<div class="loginrow" data-lid="${p.id}"><span class="ava ${p.role.toLowerCase()}">${initials(p.name)||'?'}</span><div class="lrtxt"><b>${esc(p.name)}</b>${full?`<span>${subLine(p)}</span>`:''}</div></div>`;
   if(f){
     const list=staff.filter(p=>p.name.toLowerCase().includes(f)).sort((a,b)=>a.name.localeCompare(b.name));
-    $('loginList').innerHTML=list.map(row).join('')||`<div style="padding:16px;color:var(--muted)">No match — check spelling or ask your manager.</div>`;
+    $('loginList').innerHTML=list.length?`<div class="logingrid">${list.map(p=>cell(p,true)).join('')}</div>`:`<div style="padding:16px;color:var(--muted)">No match — check spelling or ask your manager.</div>`;
     return;
   }
   const groups=[['day','☀️ Day',[['RN','Nurses'],['PCT','PCTs'],['HUC','HUCs']]],['night','🌙 Night',[['RN','Nurses'],['PCT','PCTs']]]];
@@ -2333,7 +2374,9 @@ function renderLoginList(filter){
   groups.forEach(([line,ttl,roles])=>{roles.forEach(([role,rl])=>{
     const g=staff.filter(p=>p.line===line&&p.role===role).sort((a,b)=>a.name.localeCompare(b.name));
     if(!g.length)return;
-    h+=`<div class="loginhd">${ttl} · ${rl} <span class="lhn">${g.length}</span></div>`+g.map(row).join('');
+    const key=line+'_'+role, open=loginOpen.has(key);
+    h+=`<div class="loginhd${open?' open':''}" data-lg="${key}"><span>${ttl} · ${rl} <span class="lhn">${g.length}</span></span><span class="lchev">${open?'▾':'▸'}</span></div>`;
+    if(open)h+=`<div class="logingrid">${g.map(p=>cell(p,false)).join('')}</div>`;
   });});
   $('loginList').innerHTML=h||`<div style="padding:16px;color:var(--muted)">No staff yet.</div>`;
 }
@@ -2557,6 +2600,18 @@ function renderFairness(){
   h+=`<div class="sub" style="padding:0 16px 10px">Who’s owed fairer shifts — higher means a raw deal (denied requests, extra weekends/holidays). The next build gives them priority. Bank each cycle to carry it forward.</div>`;
   if(!rows.length){h+=`<div style="padding:6px 16px 18px;color:var(--muted)">Build a schedule, then bank the cycle to start tracking fairness.</div>`;}
   else h+=rows.map(r=>{const lab=r.standing>=3?'Owed':r.standing<=-3?'Favored':'Fair';const cls=r.standing>=3?'low':r.standing<=-3?'good':'mid';const round=x=>Math.round(x*10)/10;return `<div class="rule"><div class="rl"><b>${r.p.name}</b><span>${r.p.role}${r.p.role!=='HUC'?' · '+(r.p.line==='day'?'Day':'Night'):''} · banked ${r.banked>0?'+':''}${r.banked}${r.p.asn.size>0?' · this cycle '+(r.tc>0?'+':'')+round(r.tc):''}</span></div><span class="reqbadge ${cls}">${lab} ${r.standing>0?'+':''}${round(r.standing)}</span></div>`;}).join('');
+  h+=`<div style="padding:16px 16px 6px;border-top:1px solid var(--line);margin-top:8px"><b style="font-size:15px">Float log ${hlp('Who worked off 10G (floated) this schedule and how many times. Floating is shared in turns — within each group nobody floats a second time until everyone has floated once, and whoever floated most last schedule floats least this one.')}</b></div>`;
+  h+=`<div class="sub" style="padding:0 16px 8px">Who floated off 10G this schedule. Shared in turns — everyone floats once before anyone floats twice.</div>`;
+  const FLG=[['RN','day','☀️ Day · Nurses'],['PCT','day','☀️ Day · PCTs'],['HUC','day','☀️ Day · HUCs'],['RN','night','🌙 Night · Nurses'],['PCT','night','🌙 Night · PCTs']];
+  FLG.forEach(([r,l,ttl])=>{
+    const g=staff.filter(p=>!p.orientee&&p.role===r&&p.line===l);if(!g.length)return;
+    const counts=g.map(p=>p.float?p.float.size:0);const mn=Math.min(...counts),mx=Math.max(...counts),tot=counts.reduce((a,b)=>a+b,0);
+    if(!tot){h+=`<div class="flg-h">${ttl}<span class="flg-ok">no floats</span></div>`;return;}
+    const even=mx-mn<=1;
+    h+=`<div class="flg-h">${ttl}<span class="${even?'flg-ok':'flg-warn'}">${even?'shared evenly ✓':'uneven ⚠'} · ${mn}\u2013${mx} each</span></div>`;
+    const floaters=g.filter(p=>p.float&&p.float.size).sort((a,b)=>b.float.size-a.float.size||a.name.localeCompare(b.name));
+    h+=floaters.map(p=>`<div class="flg-row"><div class="flg-nm"><span class="flg-n">${esc(firstName(p.name))}</span><span class="flg-c">${p.float.size}\u00d7</span></div><div class="flg-days">${[...p.float].sort((a,b)=>a-b).map(d=>`<label class="flg-day"><span class="flg-dt">${fmtDate(d)}</span><input class="flg-in" data-flp="${p.id}" data-fld="${d}" value="${esc((p.floatTo&&p.floatTo[d])||'')}" placeholder="floated to…" autocomplete="off"></label>`).join('')}</div></div>`).join('');
+  });
   $('fairCard').innerHTML=h;
 }
 function renderHoursMgr(){
@@ -2702,7 +2757,7 @@ $('pinEntryGo').onclick=()=>{const a=($('pinEntry').value||'').trim();if(checkMg
 $('pinEntryCancel').onclick=()=>{$('pinEntryOverlay').classList.remove('show');$('pinEntry').value='';};
 $('pinEntry').addEventListener('keydown',e=>{if(e.key==='Enter')$('pinEntryGo').onclick();});
 $('loginSearch').addEventListener('input',e=>renderLoginList(e.target.value));
-$('loginOverlay').addEventListener('click',e=>{const rec=e.target.closest('[data-rec]');if(rec){signInStaff(rec.dataset.rec);return;}const li=e.target.closest('[data-lid]');if(li){signInStaff(li.dataset.lid);return;}});
+$('loginOverlay').addEventListener('click',e=>{const rec=e.target.closest('[data-rec]');if(rec){signInStaff(rec.dataset.rec);return;}const lg=e.target.closest('[data-lg]');if(lg){if(loginOpen.has(lg.dataset.lg))loginOpen.delete(lg.dataset.lg);else loginOpen.add(lg.dataset.lg);renderLoginList($('loginSearch')?$('loginSearch').value:'');return;}const li=e.target.closest('[data-lid]');if(li){signInStaff(li.dataset.lid);return;}});
 $('screen-staff').addEventListener('click',e=>{
   const p=meUser();if(!p)return;
   const sly=e.target.closest('[data-slay]');if(sly){settings.staffLayout=sly.dataset.slay;save();renderStaff();return;}

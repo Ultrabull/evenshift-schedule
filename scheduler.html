@@ -467,6 +467,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .viewtabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
 .viewtabs button{flex:0 0 auto;padding:9px 13px;border:1px solid var(--line-strong);background:#fff;border-radius:999px;font-size:13.5px;font-weight:600;color:var(--muted);white-space:nowrap}
 .viewtabs button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.viewtabs #moreTabsBtn{background:#eef3f5;color:#5a6b75;font-weight:800}
+.viewtabs #moreTabsBtn.on{background:#5a6b75;border-color:#5a6b75;color:#fff}
 .viewtabs button.hide{display:none}
 .hourshero{display:flex;gap:10px;padding:6px 16px 14px}
 .hourshero>div{flex:1;background:var(--teal-soft);border-radius:14px;padding:12px 8px;text-align:center}
@@ -552,6 +554,13 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .cpchip{padding:5px 12px;border:1px solid #cdd9de;background:#fff;border-radius:9px;font-size:12.5px;font-weight:700;color:#3a4a54}
 .cpchip.on{background:var(--violet,#6b4ec9);border-color:var(--violet,#6b4ec9);color:#fff}
 .cpwarn{font-size:11px;font-weight:800;color:#b23b30}
+.chip.huc2{display:inline-flex;align-items:center;gap:6px;background:#eef3f5;padding:5px 6px 5px 11px}
+.chip.huc2 b{font-weight:700;font-size:13px}
+.dblbtn{border:1px solid #cdd9de;background:#fff;color:#5a6b75;border-radius:8px;font-size:10px;font-weight:800;padding:2px 7px}
+.dblbtn.on{background:#8a5a12;border-color:#8a5a12;color:#fff}
+.chipx{border:none;background:none;color:#9aa6ad;font-size:12px;padding:0 2px;cursor:pointer}
+.offtgl{border:1px solid #cdd9de;background:#fff;color:#5a6b75;border-radius:8px;font-size:10px;font-weight:800;padding:4px 8px;white-space:nowrap;flex:0 0 auto}
+.offtgl.on{background:#5a6b75;border-color:#5a6b75;color:#fff}
 .lvrow{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:2px 0 8px}
 .lvlbl{font-size:11px;color:#7c8a93;font-weight:700;margin-right:2px}
 .lvchip{padding:5px 10px;border:1px solid #d8c4a0;background:#fdf6e9;color:#8a5a12;border-radius:9px;font-size:12px;font-weight:700}
@@ -669,7 +678,8 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <div id="timeoffReview"></div>
     <div id="openReview"></div>
     <div id="healthBanner" class="health ok"></div>
-    <div class="viewtabs" id="schedViewTabs" style="margin-bottom:14px"><button data-sv="month" class="on">📅 Month</button><button data-sv="roster">🧾 Roster</button><button data-sv="day">📋 Day</button><button data-sv="req">📝 Requests</button><button data-sv="today">🕐 Today</button><button data-sv="hours">⏱ Hours</button><button data-sv="fair">⚖️ Fairness</button><button data-sv="floats">🛟 Floats</button><button data-sv="check">✅ Check</button></div>
+    <div class="viewtabs" id="schedViewTabs"><button data-sv="month" class="on">📅 Calendar</button><button data-sv="roster">🧾 Roster</button><button data-sv="day">✏️ Edit day</button><button data-sv="req">📝 Requests</button><button data-sv="check">✅ Check</button><button id="moreTabsBtn" class="moretabs">⋯ More</button></div>
+    <div class="viewtabs hide" id="schedMoreTabs" style="margin-bottom:14px"><button data-sv="today">🕐 Today</button><button data-sv="hours">⏱ Hours</button><button data-sv="fair">⚖️ Fairness</button><button data-sv="floats">🛟 Floats</button></div>
     <div id="dayWrap">
     <div class="card ribbon-card">
       <div class="ribbon-wrap"><div class="ribbon-inner"><div class="rlabels"><span class="sp"></span><span>Day</span><span>Night</span><span class="aide">aides</span></div><div class="ribbon" id="ribbon"></div></div></div>
@@ -1022,9 +1032,9 @@ function recHours(r){if(!r||!r.in)return 0;const end=r.out||Date.now();return Ma
 function clockHoursInRange(p,sISO,eISO){let h=0;const c=p.clock||{};for(const iso in c){if(iso>=sISO&&iso<=eISO)h+=recHours(c[iso]);}return h;}
 function weekRanges(){const out=[];const psd=(settings.payStartDow==null?START_DOW:settings.payStartDow);let s=0;for(let d=1;d<DAYS;d++){if(((START_DOW+d)%7)===psd){out.push({w:out.length,startD:s,endD:d-1,startISO:isoOf(s),endISO:isoOf(d-1)});s=d;}}out.push({w:out.length,startD:s,endD:DAYS-1,startISO:isoOf(s),endISO:isoOf(DAYS-1)});return out;}
 function shiftLen(p){return p&&p.role==='HUC'?8:12;}
-function schedHoursWeek(p,r){let n=0;for(let d=r.startD;d<=r.endD;d++)if(worked(p,d))n++;return n*shiftLen(p);}
+function schedHoursWeek(p,r){let n=0,db=0;for(let d=r.startD;d<=r.endD;d++){if(worked(p,d))n++;if(p.dbl&&p.dbl.has(d)&&worked(p,d))db++;}return n*shiftLen(p)+db*8;}
 function workedHoursWeek(p,r){return clockHoursInRange(p,r.startISO,r.endISO);}
-function schedHoursTotal(p){return workedCount(p)*shiftLen(p);}
+function schedHoursTotal(p){let db=0;if(p.dbl)p.dbl.forEach(d=>{if(worked(p,d))db++;});return workedCount(p)*shiftLen(p)+db*8;}
 function workedHoursTotal(p){let h=0;const c=p.clock||{};for(const iso in c)h+=recHours(c[iso]);return h;}
 function otTotal(p){return weekRanges().reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-(settings.otThreshold||40)),0);}
 
@@ -1105,7 +1115,7 @@ function floatAssign(p,d){p.asn.delete(d);(p.float=p.float||new Set()).add(d);}
 function build(){
   cycleSeed++;staff.forEach(p=>{p.asn=new Set();p.float=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();if(!p.picks||!p.picks.size)genPicks(p);});
   const _protN=Math.max(0,settings.protected||0);staff.forEach(p=>{p._prot=new Set();if(_protN&&p.avoid&&p.avoid.size){const bw={};[...p.avoid].sort((a,b)=>a-b).forEach(d=>{(bw[weekOf(d)]=bw[weekOf(d)]||[]).push(d);});Object.values(bw).forEach(arr=>arr.slice(0,_protN).forEach(d=>p._prot.add(d)));}});
-  staff.forEach(p=>{const _cap=weekCap(p),_pw={},_ld=[];for(let d=0;d<DAYS;d++){if(!p.pto.has(d)&&((p.workDOW&&p.workDOW.has(wd(d)))||(p.locked&&p.locked.has(d))))_ld.push(d);}_ld.sort((a,b)=>a-b);_ld.forEach(d=>{const w=weekOf(d);if((_pw[w]||0)>=_cap)return;if(!worked(p,d)){_pw[w]=(_pw[w]||0)+1;assign(p,d);}});}); // locked weekdays + locked days, capped at weekly FTE
+  staff.forEach(p=>{if(p.office)return;const _cap=weekCap(p),_pw={},_ld=[];for(let d=0;d<DAYS;d++){if(!p.pto.has(d)&&((p.workDOW&&p.workDOW.has(wd(d)))||(p.locked&&p.locked.has(d))))_ld.push(d);}_ld.sort((a,b)=>a-b);_ld.forEach(d=>{const w=weekOf(d);if((_pw[w]||0)>=_cap)return;if(!worked(p,d)){_pw[w]=(_pw[w]||0)+1;assign(p,d);}});}); // locked weekdays + locked days, capped at weekly FTE
   // Charge distribution: give EVERY shift its charge minimum first (spread across all days), then add a
   // backup 2nd charge only where spare charge capacity remains — round-robin so it never starves late days.
   if(settings.useCharge!==false){const cm=settings.chargeMin||1;const goals=[cm];if(settings.chargeBackup!==false)goals.push(cm+1);
@@ -1260,7 +1270,7 @@ function build(){
   staff.forEach(p=>{p.floatCount=p.float?p.float.size:0;}); // remember this schedule's float load for next time
   computeCoverage();
 }
-const shiftCount=(role,line,d)=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
+const shiftCount=(role,line,d)=>{let n=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;if(role==='HUC')n+=staff.filter(p=>p.role==='HUC'&&!p.orientee&&p.dbl&&p.dbl.has(d)&&p.asn.has(d)).length;return n;};
 const chargeCount=(line,d)=>staff.filter(p=>p.role==='RN'&&p.line===line&&p.charge&&!p.orientee&&p.asn.has(d)).length;
 let coverage=[];
 function computeCoverage(){coverage=[];for(let d=0;d<DAYS;d++)coverage.push({rnDay:shiftCount('RN','day',d),rnNight:shiftCount('RN','night',d),chgDay:chargeCount('day',d),chgNight:chargeCount('night',d),pctDay:shiftCount('PCT','day',d),pctNight:shiftCount('PCT','night',d),huc:shiftCount('HUC','day',d)});}
@@ -1354,7 +1364,7 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(!p.leaveType)p.leaveType={};if(!p.floatTo)p.floatTo={};if(p.anm===undefined)p.anm=false;if(p.edu===undefined)p.edu=false;if(p.office===undefined)p.office=false;if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(!p.leaveType)p.leaveType={};if(!p.floatTo)p.floatTo={};p.dbl=new Set(p.dbl||[]);if(p.anm===undefined)p.anm=false;if(p.edu===undefined)p.edu=false;if(p.office===undefined)p.office=false;if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
 function ensureAnms(){
   let id=staff.length?Math.max(...staff.map(p=>p.id))+1:0;let sen=staff.length?Math.max(...staff.map(p=>p.seniority||0))+1:0;
   [['Chelsea','day','PT',{anm:1}],['Connie','day','PT',{anm:1}],['Kamryn','night','PT',{anm:1}],['Stacy','day','PRN',{office:1}],['Randi','day','PRN',{edu:1}]].forEach(([n,line,fte,fl])=>{
@@ -1374,7 +1384,7 @@ function load(){
   staff=seed();return false;
 }
 function save(){try{
-  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])],workDOW:[...(p.workDOW||[])],leaveType:p.leaveType||{},floatTo:p.floatTo||{},anm:!!p.anm,edu:!!p.edu,office:!!p.office}))));
+  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])],workDOW:[...(p.workDOW||[])],leaveType:p.leaveType||{},floatTo:p.floatTo||{},anm:!!p.anm,edu:!!p.edu,office:!!p.office,dbl:[...(p.dbl||[])]}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
   localStorage.setItem(KEY_SW,JSON.stringify(swaps));
   localStorage.setItem(KEY_TO,JSON.stringify(timeOff));
@@ -1392,7 +1402,7 @@ function mgrRemembered(){try{return localStorage.getItem(KEY_MGRDEV)==='1';}catc
 const $=id=>document.getElementById(id);
 let screen='people',curDay=0,filterRole='all',searchTxt='',editId=null,openPicker=null,picksSource='sample';
 let openGroups=new Set();
-let schedView='month',calMode='coverage',editPersonId=null,painting=false,paintAdd=true,openFlag=null,staffView='home';
+let schedView='month',calMode='coverage',editPersonId=null,painting=false,paintAdd=true,openFlag=null,staffView='home',moreTabsOpen=false;
 let addingRule=false,ruleDraft={name:'',note:false,role:'PCT',line:'night',min:3};
 let addingHoliday=false,holDraft={name:'',date:''};
 let addingCode=false,codeDraft={code:'',cat:'off'};
@@ -1426,7 +1436,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 28n</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 28q</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1455,7 +1465,7 @@ function renderPeople(){
     return `<div class="ppl-row" data-id="${p.id}">
       <div class="ava ${av}">${initials(p.name)||'?'}</div>
       <div class="ppl-main"><div class="nm">${p.name}</div><div class="meta">${p.charge?'<span class="tag chg">CHG</span>':''}${p.precept?'<span class="tag" style="background:#e6f0fb;color:#2c5aa0">PRE</span>':''}${p.anm?'<span class="tag" style="background:#e2f0e8;color:#1d7a45">ANM</span>':''}${p.edu?'<span class="tag" style="background:#e0f2f1;color:#0d6e6e">EDU</span>':''}${p.office?'<span class="tag" style="background:#eceff1;color:#5a6b75">OFFICE</span>':''}${p.senior?'<span class="tag" style="background:#ede7fb;color:#5b46b8">SR</span>':''}${p.wtw?'<span class="tag" style="background:var(--teal-soft);color:var(--teal-deep)">WTW</span>':''}${p.orientee?'<span class="tag" style="background:#fdeede;color:#9a5d11">ORI</span>':''}<span class="tag fte">${fteWord(p.fte)}</span></div></div>
-      <div class="go">›</div></div>`;
+      ${(p.anm||p.edu||p.office)?`<button class="offtgl${p.office?' on':''}" data-office="${p.id}">${p.office?'🏢 In office':'On floor'}</button>`:'<div class="go">›</div>'}</div>`;
   };
   const grp=(key,label,arr)=>{if(!arr.length)return '';const open=searchTxt?true:openGroups.has(key);return `<button type="button" class="pplsec${open?' open':''}" data-grp="${key}"><span>${label}</span><span class="ppln">${arr.length}</span><span class="grpcv">▾</span></button><div class="pplgrp${open?' open':''}">${arr.map(rowHtml).join('')}</div>`;};
   const isLead=p=>p.anm||p.edu||p.office;
@@ -1624,10 +1634,13 @@ function renderSched(){
   const VT={month:['Schedule','The whole month at a glance'],roster:['Roster','The whole unit, day & night'],day:['Day view','One shift at a time'],req:['Requests','Staff picks & imported requests'],today:['Today','Who\u2019s on right now'],hours:['Hours','Scheduled hours per person'],floats:['Float log','Who floated, when & where'],fair:['Fairness','Weekends, holidays & floats — shared fairly'],check:['Check','A safety & fairness review of the draft']};const _vt=VT[v]||VT.month;if($('schedTitle'))$('schedTitle').textContent=_vt[0];if($('schedSubt'))$('schedSubt').textContent=_vt[1];
   const _code=(currentUser&&currentUser.role==='manager'&&settings.useTimekeeping!==false)?activeCode():'';
   $('todayCodeBar').innerHTML=_code?`<div class="codebar">🔑 Today’s clock-in code: <b>${_code}</b><span>changes at midnight</span></div>`:'';
-  $('schedViewTabs').querySelectorAll('[data-sv]').forEach(b=>b.classList.toggle('on',b.dataset.sv===v));
+  document.querySelectorAll('#schedViewTabs [data-sv],#schedMoreTabs [data-sv]').forEach(b=>b.classList.toggle('on',b.dataset.sv===v));
+  const _isMore=['today','hours','fair','floats'].includes(v);if(_isMore)moreTabsOpen=true;
+  if($('schedMoreTabs'))$('schedMoreTabs').classList.toggle('hide',!moreTabsOpen);
+  if($('moreTabsBtn'))$('moreTabsBtn').classList.toggle('on',moreTabsOpen);
   const tkOn=settings.useTimekeeping!==false;
-  const tdTab=$('schedViewTabs').querySelector('[data-sv="today"]');if(tdTab)tdTab.classList.toggle('hide',!tkOn);
-  const hrTab=$('schedViewTabs').querySelector('[data-sv="hours"]');if(hrTab)hrTab.classList.toggle('hide',!tkOn);
+  const tdTab=document.querySelector('[data-sv="today"]');if(tdTab)tdTab.classList.toggle('hide',!tkOn);
+  const hrTab=document.querySelector('[data-sv="hours"]');if(hrTab)hrTab.classList.toggle('hide',!tkOn);
   if(!tkOn&&(v==='today'||v==='hours')){schedView='month';return renderSched();}
   $('dayWrap').classList.toggle('hide',v!=='day');
   $('rosterCard').classList.toggle('hide',v!=='roster');
@@ -1871,7 +1884,7 @@ function renderDay(){
     const chg=s.charge?chargeCount(s.line,d):null;const key=s.role+'|'+s.line;
     const bt=status==='hole'?'Too short':status==='low'?'A bit short':'Full';
     h+=`<div class="shiftcard${status==='hole'?' short':''}"><div class="sc-h"><div class="ttl">${s.ttl} <small>${s.sub}</small></div><span class="cnt">${c}/${rq.ideal}</span><span class="badge ${status}">${bt}</span></div><div class="chips2">`;
-    members.forEach(p=>{h+=`<button class="chip ${s.line}" data-rm="${p.id}|${d}">${p.charge?'<i class="cd"></i>':''}${firstName(p.name)}${consecIfAdd(p,d)>=settings.maxConsec?' ⚠':''}<span class="x">✕</span></button>`;});
+    members.forEach(p=>{if(s.role==='HUC'){const isD=p.dbl&&p.dbl.has(d);h+=`<span class="chip huc2"><b>${esc(firstName(p.name))}</b><button class="dblbtn${isD?' on':''}" data-dbl="${p.id}|${d}">${isD?'16h ✓':'×2'}</button><button class="chipx" data-rm="${p.id}|${d}">✕</button></span>`;}else h+=`<button class="chip ${s.line}" data-rm="${p.id}|${d}">${p.charge?'<i class="cd"></i>':''}${firstName(p.name)}${consecIfAdd(p,d)>=settings.maxConsec?' ⚠':''}<span class="x">✕</span></button>`;});
     const oris=staff.filter(p=>p.role===s.role&&p.line===s.line&&p.orientee&&p.oriDays.has(d));
     oris.forEach(p=>{h+=`<button class="chip" style="background:#fdeede;color:#9a5d11" data-rmori="${p.id}|${d}">${firstName(p.name)} <span style="font-size:9px;font-weight:700;opacity:.7">ORI</span><span class="x">✕</span></button>`;});
     if(!members.length&&!oris.length)h+='<span class="pkempty">No one yet — tap “Add”.</span>';
@@ -1993,7 +2006,8 @@ function calApply(d){const p=editPerson();if(!p||p.pto.has(d))return;
   const cell=$('calCard').querySelector('.calcell[data-d="'+d+'"]');
   if(cell){cell.classList.remove('d','n','flt');const on=p.asn.has(d);if(on)cell.classList.add(p.line==='night'?'n':'d');const mk=cell.querySelector('.cmark');if(mk)mk.textContent=on?(p.line==='night'?'N':'D'):'';}
 }
-$('schedViewTabs').addEventListener('click',e=>{const b=e.target.closest('[data-sv]');if(!b)return;schedView=b.dataset.sv;if(schedView!=='month'){calMode='coverage';editPersonId=null;}renderSched();});
+$('schedViewTabs').addEventListener('click',e=>{if(e.target.closest('#moreTabsBtn')){moreTabsOpen=!moreTabsOpen;$('schedMoreTabs').classList.toggle('hide',!moreTabsOpen);$('moreTabsBtn').classList.toggle('on',moreTabsOpen);return;}const b=e.target.closest('[data-sv]');if(!b)return;schedView=b.dataset.sv;if(schedView!=='month'){calMode='coverage';editPersonId=null;}renderSched();});
+if($('schedMoreTabs'))$('schedMoreTabs').addEventListener('click',e=>{const b=e.target.closest('[data-sv]');if(!b)return;schedView=b.dataset.sv;calMode='coverage';editPersonId=null;renderSched();});
 if($('floatCard')){
   $('floatCard').addEventListener('input',e=>{const el=e.target.closest('.flg-in');if(el){const p=staff.find(x=>x.id===+el.dataset.flp);if(p){(p.floatTo=p.floatTo||{})[+el.dataset.fld]=el.value;save();}return;}const he=e.target.closest('.flh-in');if(he){const en=floatHistory.find(x=>x.id===he.dataset.flh);if(en){en.where=he.value;saveFloatLog();}return;}});
   $('floatCard').addEventListener('click',e=>{if(e.target.closest('[data-flsave]')){const n=commitFloats();renderFloatLog();toast(n?('Saved '+n+' float'+(n>1?'s':'')+' to the log'):'Log already up to date');return;}const rx=e.target.closest('[data-flhx]');if(rx){floatHistory=floatHistory.filter(x=>x.id!==rx.dataset.flhx);saveFloatLog();renderFloatLog();return;}});
@@ -2055,7 +2069,7 @@ $('flags').addEventListener('click',e=>{
 /* ============ events ============ */
 $('search').addEventListener('input',e=>{searchTxt=e.target.value;renderPeople();});
 $('filters').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;filterRole=b.dataset.f;renderPeople();});
-$('pplList').addEventListener('click',e=>{const g=e.target.closest('[data-grp]');if(g){const k=g.dataset.grp;if(openGroups.has(k))openGroups.delete(k);else openGroups.add(k);renderPeople();return;}const r=e.target.closest('[data-id]');if(!r)return;openPerson(+r.dataset.id);});
+$('pplList').addEventListener('click',e=>{const g=e.target.closest('[data-grp]');if(g){const k=g.dataset.grp;if(openGroups.has(k))openGroups.delete(k);else openGroups.add(k);renderPeople();return;}const of=e.target.closest('[data-office]');if(of){const p=staff.find(x=>x.id===+of.dataset.office);if(p){p.office=!p.office;if(p.office)p.charge=false;save();renderPeople();toast(p.office?(firstName(p.name)+' set to office — off the floor. Rebuild to apply.'):(firstName(p.name)+' back on the floor'));}return;}const r=e.target.closest('[data-id]');if(!r)return;openPerson(+r.dataset.id);});
 $('addFab').addEventListener('click',()=>openPerson(null));
 $('rulesCard').addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(!b)return;const[k,dv]=b.dataset.step.split('|');stepRule(k,+dv);});
 $('rulesCard').addEventListener('click',e=>{const tg=e.target.closest('[data-roletgl]');if(!tg)return;const k=tg.dataset.roletgl;settings[k]=settings[k]===false?true:false;renderRules();rulesChanged();});
@@ -2096,6 +2110,7 @@ $('dayBody').addEventListener('click',e=>{
   if(rmo){const[id,dd]=rmo.dataset.rmori.split('|');staff.find(p=>p.id==id).oriDays.delete(+dd);computeCoverage();renderRibbon();renderDay();renderFlags();return;}
   if(rm){const[id,d]=rm.dataset.rm.split('|');unassign(staff.find(p=>p.id==id),+d);computeCoverage();renderRibbon();renderDay();renderFlags();return;}
   const cg=e.target.closest('[data-chg]');if(cg){const pr=cg.dataset.chg.split('|');settings.chargePicks=settings.chargePicks||{};settings.chargePicks[pr[0]+'|'+pr[1]]=+pr[2];save();renderDay();toast('Charge set');return;}
+  const dbl=e.target.closest('[data-dbl]');if(dbl){const[id,d]=dbl.dataset.dbl.split('|');const q=staff.find(x=>x.id==id);q.dbl=q.dbl||new Set();if(q.dbl.has(+d))q.dbl.delete(+d);else q.dbl.add(+d);save();computeCoverage();renderRibbon();renderDay();renderFlags();return;}
   if(add){openPicker=openPicker===add.dataset.add?null:add.dataset.add;renderDay();return;}
   if(asn){const[id,d]=asn.dataset.asn.split('|');assign(staff.find(p=>p.id==id),+d);openPicker=null;computeCoverage();renderRibbon();renderDay();renderFlags();return;}
 });
@@ -2576,7 +2591,7 @@ function renderMySchedule(p){
     h+='<div style="padding:11px 16px;background:#f4f8f7;font-size:13px;color:var(--ink)">\ud83d\udccb '+msg+'</div>';
   }
   h+='<div class="sect" style="margin:8px 14px 4px">Upcoming shifts</div>'+fairMsg;
-  h+=days.length?days.map(d=>{const dt=dateOf(d);const fl=p.float&&p.float.has(d);const given=openShifts.some(o=>o.fromId===p.id&&o.day===d&&(o.status==='open'||o.status==='claimed'));return '<div class="rule"><div class="rl"><b>'+dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+'</b><span>'+(p.line==='day'?'Day 7a–7p':'Night 7p–7a')+' · '+shiftReason(p,d)+(isHoliday(d)?' · ★':'')+'</span></div>'+(given?'<span class="tobadge pend">Given up</span>':fl?'<span class="tobadge pend" style="background:#f5ecd6;color:#9a6a12">Float · off 10G</span>':'<div style="display:flex;gap:6px;margin-left:auto;flex:0 0 auto"><button class="swapbtn" data-swap="'+d+'">⇄ Swap</button><button class="swapbtn gv" data-giveup="'+d+'">Give up</button></div>')+'</div>';}).join(''):'<div style="padding:16px;color:var(--faint)">No upcoming shifts yet. Your manager builds the schedule.</div>';
+  h+=days.length?days.map(d=>{const dt=dateOf(d);const fl=p.float&&p.float.has(d);const given=openShifts.some(o=>o.fromId===p.id&&o.day===d&&(o.status==='open'||o.status==='claimed'));return '<div class="rule"><div class="rl"><b>'+dt.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+'</b><span>'+(p.line==='day'?'Day 7a–7p':'Night 7p–7a')+' · '+shiftReason(p,d)+(isHoliday(d)?' · ★':'')+((p.dbl&&p.dbl.has(d))?' · 16h ×2':'')+'</span></div>'+(given?'<span class="tobadge pend">Given up</span>':fl?'<span class="tobadge pend" style="background:#f5ecd6;color:#9a6a12">Float · off 10G</span>':'<div style="display:flex;gap:6px;margin-left:auto;flex:0 0 auto">'+(p.role==='HUC'?'<button class="swapbtn'+((p.dbl&&p.dbl.has(d))?' gv':'')+'" data-mydbl="'+d+'">'+((p.dbl&&p.dbl.has(d))?'Undo 16h':'Work 16h')+'</button>':'')+'<button class="swapbtn" data-swap="'+d+'">⇄ Swap</button><button class="swapbtn gv" data-giveup="'+d+'">Give up</button></div>')+'</div>';}).join(''):'<div style="padding:16px;color:var(--faint)">No upcoming shifts yet. Your manager builds the schedule.</div>';
   $('myShiftsCard').innerHTML=h;
 }
 function renderOpenShifts(p){
@@ -2896,6 +2911,7 @@ $('screen-staff').addEventListener('click',e=>{
   const gu=e.target.closest('[data-giveup]');if(gu){giveUpShift(p,+gu.dataset.giveup);return;}
   if(e.target.closest('#clockBtn')){const iso=todayISO(),rec=p.clock[iso]||{};if(rec.in&&!rec.out){p.clock[iso].out=Date.now();save();renderStaff();toast('Clocked out — '+hrsBetween(rec.in,p.clock[iso].out));}else if(!rec.in){doClockIn(p);}return;}
   if(e.target.closest('#staffSwitch')||e.target.closest('#staffExit')){sayBye();openLogin(false);return;}
+  const md=e.target.closest('[data-mydbl]');if(md){const dd=+md.dataset.mydbl;p.dbl=p.dbl||new Set();if(p.dbl.has(dd))p.dbl.delete(dd);else p.dbl.add(dd);save();renderStaff();toast(p.dbl.has(dd)?'Double (16h) requested':'Double removed');return;}
   const sw=e.target.closest('[data-swap]');if(sw){openSwap(+sw.dataset.swap);return;}
   const ac=e.target.closest('[data-acc]');if(ac){const s=swaps.find(x=>x.id===ac.dataset.acc);if(s){s.status='mgr';save();renderStaff();toast('Accepted — sent to your manager');}return;}
   const dc2=e.target.closest('[data-dec]');if(dc2){const s=swaps.find(x=>x.id===dc2.dataset.dec);if(s){s.status='declined';save();renderStaff();toast('Declined');}return;}

@@ -1164,7 +1164,7 @@ function build(){
          const room=shiftCount(p.role,p.line,d)<reqEff(p.role,p.line,d).ideal?0:1;
          const k=room*1000000+(p.picks.has(d)?0:1)*1000+d;
          if(k<bestKey){bestKey=k;best=d;}}
-       if(best>=0){if(shiftCount(p.role,p.line,best)<reqEff(p.role,p.line,best).ideal)assign(p,best);else floatAssign(p,best);imp=true;break;}}
+       if(best>=0){const _full=shiftCount(p.role,p.line,best)>=reqEff(p.role,p.line,best).ideal;if(_full&&p.anm)continue;if(!_full)assign(p,best);else floatAssign(p,best);imp=true;break;}}
    }}
   // charge repair: ensure each shift hits its charge minimum where a charge nurse is free
   if(useCh)for(let d=0;d<DAYS;d++)for(const line of ['day','night']){
@@ -1179,7 +1179,7 @@ function build(){
   // only whose turn it is to float changes. Never floats a charge nurse if it would drop charge below the min.
   for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
     if(!roleOn(r))continue;
-    const grp=staff.filter(p=>!p.orientee&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    const grp=staff.filter(p=>!p.orientee&&!p.anm&&p.role===r&&p.line===l&&p.fte!=='PRN');
     if(grp.length<2)continue;
     let guard=0,changed=true;
     while(changed&&guard++<6000){changed=false;
@@ -1203,7 +1203,7 @@ function build(){
   // Cross-cycle rotation: keep counts even, but hand the "extra" float to whoever floated LEAST last schedule.
   for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
     if(!roleOn(r))continue;
-    const grp=staff.filter(p=>!p.orientee&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    const grp=staff.filter(p=>!p.orientee&&!p.anm&&p.role===r&&p.line===l&&p.fte!=='PRN');
     if(grp.length<2)continue;
     let guard=0,changed=true;
     while(changed&&guard++<4000){changed=false;
@@ -1225,7 +1225,7 @@ function build(){
   // colleague who works that day and won't become consecutive themselves. Coverage stays identical.
   for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
     if(!roleOn(r))continue;
-    const grp=staff.filter(p=>!p.orientee&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    const grp=staff.filter(p=>!p.orientee&&!p.anm&&p.role===r&&p.line===l&&p.fte!=='PRN');
     if(grp.length<2)continue;
     let guard=0,changed=true;
     while(changed&&guard++<8000){changed=false;
@@ -1426,7 +1426,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 28m</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 28n</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}

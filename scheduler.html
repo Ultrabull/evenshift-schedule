@@ -547,6 +547,11 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .creq{position:absolute;top:3px;right:3px;font-size:8px;font-weight:800;padding:1px 4px;border-radius:5px;letter-spacing:.02em;line-height:1.3}
 .creq.want{background:#cdefd9;color:#1d7a45}
 .creq.off{background:#f7e2bb;color:#8a5a12}
+.chgpick{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:7px 0 2px;padding:8px 10px;background:#f3f0fb;border:1px solid #e0d8f5;border-radius:11px}
+.cplbl{font-size:12px;font-weight:800;color:#5b46b8}
+.cpchip{padding:5px 12px;border:1px solid #cdd9de;background:#fff;border-radius:9px;font-size:12.5px;font-weight:700;color:#3a4a54}
+.cpchip.on{background:var(--violet,#6b4ec9);border-color:var(--violet,#6b4ec9);color:#fff}
+.cpwarn{font-size:11px;font-weight:800;color:#b23b30}
 .lvrow{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:2px 0 8px}
 .lvlbl{font-size:11px;color:#7c8a93;font-weight:700;margin-right:2px}
 .lvchip{padding:5px 10px;border:1px solid #d8c4a0;background:#fdf6e9;color:#8a5a12;border-radius:9px;font-size:12px;font-weight:700}
@@ -1012,7 +1017,7 @@ function workedHoursTotal(p){let h=0;const c=p.clock||{};for(const iso in c)h+=r
 function otTotal(p){return weekRanges().reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-(settings.otThreshold||40)),0);}
 
 /* ============ settings ============ */
-let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:4,pctNightMin:3,usePCT:true,useWeekend:true,weRn:9,weRnMin:8,wePct:5,wePctMin:4,friRn:9,friRnMin:8,friPct:5,friPctMin:4,satRn:9,satRnMin:8,satPct:5,satPctMin:4,weRnN:9,weRnNMin:8,wePctN:5,wePctNMin:4,coverVer:6,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:1,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
+let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,chargeBackup:true,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:4,pctNightMin:3,usePCT:true,useWeekend:true,weRn:9,weRnMin:8,wePct:5,wePctMin:4,friRn:9,friRnMin:8,friPct:5,friPctMin:4,satRn:9,satRnMin:8,satPct:5,satPctMin:4,weRnN:9,weRnNMin:8,wePctN:5,wePctNMin:4,coverVer:6,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:1,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
 function req(role,line){const cm=(settings.useCharge===false?0:(settings.chargeMin||0));if(role==='RN')return line==='day'?{ideal:settings.rnDayIdeal+cm,min:settings.rnDayMin+cm}:{ideal:settings.rnNightIdeal+cm,min:settings.rnNightMin+cm};if(role==='PCT')return line==='day'?{ideal:settings.pctDayIdeal,min:settings.pctDayMin}:{ideal:settings.pctNightIdeal,min:settings.pctNightMin};return{ideal:settings.hucNeed,min:settings.hucNeed};}
 function roleOn(role){if(role==='PCT')return settings.usePCT!==false;if(role==='HUC')return settings.useHUC!==false;return true;}
 function isoOf(d){const dt=dateOf(d);return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
@@ -1056,6 +1061,18 @@ const hardOff=(p,d)=>!!(p.hardDOW&&p.hardDOW.has(wd(d)));
 const available=(p,d)=>!p.pto.has(d)&&!hardOff(p,d)&&!(p._prot&&p._prot.has(d))&&!worked(p,d)&&workedCount(p)<maxShifts(p)&&weekCount(p,d)<weekCap(p)&&consecIfAdd(p,d)<=settings.maxConsec;
 const availableOT=(p,d)=>!p.pto.has(d)&&!hardOff(p,d)&&!worked(p,d)&&consecIfAdd(p,d)<=settings.maxConsec;
 let cycleSeed=0;
+let chargeSel={};
+function computeChargeSel(){
+  chargeSel={};const mp=settings.chargePicks||{};
+  for(let d=0;d<DAYS;d++)for(const line of ['day','night']){
+    const key=line+'|'+d;
+    const trained=staff.filter(p=>p.role==='RN'&&p.line===line&&p.charge&&!p.orientee&&p.asn.has(d));
+    if(!trained.length)continue;
+    if(mp[key]!=null){const m=trained.find(p=>p.id===mp[key]);if(m){chargeSel[key]=m.id;continue;}}
+    trained.sort((a,b)=>(((a.seniority+cycleSeed)%997)-((b.seniority+cycleSeed)%997))||a.name.localeCompare(b.name));
+    chargeSel[key]=trained[0].id;
+  }
+}
 function score(p,d){let v=0;if(p.picks.has(d))v+=100;if(p.avoid&&p.avoid.has(d))v-=80;v+=(targetShifts(p)-workedCount(p))*6;
   const _w=wd(d);
   if(p.prefDOW&&p.prefDOW.has(_w))v+=60;
@@ -1072,6 +1089,23 @@ function build(){
   cycleSeed++;staff.forEach(p=>{p.asn=new Set();p.float=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();if(!p.picks||!p.picks.size)genPicks(p);});
   const _protN=Math.max(0,settings.protected||0);staff.forEach(p=>{p._prot=new Set();if(_protN&&p.avoid&&p.avoid.size){const bw={};[...p.avoid].sort((a,b)=>a-b).forEach(d=>{(bw[weekOf(d)]=bw[weekOf(d)]||[]).push(d);});Object.values(bw).forEach(arr=>arr.slice(0,_protN).forEach(d=>p._prot.add(d)));}});
   staff.forEach(p=>{const _cap=weekCap(p),_pw={},_ld=[];for(let d=0;d<DAYS;d++){if(!p.pto.has(d)&&((p.workDOW&&p.workDOW.has(wd(d)))||(p.locked&&p.locked.has(d))))_ld.push(d);}_ld.sort((a,b)=>a-b);_ld.forEach(d=>{const w=weekOf(d);if((_pw[w]||0)>=_cap)return;if(!worked(p,d)){_pw[w]=(_pw[w]||0)+1;assign(p,d);}});}); // locked weekdays + locked days, capped at weekly FTE
+  // Charge distribution: give EVERY shift its charge minimum first (spread across all days), then add a
+  // backup 2nd charge only where spare charge capacity remains — round-robin so it never starves late days.
+  if(settings.useCharge!==false){const cm=settings.chargeMin||1;const goals=[cm];if(settings.chargeBackup!==false)goals.push(cm+1);
+    for(const g of goals){let progress=true,guard=0;const shifts=[];
+      for(let d=0;d<DAYS;d++)for(const line of ['day','night'])if(!reqEff('RN',line,d).off)shifts.push({d,line});
+      while(progress&&guard++<6000){progress=false;
+        shifts.sort((a,b)=>chargeCount(a.line,a.d)-chargeCount(b.line,b.d));
+        for(const s of shifts){
+          if(chargeCount(s.line,s.d)>=g)continue;
+          if(shiftCount('RN',s.line,s.d)>=reqEff('RN',s.line,s.d).ideal)continue;
+          const ch=staff.filter(p=>p.role==='RN'&&p.line===s.line&&p.charge&&!p.orientee&&available(p,s.d)).sort((a,b)=>((b.picks.has(s.d)?1:0)-(a.picks.has(s.d)?1:0))||((weekCap(b)-weekCount(b,s.d))-(weekCap(a)-weekCount(a,s.d)))||((targetShifts(b)-workedCount(b))-(targetShifts(a)-workedCount(a))))[0];
+          if(!ch)continue;
+          assign(ch,s.d);progress=true;break;
+        }
+      }
+    }
+  }
   const fill=(role,line,d,target,wantCharge)=>{
     const have=()=>staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;
     if(wantCharge){let pool=staff.filter(p=>p.role===role&&p.line===line&&p.charge&&!p.orientee&&available(p,d)).sort((a,b)=>score(b,d)-score(a,d));
@@ -1167,6 +1201,38 @@ function build(){
           assign(H,d);floatAssign(Lp,d);changed=true;done=true;break;}
         if(done)break;}
         if(changed)break;}
+    }
+  }
+  // Spread floats: no one should float two days in a row. Move the 2nd day's float to a lighter-loaded
+  // colleague who works that day and won't become consecutive themselves. Coverage stays identical.
+  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
+    if(!roleOn(r))continue;
+    const grp=staff.filter(p=>!p.orientee&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    if(grp.length<2)continue;
+    let guard=0,changed=true;
+    while(changed&&guard++<8000){changed=false;
+      for(const A of grp){
+        if(!A.float||A.float.size<2)continue;
+        const fl=[...A.float].sort((a,b)=>a-b);let clash=-1;
+        for(const x of fl){if(A.float.has(x+1)){clash=x+1;break;}}
+        if(clash<0)continue;
+        const cands=grp.filter(B=>B!==A&&B.asn.has(clash)&&!B.float.has(clash-1)&&!B.float.has(clash+1)&&(B.float?B.float.size:0)<=A.float.size&&!isLocked(B,clash)&&!(B.charge&&r==='RN'&&chargeCount(l,clash)<=settings.chargeMin)).sort((a,b)=>(a.float?a.float.size:0)-(b.float?b.float.size:0));
+        if(cands.length){assign(A,clash);floatAssign(cands[0],clash);changed=true;break;}
+      }
+    }
+  }
+  // Backup charge: keep a 2nd charge-trained nurse on every shift as a backup for the charge nurse.
+  if(useCh&&settings.chargeBackup!==false){const goal=(settings.chargeMin||1)+1;
+    for(let d=0;d<DAYS;d++)for(const line of ['day','night']){
+      let guard=0;
+      while(chargeCount(line,d)<goal&&guard++<12){
+        const ch=staff.find(p=>p.role==='RN'&&p.line===line&&p.charge&&!p.orientee&&available(p,d));
+        if(!ch)break;
+        if(shiftCount('RN',line,d)<reqEff('RN',line,d).ideal){assign(ch,d);continue;}
+        const spare=staff.filter(p=>p.role==='RN'&&p.line===line&&!p.charge&&!p.orientee&&p.asn.has(d)&&!isLocked(p,d)&&!(p.float&&(p.float.has(d-1)||p.float.has(d+1)))).sort((a,b)=>(a.float?a.float.size:0)-(b.float?b.float.size:0))[0];
+        if(!spare)break;
+        floatAssign(spare,d);assign(ch,d);
+      }
     }
   }
   // orientees: extra on the floor, shadowing their preceptor (only on days the preceptor works)
@@ -1335,7 +1401,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 27x</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 28g</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1766,6 +1832,7 @@ function rosterGrid(a,b){
   $('rosterBody').innerHTML=`<div class="rgrid-wrap ${rosterMode}"><table class="rgrid"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 function renderDay(){
+  computeChargeSel();
   const d=curDay;$('dvWd').textContent=WDF[wd(d)]+(isHoliday(d)?' · 🎉 '+holidayName(d):(isColWE(d)?' · weekend':''));$('dvDt').textContent=fmtDate(d)+' · Day '+(d+1);
   let bad=0,low=0;SECTIONS.forEach(s=>{const c=shiftCount(s.role,s.line,d),rq=req(s.role,s.line);if(c<rq.min)bad++;else if(c<rq.ideal)low++;});
   const st=$('dvStat');if(bad){st.className='stat bad';st.textContent=bad+' short';}else if(low){st.className='stat warn';st.textContent=low+' below ideal';}else{st.className='stat ok';st.textContent='All good';}
@@ -1780,6 +1847,11 @@ function renderDay(){
     oris.forEach(p=>{h+=`<button class="chip" style="background:#fdeede;color:#9a5d11" data-rmori="${p.id}|${d}">${firstName(p.name)} <span style="font-size:9px;font-weight:700;opacity:.7">ORI</span><span class="x">✕</span></button>`;});
     if(!members.length&&!oris.length)h+='<span class="pkempty">No one yet — tap “Add”.</span>';
     h+='</div>';
+    if(s.charge){const ckey=s.line+'|'+d;const trained=members.filter(p=>p.charge);const selId=chargeSel[ckey];
+      h+='<div class="chgpick"><span class="cplbl">🩺 In charge:</span>';
+      if(trained.length){h+=trained.map(p=>`<button class="cpchip${p.id===selId?' on':''}" data-chg="${ckey}|${p.id}">${esc(firstName(p.name))}</button>`).join('');if(trained.length<2)h+='<span class="cpwarn">⚠ no backup</span>';}
+      else h+='<span class="cpwarn">⚠ none charge-trained here</span>';
+      h+='</div>';}
     const _fl=staff.filter(q=>q.role===s.role&&q.line===s.line&&q.float&&q.float.has(d));
     if(_fl.length)h+=`<div class="chgwarn" style="color:#9a6a12;background:#f9f1dd;border-color:#e7d39a">↗ Floated off 10G today: ${_fl.map(q=>firstName(q.name)).join(', ')}</div>`;
     if(s.charge&&chg<settings.chargeMin)h+=`<div class="chgwarn">⚠ No charge nurse here yet.</div>`;
@@ -1818,26 +1890,30 @@ function renderHealth(){
 function renderFlags(){
   const useCh=settings.useCharge!==false;
   const L={'RN|day':'Day nurses','RN|night':'Night nurses','PCT|day':'Day PCTs','PCT|night':'Night PCTs','HUC|day':'HUCs'};
-  const grp={},chg={day:0,night:0};
+  const dd=d=>dateOf(d).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+  const fmtDays=arr=>arr.length?arr.slice(0,8).map(dd).join(' \u00b7 ')+(arr.length>8?' \u00b7 +'+(arr.length-8)+' more':''):'';
+  const grp={},chg={day:[],night:[]},bkp={day:[],night:[]};
   for(let d=0;d<DAYS;d++){const c=coverage[d];
     const look=(role,line,count)=>{const rq=reqEff(role,line,d);if(rq.off||count>=rq.ideal)return;const k=role+'|'+line;
-      const g=grp[k]||(grp[k]={role,line,days:0,lo:99,ideal:rq.ideal,belowMin:false,tot:staff.filter(p=>p.role===role&&p.line===line&&!p.orientee).length});
-      g.days++;g.lo=Math.min(g.lo,count);g.ideal=rq.ideal;if(count<rq.min)g.belowMin=true;};
+      const g=grp[k]||(grp[k]={role,line,days:0,lo:99,ideal:rq.ideal,belowMin:false,dates:[],tot:staff.filter(p=>p.role===role&&p.line===line&&!p.orientee).length});
+      g.days++;g.lo=Math.min(g.lo,count);g.ideal=rq.ideal;g.dates.push(d);if(count<rq.min)g.belowMin=true;};
     look('RN','day',c.rnDay);look('RN','night',c.rnNight);look('PCT','day',c.pctDay);look('PCT','night',c.pctNight);look('HUC','day',c.huc);
-    if(useCh&&c.chgDay<settings.chargeMin)chg.day++;if(useCh&&c.chgNight<settings.chargeMin)chg.night++;
+    if(useCh&&c.chgDay<settings.chargeMin)chg.day.push(d);if(useCh&&c.chgNight<settings.chargeMin)chg.night.push(d);
+    if(useCh&&settings.chargeBackup!==false){const bg=(settings.chargeMin||1)+1;if(c.chgDay>=settings.chargeMin&&c.chgDay<bg)bkp.day.push(d);if(c.chgNight>=settings.chargeMin&&c.chgNight<bg)bkp.night.push(d);}
   }
   const F=[];
   Object.values(grp).forEach(g=>{let surplus=false;for(let _d=0;_d<DAYS;_d++){if(shiftCount(g.role,g.line,_d)>reqEff(g.role,g.line,_d).ideal){surplus=true;break;}}F.push({kind:'cov',sev:g.belowMin?'red':'amber',role:g.role,line:g.line,surplus,
     title:L[g.role+'|'+g.line]+(g.belowMin?' — below your minimum':' — below the ideal'),
-    reason:'Running '+(g.lo===g.ideal-1?(g.ideal-1)+'':g.lo+'–'+(g.ideal-1))+' of '+g.ideal+' on '+g.days+' shift'+(g.days>1?'s':'')+'. Only '+g.tot+' '+roleWord(g.role)+'s on the roster for a '+g.ideal+'/shift rule — that\'s the real limit.'});});
-  ['day','night'].forEach(line=>{if(chg[line])F.push({kind:'chg',sev:'red',role:'RN',line,
-    title:'Charge nurse missing — '+line,reason:'No charge-trained nurse on '+chg[line]+' '+line+' shift'+(chg[line]>1?'s':'')+'. Overtime from a charge-trained nurse can cover it.'});});
+    reason:'Running '+(g.lo===g.ideal-1?(g.ideal-1)+'':g.lo+'–'+(g.ideal-1))+' of '+g.ideal+' on '+g.days+' shift'+(g.days>1?'s':'')+'. Only '+g.tot+' '+roleWord(g.role)+'s on the roster for a '+g.ideal+'/shift rule — that\'s the real limit.'+' Short on: '+fmtDays(g.dates)+'.'});});
+  ['day','night'].forEach(line=>{if(chg[line].length)F.push({kind:'chg',sev:'red',role:'RN',line,
+    title:'Charge nurse missing — '+line,reason:'No charge-trained nurse on '+chg[line].length+' '+line+' shift'+(chg[line].length>1?'s':'')+': '+fmtDays(chg[line])+'. Overtime from a charge-trained nurse can cover it.'});});
+  ['day','night'].forEach(line=>{if(bkp[line].length)F.push({kind:'info',sev:'amber',title:'No backup charge — '+line,reason:'Only one charge-trained nurse on '+bkp[line].length+' '+line+' shift'+(bkp[line].length>1?'s':'')+': '+fmtDays(bkp[line])+'. No backup if the charge nurse is pulled — add or cross-train a second.'});});
   const wkShort=staff.filter(p=>!p.orientee&&weekendQuota(p)&&p.weCount<weekendQuota(p));
-  if(wkShort.length)F.push({kind:'info',sev:'amber',title:wkShort.length+' staff short on weekend shifts',reason:'Open Month view, pick a person, and tap a Sat/Sun to add one.'});
+  if(wkShort.length)F.push({kind:'info',sev:'amber',title:wkShort.length+' staff short on weekend shifts',reason:wkShort.slice(0,6).map(p=>firstName(p.name)).join(', ')+(wkShort.length>6?'…':'')+' need more weekend shifts. Open Month view, pick one, and tap a Sat/Sun to add one.'});
   const owed=staff.filter(p=>!p.orientee&&(p.ledger||0)>=5).sort((a,b)=>(b.ledger||0)-(a.ledger||0));
   if(owed.length)F.push({kind:'owed',sev:'amber',title:owed.length+' owed fairer shifts',reason:'From the fairness ledger: '+owed.slice(0,3).map(p=>firstName(p.name)+' +'+(p.ledger||0)).join(', ')+(owed.length>3?'…':'')+'. Grant a top request to pay them back.'});
   const tired=staff.filter(p=>!p.orientee&&(()=>{for(let d=0;d<DAYS;d++)if(p.asn.has(d)&&consecIfAdd(p,d)>=settings.maxConsec)return true;return false;})());
-  if(tired.length)F.push({kind:'info',sev:'amber',title:tired.length+' working the max shifts in a row',reason:tired.slice(0,3).map(p=>firstName(p.name)).join(', ')+(tired.length>3?'…':'')+' hit your '+settings.maxConsec+'-in-a-row limit. Ease them in Month view if you can.'});
+  if(tired.length){const tinfo=tired.map(p=>{let hd=-1;for(let d=0;d<DAYS;d++)if(p.asn.has(d)&&consecIfAdd(p,d)>=settings.maxConsec){hd=d;break;}return firstName(p.name)+(hd>=0?' ('+dd(hd)+')':'');});F.push({kind:'info',sev:'amber',title:tired.length+' working the max shifts in a row',reason:tinfo.slice(0,3).join(', ')+(tinfo.length>3?'…':'')+' hit your '+settings.maxConsec+'-in-a-row limit. Ease them in Month view if you can.'});}
   F.sort((a,b)=>(a.sev==='red'?0:1)-(b.sev==='red'?0:1));
   $('flagCount').textContent=F.length?F.length:'';
   if(!F.length){$('flags').innerHTML='<div class="flag-ok">✓ All shifts solved — nothing to fix.</div>';return;}
@@ -1987,6 +2063,7 @@ $('dayBody').addEventListener('click',e=>{
   const co=e.target.closest('[data-callout]');if(co){const[role,line,dd]=co.dataset.callout.split('|');openBackfill(role,line,+dd);return;}
   if(rmo){const[id,dd]=rmo.dataset.rmori.split('|');staff.find(p=>p.id==id).oriDays.delete(+dd);computeCoverage();renderRibbon();renderDay();renderFlags();return;}
   if(rm){const[id,d]=rm.dataset.rm.split('|');unassign(staff.find(p=>p.id==id),+d);computeCoverage();renderRibbon();renderDay();renderFlags();return;}
+  const cg=e.target.closest('[data-chg]');if(cg){const pr=cg.dataset.chg.split('|');settings.chargePicks=settings.chargePicks||{};settings.chargePicks[pr[0]+'|'+pr[1]]=+pr[2];save();renderDay();toast('Charge set');return;}
   if(add){openPicker=openPicker===add.dataset.add?null:add.dataset.add;renderDay();return;}
   if(asn){const[id,d]=asn.dataset.asn.split('|');assign(staff.find(p=>p.id==id),+d);openPicker=null;computeCoverage();renderRibbon();renderDay();renderFlags();return;}
 });
@@ -2601,9 +2678,7 @@ function renderFairness(){
   const banked=settings.bankedKey===periodKey();
   let h=`<div style="padding:14px 16px 6px;display:flex;align-items:center;gap:8px"><b style="font-size:15px;flex:1">Fairness ledger${hlp('Each nurse has a fairness number. Working more weekends, nights, or holidays than your share pushes it up; an easy stretch pushes it down. Higher numbers get first pick next schedule. Example: Mia worked 3 weekends and Sam worked 0, so Mia’s number is higher — if both want the same Friday off, Mia gets it. Tap “Bank this cycle” when a cycle ends to lock it in.')}</b><button class="bigaction ${banked?'grey':''}" id="bankBtn" style="width:auto;padding:9px 12px;min-height:auto;font-size:13px"${banked?' disabled':''}>${banked?'Banked ✓':'Bank this cycle'}</button>${hlp('Banking saves this cycle’s fairness scores so they carry into the next schedule. Do it once a cycle is finished — it locks in who is owed so the next build can pay them back.')}</div>`;
   h+=`<div class="sub" style="padding:0 16px 10px">Who’s owed fairer shifts — higher means a raw deal (denied requests, extra weekends/holidays). The next build gives them priority. Bank each cycle to carry it forward.</div>`;
-  if(!rows.length){h+=`<div style="padding:6px 16px 18px;color:var(--muted)">Build a schedule, then bank the cycle to start tracking fairness.</div>`;}
-  else h+=rows.map(r=>{const lab=r.standing>=3?'Owed':r.standing<=-3?'Favored':'Fair';const cls=r.standing>=3?'low':r.standing<=-3?'good':'mid';const round=x=>Math.round(x*10)/10;return `<div class="rule"><div class="rl"><b>${r.p.name}</b><span>${r.p.role}${r.p.role!=='HUC'?' · '+(r.p.line==='day'?'Day':'Night'):''} · banked ${r.banked>0?'+':''}${r.banked}${r.p.asn.size>0?' · this cycle '+(r.tc>0?'+':'')+round(r.tc):''}</span></div><span class="reqbadge ${cls}">${lab} ${r.standing>0?'+':''}${round(r.standing)}</span></div>`;}).join('');
-  h+=`<div style="padding:16px 16px 6px;border-top:1px solid var(--line);margin-top:8px"><b style="font-size:15px">Float log ${hlp('Who worked off 10G (floated) this schedule and how many times. Floating is shared in turns — within each group nobody floats a second time until everyone has floated once, and whoever floated most last schedule floats least this one.')}</b></div>`;
+  h+=`<div style="padding:14px 16px 6px"><b style="font-size:15px">Float log ${hlp('Who worked off 10G (floated) this schedule and how many times. Floating is shared in turns — within each group nobody floats a second time until everyone has floated once, and whoever floated most last schedule floats least this one.')}</b></div>`;
   h+=`<div class="sub" style="padding:0 16px 8px">Who floated off 10G this schedule. Shared in turns — everyone floats once before anyone floats twice.</div>`;
   const FLG=[['RN','day','☀️ Day · Nurses'],['PCT','day','☀️ Day · PCTs'],['HUC','day','☀️ Day · HUCs'],['RN','night','🌙 Night · Nurses'],['PCT','night','🌙 Night · PCTs']];
   FLG.forEach(([r,l,ttl])=>{
@@ -2615,6 +2690,9 @@ function renderFairness(){
     const floaters=g.filter(p=>p.float&&p.float.size).sort((a,b)=>b.float.size-a.float.size||a.name.localeCompare(b.name));
     h+=floaters.map(p=>`<div class="flg-row"><div class="flg-nm"><span class="flg-n">${esc(firstName(p.name))}</span><span class="flg-c">${p.float.size}\u00d7</span></div><div class="flg-days">${[...p.float].sort((a,b)=>a-b).map(d=>`<label class="flg-day"><span class="flg-dt">${fmtDate(d)}</span><input class="flg-in" data-flp="${p.id}" data-fld="${d}" value="${esc((p.floatTo&&p.floatTo[d])||'')}" placeholder="floated to…" autocomplete="off"></label>`).join('')}</div></div>`).join('');
   });
+  h+=`<div style="padding:14px 16px 6px;border-top:1px solid var(--line);margin-top:6px"><b style="font-size:15px">Fairness ledger</b></div>`;
+  if(!rows.length){h+=`<div style="padding:6px 16px 18px;color:var(--muted)">Build a schedule, then bank the cycle to start tracking fairness.</div>`;}
+  else h+=rows.map(r=>{const lab=r.standing>=3?'Owed':r.standing<=-3?'Favored':'Fair';const cls=r.standing>=3?'low':r.standing<=-3?'good':'mid';const round=x=>Math.round(x*10)/10;return `<div class="rule"><div class="rl"><b>${r.p.name}</b><span>${r.p.role}${r.p.role!=='HUC'?' · '+(r.p.line==='day'?'Day':'Night'):''} · banked ${r.banked>0?'+':''}${r.banked}${r.p.asn.size>0?' · this cycle '+(r.tc>0?'+':'')+round(r.tc):''}</span></div><span class="reqbadge ${cls}">${lab} ${r.standing>0?'+':''}${round(r.standing)}</span></div>`;}).join('');
   $('fairCard').innerHTML=h;
 }
 function renderHoursMgr(){

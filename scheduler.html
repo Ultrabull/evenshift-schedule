@@ -1426,7 +1426,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 28l</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 28m</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1458,9 +1458,12 @@ function renderPeople(){
       <div class="go">›</div></div>`;
   };
   const grp=(key,label,arr)=>{if(!arr.length)return '';const open=searchTxt?true:openGroups.has(key);return `<button type="button" class="pplsec${open?' open':''}" data-grp="${key}"><span>${label}</span><span class="ppln">${arr.length}</span><span class="grpcv">▾</span></button><div class="pplgrp${open?' open':''}">${arr.map(rowHtml).join('')}</div>`;};
+  const isLead=p=>p.anm||p.edu||p.office;
   let H='';
+  const lead=list.filter(isLead).sort((a,b)=>a.name.localeCompare(b.name));
+  if(lead.length)H+=grp('lead','Managers & educators',lead);
   [['RN','Nurses'],['PCT','PCTs'],['HUC','HUCs']].forEach(([role,rlabel])=>{
-    const rl=list.filter(p=>p.role===role);if(!rl.length)return;
+    const rl=list.filter(p=>p.role===role&&!isLead(p));if(!rl.length)return;
     if(role==='HUC'){H+=grp('HUC',rlabel,rl);return;}
     H+=grp(role+'|day',rlabel+' · Day',rl.filter(p=>p.line==='day'))+grp(role+'|night',rlabel+' · Night',rl.filter(p=>p.line==='night'));
   });

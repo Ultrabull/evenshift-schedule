@@ -136,8 +136,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .acc-cv{flex-shrink:0;color:var(--faint);font-size:14px;transition:transform .22s;margin-left:4px}
 .acc.open .acc-cv{transform:rotate(180deg)}
 .acc-b{display:none;padding:2px 12px 14px}
-.acc.open .acc-b{display:block;animation:accin .22s ease}
-@keyframes accin{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.acc.open .acc-b{display:block;animation:accin .22s ease}from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}
 .acc-b>.card{border:none;box-shadow:none;border-radius:0;background:transparent;margin:0}
 .tilegrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
 .tile{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:20px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;min-height:128px;text-align:center;font-family:inherit;cursor:pointer;position:relative}
@@ -190,8 +189,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .ppl-main{flex:1;min-width:0}
 .ppl-row{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px;box-shadow:var(--shadow);cursor:pointer}
 .ppl-row .go{display:none}
-.ppl-row .meta{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
-@media(max-width:360px){.pplgrp.open{grid-template-columns:1fr}}
+.ppl-row .meta{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}.pplgrp.open{grid-template-columns:1fr}
 .ppl-row:active{background:#fafbfc}
 .ava{width:36px;height:36px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;color:#fff}
 .ava.rn{background:var(--teal)}.ava.pct{background:#5a8a3f}.ava.huc{background:#a06a2c}
@@ -332,7 +330,6 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 
 /* welcome */
 .welcome .sheet{text-align:left}
-.gsec{font-weight:800;font-size:15px;color:var(--ink);margin:20px 2px 11px;padding-top:14px;border-top:1px solid var(--line)}
 .gp{font-size:14.5px;line-height:1.55;color:var(--ink);margin:11px 2px}
 .gpri{display:flex;gap:11px;align-items:flex-start;margin:10px 2px}
 .gpri .gn{flex:0 0 26px;height:26px;border-radius:50%;background:var(--teal);color:#fff;font-weight:800;font-size:13.5px;display:flex;align-items:center;justify-content:center;margin-top:1px}
@@ -376,8 +373,6 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .rule.off{opacity:.5}
 .flag{align-items:center}
 .fbody{flex:1;min-width:0}
-.flagfix{margin-left:auto;background:var(--teal);color:#fff;border:none;border-radius:8px;padding:8px 13px;font-size:12.5px;font-weight:600;white-space:nowrap}
-.flagpick{border-top:1px solid var(--line);background:#fbfcfd}
 .flagpick .pklist{padding:10px 16px}
 .flag{align-items:flex-start}
 .flagopts{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
@@ -397,13 +392,29 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .clk-btn.in{background:#0a7d3c}.clk-btn.out{background:#c0392b}
 .clk-note{padding:0 18px 16px;color:var(--muted);font-size:14px}
 .clk-note.warn{color:#b45309}
-.dayreq{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line)}
-.dayreq:last-child{border-bottom:none}
-.reqbtns{display:flex;gap:6px}
 .rqb{padding:8px 11px;border:2px solid var(--line);background:#fff;border-radius:11px;font-size:13px;font-weight:700;color:var(--muted)}
 .rqb.on.want{background:#0a7d3c;border-color:#0a7d3c;color:#fff}
 .rqb.on.off{background:#b45309;border-color:#b45309;color:#fff}
 .rqb.on.pto{background:#6d28d9;border-color:#6d28d9;color:#fff}
+.nexthero{background:linear-gradient(135deg,var(--teal),var(--teal-deep));color:#fff;border-radius:16px;padding:16px 18px;margin:2px 0 12px;box-shadow:var(--shadow)}
+.nexthero.none{background:#eef3f5;color:var(--muted)}
+.nexthero .nh-lbl{font-size:12px;font-weight:700;opacity:.85;text-transform:uppercase;letter-spacing:.4px}
+.nexthero.none .nh-lbl{color:var(--muted)}
+.nexthero .nh-when{font-size:23px;font-weight:900;margin-top:2px}
+.nexthero.none .nh-when{font-size:17px;color:var(--ink)}
+.nexthero .nh-time{font-size:14px;font-weight:600;opacity:.92;margin-top:1px}
+.lastuser{display:flex;align-items:center;gap:11px;background:var(--teal-soft);border:1px solid var(--teal);border-radius:14px;padding:12px 14px;margin:0 0 8px;cursor:pointer}
+.lastuser .lrtxt b{color:var(--teal-deep)}
+.lastuser .lrtxt span{display:block;font-size:12px;color:var(--muted)}
+.lastuser .lchev{margin-left:auto;color:var(--teal-deep);font-size:20px}
+.lastuser-or{text-align:center;font-size:12px;color:var(--faint);margin:0 0 8px}
+.reqsum{margin:2px 14px 10px;padding:10px 12px;background:var(--teal-soft);color:var(--teal-deep);border-radius:11px;font-size:13px;line-height:1.5}
+.reqddl{margin:2px 14px 10px;padding:10px 12px;background:#fff4e0;color:#8a5a12;border:1px solid #f0d9a8;border-radius:11px;font-size:13px}
+.reqddl.closed{background:#f3e2e0;color:#9a3b30;border-color:#e6bcb6}
+.calcell.req.dblreq{background:#f5ecd6;border-color:#e0c27a}
+.calcell.req.dblreq .cmark{color:#8a5a12}
+.brush.dblreq{background:#f9f1dd;border-color:#e7d39a;color:#8a5a12}
+.brush.dblreq.on{background:#8a5a12;border-color:#8a5a12;color:#fff}
 .brushrow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
 .brush{flex:1;min-width:70px;padding:9px 6px;border:2px solid var(--line);background:#fff;border-radius:11px;font-size:12.5px;font-weight:700;color:var(--muted)}
 .brush.on.off{background:#b45309;border-color:#b45309;color:#fff}
@@ -439,10 +450,6 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .loginrow .lrtxt{display:flex;flex-direction:column;line-height:1.25}
 .loginrow .lrtxt b{font-size:15px}
 .loginrow .lrtxt span{font-size:12.5px;color:var(--muted)}
-.recentbtn{display:flex;align-items:center;gap:11px;width:100%;padding:11px 14px;border:2px solid var(--teal);background:var(--teal-soft);border-radius:13px;margin-bottom:8px;text-align:left}
-.recentbtn b{display:block;font-size:15px;color:var(--ink)}
-.recentbtn .rsub{display:block;font-size:12.5px;color:var(--muted);font-weight:400}
-.recentlbl{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:2px 2px 7px}
 .addbtn.callout{color:#b45309}
 .calcell.req{position:relative}
 .cdem{position:absolute;top:3px;right:3px;min-width:15px;height:15px;line-height:15px;text-align:center;border-radius:8px;font-size:9.5px;font-weight:800;color:#fff;padding:0 3px}
@@ -499,25 +506,19 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 #greetbar.show{transform:translate(-50%,0);opacity:1}
 .rhonor{background:var(--teal-soft);color:var(--teal-deep);border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:10px}
 .rhonor b{font-size:15px}.rhsub{opacity:.65;font-size:12px}
-.rsec-h{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:#2b3a44;margin:12px 2px 6px;font-size:15px}
-.rsec-n{font-size:12px;font-weight:600;color:#7c8a93}
 .rrow{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1px solid #e7edf0;border-radius:11px;margin-bottom:6px;background:#fff}
 .rrow.rq-ok{background:#eafaf1;border-color:#bce8cf}
 .rrow.rq-no{background:#fdecea;border-color:#f3c2bb}
-.rdot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
 .rdot.day{background:var(--teal)}.rdot.night{background:var(--night)}
-.rnm{flex:1;font-size:14px;color:#243038;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.rrole{font-size:10px;font-weight:800;letter-spacing:.04em;background:#eef3f5;color:#5a6b75;padding:1px 6px;border-radius:6px}
 .rtime{font-size:12px;color:#5a6b75;text-align:right;white-space:nowrap}
-.rtag{font-size:11px;font-weight:700;padding:1px 7px;border-radius:6px}
 .rtag.ok{background:#cdefd9;color:#1d7a45}.rtag.no{background:#f7cdc6;color:#b23b30}.rtag.lk{background:#ece6fb;color:#6b4ec9}
-.rfloat{font-size:11px;font-weight:700;color:#9a6a12;background:#f9f1dd;padding:1px 6px;border-radius:6px}
 .cd2{width:9px;height:9px;border-radius:50%;background:var(--violet);display:inline-block}
-.rempty{color:#9aa6ad;font-size:13px;padding:6px 4px}
 .rmode{display:flex;gap:6px;margin-bottom:10px}
 .rmode button{flex:1;padding:8px;border:1px solid #d8e0e4;background:#fff;border-radius:10px;font-weight:700;font-size:13px;color:#5a6b75}
 .rmode button.on{background:var(--teal);border-color:var(--teal);color:#fff}
 .rgrid-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:2px -4px 0}
+.rleg{font-size:11px;color:var(--muted);padding:4px 14px 8px;line-height:1.5}
+.rleg b{color:var(--ink)}
 .rgrid{border-collapse:collapse;font-size:11px}
 .rgrid th,.rgrid td{border:1px solid #e7edf0;text-align:center;padding:0}
 .rgn{text-align:left!important;padding:5px 7px!important;font-weight:600;color:#243038;white-space:nowrap;position:sticky;left:0;background:#fff;z-index:2;min-width:74px;max-width:100px;overflow:hidden;text-overflow:ellipsis}
@@ -533,6 +534,17 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .rgc.rq-ok{box-shadow:inset 0 0 0 2px var(--green)}
 .rgc.rq-no{box-shadow:inset 0 0 0 2px var(--red)}
 .rgc.rq-got{background:#dff3e7}
+.bsteps{display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 8px;margin-bottom:10px;box-shadow:var(--shadow);overflow-x:auto}
+.bstep{display:flex;align-items:center;gap:6px;padding:4px 8px;border-radius:10px;flex:0 0 auto}
+.bstep .bsn{width:20px;height:20px;border-radius:50%;background:#e7edf0;color:var(--muted);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.bstep .bsl{font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap}
+.bstep.done .bsn{background:var(--teal);color:#fff}
+.bstep.done .bsl{color:var(--ink)}
+.bsarrow{color:var(--faint);flex:0 0 auto}
+.undobtn{margin:8px 14px 0;display:inline-block;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:13px;font-weight:700;color:var(--ink);box-shadow:var(--shadow)}
+.fdate{text-decoration:underline;text-decoration-style:dotted;cursor:pointer;color:var(--teal-deep);font-weight:700}
+.rgc.chgc{font-weight:900;box-shadow:inset 0 0 0 2px #5b46b8}
+.rgc.office{background:#eceff1;color:#5a6b75;font-size:12px}
 .flg-h{display:flex;justify-content:space-between;align-items:center;background:#f0f4f6;font-weight:800;font-size:12.5px;color:#2b3a44;padding:7px 16px;margin-top:2px}
 .flg-ok{font-size:11px;font-weight:700;color:#1d7a45}
 .flg-warn{font-size:11px;font-weight:700;color:#b23b30}
@@ -577,7 +589,6 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .rgrid-wrap.week .rgh span{font-size:13px}
 .rgrid-wrap.week .rgc{height:38px;font-size:15px}
 .rgrid-wrap.week .rgshift td,.rgrid-wrap.week .rgrole td{position:static}
-.roff{margin-top:10px;background:#eafaf1;border:1px solid #bce8cf;color:#1d7a45;border-radius:11px;padding:9px 12px;font-size:12.5px}
 .flg-hist-h{display:flex;align-items:baseline;gap:8px;padding:14px 16px 6px;border-top:1px solid var(--line);margin-top:10px}
 .flg-hist-h b{font-size:15px}.flg-hist-h span{font-size:11px;color:var(--faint)}
 .flh-row{display:flex;align-items:center;gap:8px;padding:6px 16px;border-bottom:1px solid #eef2f4}
@@ -585,8 +596,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .flh-nm{font-size:13px;font-weight:700;color:#243038;flex:0 0 auto;min-width:86px}
 .flh-nm small{font-weight:600;color:#8a97a0;font-size:10px}
 .flh-in{flex:1;max-width:150px;padding:5px 8px;border:1px solid #d8e0e4;border-radius:8px;font-size:12px}
-.flh-x{border:none;background:none;color:#c0392b;font-size:14px;padding:2px 6px;cursor:pointer}
-</style>
+.flh-x{border:none;background:none;color:#c0392b;font-size:14px;padding:2px 6px;cursor:pointer}</style>
 </head>
 <body>
 
@@ -668,6 +678,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
     <div style="flex:1;min-width:150px"><b style="font-size:14.5px">Staff picks</b><div id="picksSrc" style="font-size:12.5px;color:var(--muted);margin-top:1px">Using sample picks</div></div>
     <button class="bigaction grey" id="importBtn" style="flex:0 0 auto;width:auto;padding:12px 16px;min-height:auto;font-size:14px">📥 Import</button>
   </div>
+  <div id="buildSteps"></div>
   <div class="sched-top">
     <button class="bigaction" id="buildBtn">✨ Build schedule</button>
     <button class="bigaction grey hide" id="exportBtn" style="flex:0 0 auto;width:auto;padding:17px 18px">↓ Save</button>
@@ -691,6 +702,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
         <span class="stat ok" id="dvStat">—</span>
         <button class="arrow" id="nextDayBtn">›</button>
       </div>
+      <div id="dvUndo"></div>
       <div class="daybody" id="dayBody"></div>
       <div class="legend">
         <span><i class="sw" style="background:var(--teal)"></i>Day</span>
@@ -1035,10 +1047,13 @@ function schedHoursWeek(p,r){let n=0,db=0,od=0;for(let d=r.startD;d<=r.endD;d++)
 function workedHoursWeek(p,r){return clockHoursInRange(p,r.startISO,r.endISO);}
 function schedHoursTotal(p){let db=0;if(p.dbl)p.dbl.forEach(d=>{if(worked(p,d))db++;});const od=p.officeDays?p.officeDays.size:0;return workedCount(p)*shiftLen(p)+db*8+od*shiftLen(p);}
 function workedHoursTotal(p){let h=0;const c=p.clock||{};for(const iso in c)h+=recHours(c[iso]);return h;}
-function otTotal(p){return weekRanges().reduce((a,r)=>a+Math.max(0,workedHoursWeek(p,r)-(settings.otThreshold||40)),0);}
 
 /* ============ settings ============ */
-let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,chargeBackup:true,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:4,pctNightMin:3,usePCT:true,useWeekend:true,weRn:9,weRnMin:8,wePct:5,wePctMin:4,friRn:9,friRnMin:8,friPct:5,friPctMin:4,satRn:9,satRnMin:8,satPct:5,satPctMin:4,weRnN:9,weRnNMin:8,wePctN:5,wePctNMin:4,coverVer:6,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:1,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
+
+/* ============================================================
+   STATE & SETTINGS — everything the app remembers
+   ============================================================ */
+let settings={startISO:'2026-06-21',weeks:6,rnDayIdeal:8,rnDayMin:7,rnNightIdeal:8,rnNightMin:7,chargeMin:1,chargeTarget:2,chargeBackup:true,useCharge:true,pctDayIdeal:4,pctDayMin:3,pctNightIdeal:4,pctNightMin:3,usePCT:true,useWeekend:true,weRn:9,weRnMin:8,wePct:5,wePctMin:4,weRnN:9,weRnNMin:8,wePctN:5,wePctNMin:4,coverVer:6,hucNeed:2,useHUC:true,maxConsec:4,wkFT:4,wkPT:3,wkPRN:1,honor:85,protected:1,priority:'rotating',customRules:[],holidays:[],holRnDay:7,holRnNight:7,holPct:3,codeMap:[],unitName:'10G',unitLat:null,unitLng:null,unitRadius:150,unitCode:'',dailyCodeOn:false,codeSeed:'',selfSchedule:true,reqDeadline:'',useTimekeeping:true,mgrPin:'',theme:'friendly',greetTone:'warm',ftWeek:3,ptWeek:2,prnMonth:1,hucWeek:5};
 function req(role,line){const cm=(settings.useCharge===false?0:(settings.chargeMin||0));if(role==='RN')return line==='day'?{ideal:settings.rnDayIdeal+cm,min:settings.rnDayMin+cm}:{ideal:settings.rnNightIdeal+cm,min:settings.rnNightMin+cm};if(role==='PCT')return line==='day'?{ideal:settings.pctDayIdeal,min:settings.pctDayMin}:{ideal:settings.pctNightIdeal,min:settings.pctNightMin};return{ideal:settings.hucNeed,min:settings.hucNeed};}
 function roleOn(role){if(role==='PCT')return settings.usePCT!==false;if(role==='HUC')return settings.useHUC!==false;return true;}
 function isoOf(d){const dt=dateOf(d);return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');}
@@ -1061,6 +1076,8 @@ const WK=()=>settings.weeks||6;
 const targetShifts=p=>{const wk=WK();if(p.role==='HUC'&&p.fte!=='PRN'&&p.fte!=='PT')return Math.round((settings.hucWeek||5)*wk);if(p.fte==='PRN')return Math.max(1,Math.round((settings.prnMonth||1)*DAYS/30));if(p.fte==='PT')return Math.round((settings.ptWeek||2)*wk);return Math.round((settings.ftWeek||3)*wk);};
 const maxShifts=p=>targetShifts(p);
 const weekCap=p=>{if(p.role==='HUC'&&p.fte!=='PRN'&&p.fte!=='PT')return Math.max(1,settings.hucWeek||5);if(p.fte==='PRN')return 1;if(p.fte==='PT')return Math.max(1,settings.ptWeek||2);return Math.max(1,settings.ftWeek||3);};
+const weeklyHourCap=p=>weekCap(p)*shiftLen(p);
+const weekHoursIf=(p,d,asDouble)=>{const w=weekOf(d);let hrs=0;for(let x=w*7;x<Math.min(DAYS,w*7+7);x++){if(x===d){hrs+=asDouble?shiftLen(p)*2:shiftLen(p);continue;}if(worked(p,x))hrs+=(p.dbl&&p.dbl.has(x))?shiftLen(p)*2:shiftLen(p);}return hrs;};
 const weekOf=d=>Math.floor(d/7);
 function worked(p,d){return p.asn.has(d)||!!(p.float&&p.float.has(d));}
 function workedCount(p){return p.asn.size+(p.float?p.float.size:0);}
@@ -1111,10 +1128,28 @@ function score(p,d){let v=0;if(p.picks.has(d))v+=100;if(p.avoid&&p.avoid.has(d))
 function assign(p,d){if(p.float)p.float.delete(d);p.asn.add(d);if(lineWEof(p.line,d))p.weCount++;if(p.line==='night'&&isRough(d))p.roughCount++;}
 function unassign(p,d){p.asn.delete(d);if(lineWEof(p.line,d))p.weCount--;if(p.line==='night'&&isRough(d))p.roughCount--;}
 function floatAssign(p,d){p.asn.delete(d);(p.float=p.float||new Set()).add(d);}
+
+/* ============================================================
+   SOLVER — build() turns picks + rules into a fair schedule.
+   Phases: reset -> protected days -> guaranteed days (locks/ANM/doubles)
+   -> charge distribution -> honor picks -> coverage sweeps (weekend-first)
+   -> float top-up -> charge repair -> backup charge -> float fairness
+   (in-turns / cross-cycle / de-cluster, 2 rounds) -> weekend fairness
+   -> orientees -> swaps -> coverage
+   ============================================================ */
 function build(){
   cycleSeed++;staff.forEach(p=>{p.asn=new Set();p.float=new Set();p.weCount=0;p.roughCount=0;p.oriDays=new Set();if(!p.picks||!p.picks.size)genPicks(p);});
   const _protN=Math.max(0,settings.protected||0);staff.forEach(p=>{p._prot=new Set();if(_protN&&p.avoid&&p.avoid.size){const bw={};[...p.avoid].sort((a,b)=>a-b).forEach(d=>{(bw[weekOf(d)]=bw[weekOf(d)]||[]).push(d);});Object.values(bw).forEach(arr=>arr.slice(0,_protN).forEach(d=>p._prot.add(d)));}});
-  staff.forEach(p=>{if(p.office)return;const _cap=weekCap(p),_pw={},_ld=[];for(let d=0;d<DAYS;d++){if(!p.pto.has(d)&&!(p.officeDays&&p.officeDays.has(d))&&((p.workDOW&&p.workDOW.has(wd(d)))||(p.locked&&p.locked.has(d))||(p.anm&&p.picks&&p.picks.has(d))))_ld.push(d);}_ld.sort((a,b)=>a-b);_ld.forEach(d=>{const w=weekOf(d);if((_pw[w]||0)>=_cap)return;if(!worked(p,d)){_pw[w]=(_pw[w]||0)+1;assign(p,d);}});}); // locked weekdays + locked days, capped at weekly FTE
+  staff.forEach(p=>{if(p.office)return;const _cap=weekCap(p),_pw={},_ld=[],_dReq=[];for(let d=0;d<DAYS;d++){if(p.pto.has(d)||(p.officeDays&&p.officeDays.has(d)))continue;const isDbl=p.dblReq&&p.dblReq.has(d);if(isDbl)_dReq.push(d);else if((p.workDOW&&p.workDOW.has(wd(d)))||(p.locked&&p.locked.has(d))||(p.anm&&p.picks&&p.picks.has(d)))_ld.push(d);}
+    // pass 1: place normal guaranteed days first, so their hours are locked in before any double is evaluated
+    _ld.sort((a,b)=>a-b).forEach(d=>{const w=weekOf(d);if((_pw[w]||0)>=_cap)return;if(!worked(p,d)){_pw[w]=(_pw[w]||0)+1;assign(p,d);}});
+    // pass 2: 16h doubles — always honored, capped only by the person's weekly hour budget (+ that double's own extra 8h)
+    _dReq.sort((a,b)=>a-b).forEach(d=>{
+      if(weekHoursIf(p,d,true)>weeklyHourCap(p)+shiftLen(p))return;
+      const w=weekOf(d);if(!worked(p,d)){assign(p,d);_pw[w]=(_pw[w]||0)+1;}
+      p.dbl.add(d);
+    });
+  }); // locked weekdays + locked days, capped at weekly FTE; HUC double requests capped at weekly hours
   // Charge distribution: give EVERY shift its charge minimum first (spread across all days), then add a
   // backup 2nd charge only where spare charge capacity remains — round-robin so it never starves late days.
   if(settings.useCharge!==false){const cm=settings.chargeMin||1;const goals=[cm];if(settings.chargeBackup!==false)goals.push(cm+1);
@@ -1164,6 +1199,8 @@ function build(){
   sweep(rq=>rq.ideal);          // 4) fill toward ideal where staff remain
   // FTE top-up with FLOAT overflow: bring everyone to their contracted days, but only fill 10G up to its
   // capacity (your coverage numbers). Days beyond what the unit can hold become FLOAT (worked off 10G).
+  const _chGoal=(useCh&&settings.chargeBackup!==false)?(settings.chargeMin||1)+1:(settings.chargeMin||1);
+  const _floatExempt=p=>p.anm||(useCh&&settings.chargeBackup!==false&&p.role==='RN'&&p.charge);
   {let imp=true,g=0;
    while(imp&&g++<12000){imp=false;
      const under=staff.filter(p=>!p.orientee&&roleOn(p.role)&&workedCount(p)<targetShifts(p));
@@ -1171,9 +1208,16 @@ function build(){
      for(const p of under){let best=-1,bestKey=1e15;
        for(let d=0;d<DAYS;d++){if(!available(p,d))continue;
          const room=shiftCount(p.role,p.line,d)<reqEff(p.role,p.line,d).ideal?0:1;
-         const k=room*1000000+(p.picks.has(d)?0:1)*1000+d;
+         const adj=room&&p.float&&(p.float.has(d-1)||p.float.has(d+1))?1:0;
+         const k=adj*500000000+room*1000000+(p.picks.has(d)?0:1)*1000+d;
          if(k<bestKey){bestKey=k;best=d;}}
-       if(best>=0){const _full=shiftCount(p.role,p.line,best)>=reqEff(p.role,p.line,best).ideal;if(_full&&p.anm)continue;if(!_full)assign(p,best);else floatAssign(p,best);imp=true;break;}}
+       if(best>=0){const _full=shiftCount(p.role,p.line,best)>=reqEff(p.role,p.line,best).ideal;
+         if(!_full){assign(p,best);imp=true;break;}
+         if(!_floatExempt(p)){floatAssign(p,best);imp=true;break;}
+         // exempt (charge/ANM): stay on-unit — float a rotation member out to make room
+         const sp=staff.filter(q=>q!==p&&q.role===p.role&&q.line===p.line&&!q.orientee&&!_floatExempt(q)&&q.fte!=='PRN'&&q.asn.has(best)&&!isLocked(q,best)&&!(q.float&&(q.float.has(best-1)||q.float.has(best+1)))).sort((a,b)=>(a.float?a.float.size:0)-(b.float?b.float.size:0))[0];
+         if(sp){floatAssign(sp,best);assign(p,best);imp=true;break;}
+       }}
    }}
   // charge repair: ensure each shift hits its charge minimum where a charge nurse is free
   if(useCh)for(let d=0;d<DAYS;d++)for(const line of ['day','night']){
@@ -1181,71 +1225,6 @@ function build(){
     while(chargeCount(line,d)<settings.chargeMin&&guard++<10){
       const c=staff.find(p=>p.role==='RN'&&p.line===line&&p.charge&&!p.orientee&&available(p,d));
       if(!c)break;assign(c,d);
-    }
-  }
-  // Float in turns: even out who gets floated within each shift group. Swaps on-unit<->float on the SAME day
-  // between the most- and least-floated person, so coverage and everyone's total days stay identical —
-  // only whose turn it is to float changes. Never floats a charge nurse if it would drop charge below the min.
-  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
-    if(!roleOn(r))continue;
-    const grp=staff.filter(p=>!p.orientee&&!p.anm&&p.role===r&&p.line===l&&p.fte!=='PRN');
-    if(grp.length<2)continue;
-    let guard=0,changed=true;
-    while(changed&&guard++<6000){changed=false;
-      grp.sort((a,b)=>b.float.size-a.float.size);
-      const loN=grp[grp.length-1].float.size;
-      for(let i=0;i<grp.length;i++){const H=grp[i];
-        if(H.float.size-loN<=1)break;
-        let swapped=false;
-        for(const d of H.float){
-          for(let j=grp.length-1;j>i;j--){const L=grp[j];
-            if(H.float.size-L.float.size<=1)continue;
-            if(!L.asn.has(d))continue;
-            if(L.charge&&r==='RN'&&chargeCount(l,d)<=settings.chargeMin)continue;
-            if(isLocked(L,d))continue;
-            assign(H,d);floatAssign(L,d);swapped=true;break;}
-          if(swapped)break;}
-        if(swapped){changed=true;break;}
-      }
-    }
-  }
-  // Cross-cycle rotation: keep counts even, but hand the "extra" float to whoever floated LEAST last schedule.
-  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
-    if(!roleOn(r))continue;
-    const grp=staff.filter(p=>!p.orientee&&!p.anm&&p.role===r&&p.line===l&&p.fte!=='PRN');
-    if(grp.length<2)continue;
-    let guard=0,changed=true;
-    while(changed&&guard++<4000){changed=false;
-      for(const H of grp){for(const Lp of grp){
-        if(H===Lp)continue;
-        if(H.float.size-Lp.float.size!==1)continue;          // adjacent only, so evenness is preserved
-        if((H.floatCount||0)<=(Lp.floatCount||0))continue;    // only shift toward someone lighter historically
-        let done=false;
-        for(const d of H.float){
-          if(!Lp.asn.has(d))continue;
-          if(Lp.charge&&r==='RN'&&chargeCount(l,d)<=settings.chargeMin)continue;
-          if(isLocked(Lp,d))continue;
-          assign(H,d);floatAssign(Lp,d);changed=true;done=true;break;}
-        if(done)break;}
-        if(changed)break;}
-    }
-  }
-  // Spread floats: no one should float two days in a row. Move the 2nd day's float to a lighter-loaded
-  // colleague who works that day and won't become consecutive themselves. Coverage stays identical.
-  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
-    if(!roleOn(r))continue;
-    const grp=staff.filter(p=>!p.orientee&&!p.anm&&p.role===r&&p.line===l&&p.fte!=='PRN');
-    if(grp.length<2)continue;
-    let guard=0,changed=true;
-    while(changed&&guard++<8000){changed=false;
-      for(const A of grp){
-        if(!A.float||A.float.size<2)continue;
-        const fl=[...A.float].sort((a,b)=>a-b);let clash=-1;
-        for(const x of fl){if(A.float.has(x+1)){clash=x+1;break;}}
-        if(clash<0)continue;
-        const cands=grp.filter(B=>B!==A&&B.asn.has(clash)&&!B.float.has(clash-1)&&!B.float.has(clash+1)&&(B.float?B.float.size:0)<=A.float.size&&!isLocked(B,clash)&&!(B.charge&&r==='RN'&&chargeCount(l,clash)<=settings.chargeMin)).sort((a,b)=>(a.float?a.float.size:0)-(b.float?b.float.size:0));
-        if(cands.length){assign(A,clash);floatAssign(cands[0],clash);changed=true;break;}
-      }
     }
   }
   // Backup charge: keep a 2nd charge-trained nurse on every shift as a backup for the charge nurse.
@@ -1262,20 +1241,146 @@ function build(){
       }
     }
   }
+  for(let _fpass=0;_fpass<2;_fpass++){
+  // Float in turns: even out who gets floated within each shift group. Swaps on-unit<->float on the SAME day
+  // between the most- and least-floated person, so coverage and everyone's total days stay identical —
+  // only whose turn it is to float changes. Never floats a charge nurse if it would drop charge below the min.
+  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
+    if(!roleOn(r))continue;
+    const grp=staff.filter(p=>!p.orientee&&!_floatExempt(p)&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    if(grp.length<2)continue;
+    let guard=0,changed=true;
+    while(changed&&guard++<6000){changed=false;
+      grp.sort((a,b)=>b.float.size-a.float.size);
+      const loN=grp[grp.length-1].float.size;
+      for(let i=0;i<grp.length;i++){const H=grp[i];
+        if(H.float.size-loN<=1)break;
+        let swapped=false;
+        for(const d of H.float){
+          for(let j=grp.length-1;j>i;j--){const L=grp[j];
+            if(H.float.size-L.float.size<=1)continue;
+            if(!L.asn.has(d))continue;
+            if(L.charge&&r==='RN'&&chargeCount(l,d)<=_chGoal)continue;
+            if(isLocked(L,d))continue;
+            if(L.float&&(L.float.has(d-1)||L.float.has(d+1)))continue;
+            assign(H,d);floatAssign(L,d);swapped=true;break;}
+          if(swapped)break;}
+        if(!swapped){ // two-hop: H hands the float to M on the same day, M hands one of its floats to L
+          outer:for(const d of H.float){
+            for(const M of grp){if(M===H)continue;if(!M.asn.has(d))continue;if(isLocked(M,d))continue;if(M.charge&&r==='RN'&&chargeCount(l,d)<=_chGoal)continue;
+              const _madj=d2=>((M.float.has(d-1)&&d-1!==d2)||(M.float.has(d+1)&&d+1!==d2));
+              for(const d2 of (M.float||[])){
+                if(_madj(d2))continue;
+                for(let j=grp.length-1;j>=0;j--){const L=grp[j];if(L===H||L===M)continue;
+                  if(H.float.size-L.float.size<=1)continue;
+                  if(!L.asn.has(d2))continue;if(isLocked(L,d2))continue;
+                  if(L.charge&&r==='RN'&&chargeCount(l,d2)<=_chGoal)continue;
+                  if(L.float.has(d2-1)||L.float.has(d2+1))continue;
+                  assign(H,d);floatAssign(M,d);assign(M,d2);floatAssign(L,d2);swapped=true;break outer;}}}}
+        }
+        if(swapped){changed=true;break;}
+      }
+    }
+  }
+  // Cross-cycle rotation: keep counts even, but hand the "extra" float to whoever floated LEAST last schedule.
+  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
+    if(!roleOn(r))continue;
+    const grp=staff.filter(p=>!p.orientee&&!_floatExempt(p)&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    if(grp.length<2)continue;
+    let guard=0,changed=true;
+    while(changed&&guard++<4000){changed=false;
+      for(const H of grp){for(const Lp of grp){
+        if(H===Lp)continue;
+        if(H.float.size-Lp.float.size!==1)continue;          // adjacent only, so evenness is preserved
+        if((H.floatCount||0)<=(Lp.floatCount||0))continue;    // only shift toward someone lighter historically
+        let done=false;
+        for(const d of H.float){
+          if(!Lp.asn.has(d))continue;
+          if(Lp.charge&&r==='RN'&&chargeCount(l,d)<=_chGoal)continue;
+          if(isLocked(Lp,d))continue;
+          if(Lp.float&&(Lp.float.has(d-1)||Lp.float.has(d+1)))continue;
+          assign(H,d);floatAssign(Lp,d);changed=true;done=true;break;}
+        if(done)break;}
+        if(changed)break;}
+    }
+  }
+  // Spread floats: no one should float two days in a row. Move the 2nd day's float to a lighter-loaded
+  // colleague who works that day and won't become consecutive themselves. Coverage stays identical.
+  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night'],['HUC','day']]){
+    if(!roleOn(r))continue;
+    const grp=staff.filter(p=>!p.orientee&&!_floatExempt(p)&&p.role===r&&p.line===l&&p.fte!=='PRN');
+    if(grp.length<2)continue;
+    let guard=0,changed=true;
+    while(changed&&guard++<8000){changed=false;
+      for(const A of grp){
+        if(!A.float||A.float.size<2)continue;
+        const fl=[...A.float].sort((a,b)=>a-b);let clash=-1;
+        for(const x of fl){if(A.float.has(x+1)){clash=x+1;break;}}
+        if(clash<0)continue;
+        const _sz=q=>q.float?q.float.size:0;const gmax=Math.max(...grp.map(_sz)),gmin=Math.min(...grp.map(_sz));
+        const ok=B=>B!==A&&B.asn.has(clash)&&!B.float.has(clash-1)&&!B.float.has(clash+1)&&!isLocked(B,clash)&&!(B.charge&&r==='RN'&&chargeCount(l,clash)<=_chGoal);
+        let cands=grp.filter(B=>ok(B)&&_sz(B)<_sz(A)).sort((a,b)=>_sz(a)-_sz(b));
+        if(!cands.length&&_sz(A)-1>=gmin)cands=grp.filter(B=>ok(B)&&_sz(B)===_sz(A)&&_sz(B)+1<=gmax).sort((a,b)=>_sz(a)-_sz(b));
+        if(cands.length){assign(A,clash);floatAssign(cands[0],clash);changed=true;break;}
+      }
+    }
+  }
+  } // end fairness polish rounds
+  // Weekend fairness: within each role/line/FTE group, trade weekend<->weekday shifts between the most-
+  // and least-weekend-loaded people. Coverage on both days stays identical; only who works the weekend moves.
+  for(const [r,l] of [['RN','day'],['RN','night'],['PCT','day'],['PCT','night']]){
+    if(!roleOn(r))continue;
+    for(const f of ['FT','PT']){
+      const grp=staff.filter(p=>!p.orientee&&!p.anm&&p.role===r&&p.line===l&&p.fte===f);
+      if(grp.length<2)continue;
+      let guard=0,changed=true;
+      while(changed&&guard++<3000){changed=false;
+        grp.sort((a,b)=>b.weCount-a.weCount);
+        const H=grp[0];
+        let done=false;
+        for(let li=grp.length-1;li>0&&!done;li--){const L=grp[li];
+          if(H===L)break;
+          if(H.weCount-L.weCount<=1)break;
+          if(r==='RN'&&!!H.charge!==!!L.charge)continue;
+          for(const tier of [0,1]){
+          for(const w of [...H.asn]){if(!lineWEof(l,w))continue;if(isLocked(H,w))continue;if(tier===0&&H.picks&&H.picks.has(w))continue;
+            if(L.asn.has(w)||L.pto.has(w)||hardOff(L,w)||(L._prot&&L._prot.has(w)))continue;
+            for(const x of [...L.asn]){if(lineWEof(l,x))continue;if(isLocked(L,x))continue;if(tier===0&&L.picks&&L.picks.has(x))continue;
+              if(H.asn.has(x)||H.pto.has(x)||hardOff(H,x)||(H._prot&&H._prot.has(x)))continue;
+              unassign(H,w);unassign(L,x); // tentative swap, then check in-a-row accurately
+              if(consecIfAdd(L,w)>settings.maxConsec||consecIfAdd(H,x)>settings.maxConsec){assign(H,w);assign(L,x);continue;}
+              assign(L,w);assign(H,x);
+              done=true;break;}
+            if(done)break;}
+          if(done)break;}
+        }
+        if(done)changed=true;else break;
+      }
+    }
+  }
   // orientees: extra on the floor, shadowing their preceptor (only on days the preceptor works)
   staff.filter(p=>p.orientee).forEach(o=>{const cap=targetShifts(o);const prec=staff.find(x=>x.id===o.preceptor);if(!prec)return;
     [...prec.asn].sort((a,b)=>a-b).forEach(d=>{if(o.oriDays.size>=cap)return;if(o.pto.has(d))return;o.oriDays.add(d);});});
   applyApprovedSwaps();
+  staff.forEach(p=>{if(p.role==='HUC'&&p.dblReq)p.dblReq.forEach(d=>{if(worked(p,d)&&!p.dbl.has(d)&&weekHoursIf(p,d,true)<=weeklyHourCap(p)+shiftLen(p))p.dbl.add(d);});});
   staff.forEach(p=>{p.floatCount=p.float?p.float.size:0;}); // remember this schedule's float load for next time
   computeCoverage();
 }
 const shiftCount=(role,line,d)=>{let n=staff.filter(p=>p.role===role&&p.line===line&&!p.orientee&&p.asn.has(d)).length;if(role==='HUC')n+=staff.filter(p=>p.role==='HUC'&&!p.orientee&&p.dbl&&p.dbl.has(d)&&p.asn.has(d)).length;return n;};
 const chargeCount=(line,d)=>staff.filter(p=>p.role==='RN'&&p.line===line&&p.charge&&!p.orientee&&p.asn.has(d)).length;
 let coverage=[];
+
+/* ============================================================
+   COVERAGE & CHARGE — counting who is on each shift
+   ============================================================ */
 function computeCoverage(){coverage=[];for(let d=0;d<DAYS;d++)coverage.push({rnDay:shiftCount('RN','day',d),rnNight:shiftCount('RN','night',d),chgDay:chargeCount('day',d),chgNight:chargeCount('night',d),pctDay:shiftCount('PCT','day',d),pctNight:shiftCount('PCT','night',d),huc:shiftCount('HUC','day',d)});}
 const statusOf=(c,ideal,min)=>c<min?'hole':c<ideal?'low':'full';
 
 /* ============ data + storage ============ */
+
+/* ============================================================
+   ROSTER DATA — the real 10G staff list
+   ============================================================ */
 const REAL_ROSTER=[
   {n:'Mia Ajiro',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
   {n:'Kate Bauder',role:'RN',line:'day',fte:'FT',charge:false,precept:false},
@@ -1363,7 +1468,12 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(!p.leaveType)p.leaveType={};if(!p.floatTo)p.floatTo={};p.dbl=new Set(p.dbl||[]);p.officeDays=new Set(p.officeDays||[]);if(p.anm===undefined)p.anm=false;if(p.edu===undefined)p.edu=false;if(p.office===undefined)p.office=false;if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
+let lastEdit=null;
+function snapEdit(label){lastEdit={label,data:staff.map(p=>({id:p.id,asn:[...p.asn],float:p.float?[...p.float]:[],dbl:p.dbl?[...p.dbl]:[]}))};}
+function undoEdit(){if(!lastEdit)return;lastEdit.data.forEach(s=>{const p=staff.find(x=>x.id===s.id);if(!p)return;p.asn=new Set(s.asn);p.float=new Set(s.float);p.dbl=new Set(s.dbl);recountLoad(p);});lastEdit=null;computeCoverage();save();renderRibbon&&renderRibbon();renderDay();renderFlags();toast('Undone');}
+function snapAsn(){const m={};staff.forEach(p=>m[p.id]=[...p.asn].sort((a,b)=>a-b).join(',')); return m;}
+function diffAsn(before){let moved=0;staff.forEach(p=>{if(before[p.id]!==[...p.asn].sort((a,b)=>a-b).join(','))moved++;});return moved;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(!p.leaveType)p.leaveType={};if(!p.floatTo)p.floatTo={};p.dbl=new Set(p.dbl||[]);p.dblReq=new Set(p.dblReq||[]);p.officeDays=new Set(p.officeDays||[]);if(p.anm===undefined)p.anm=false;if(p.edu===undefined)p.edu=false;if(p.office===undefined)p.office=false;if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
 function ensureAnms(){
   let id=staff.length?Math.max(...staff.map(p=>p.id))+1:0;let sen=staff.length?Math.max(...staff.map(p=>p.seniority||0))+1:0;
   [['Chelsea','day','PT',{anm:1}],['Connie','day','PT',{anm:1}],['Kamryn','night','PT',{anm:1}],['Stacy','day','PRN',{office:1}],['Randi','day','PRN',{edu:1}]].forEach(([n,line,fte,fl])=>{
@@ -1383,7 +1493,7 @@ function load(){
   staff=seed();return false;
 }
 function save(){try{
-  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])],workDOW:[...(p.workDOW||[])],leaveType:p.leaveType||{},floatTo:p.floatTo||{},anm:!!p.anm,edu:!!p.edu,office:!!p.office,dbl:[...(p.dbl||[])],officeDays:[...(p.officeDays||[])]}))));
+  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])],workDOW:[...(p.workDOW||[])],leaveType:p.leaveType||{},floatTo:p.floatTo||{},anm:!!p.anm,edu:!!p.edu,office:!!p.office,dbl:[...(p.dbl||[])],dblReq:[...(p.dblReq||[])],officeDays:[...(p.officeDays||[])]}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
   localStorage.setItem(KEY_SW,JSON.stringify(swaps));
   localStorage.setItem(KEY_TO,JSON.stringify(timeOff));
@@ -1412,6 +1522,10 @@ function show(s){screen=s;['home','people','rules','sched'].forEach(x=>{const sc
   ['home','people','rules','sched'].forEach(x=>{const tb=$('tab-'+x);if(tb)tb.classList.toggle('on',x===s);});
   $('addFab').classList.toggle('hide',s!=='people');
   if(s==='home')renderHome();if(s==='people')renderPeople();if(s==='rules'){renderRules();renderTheme();}if(s==='sched')renderSched();}
+
+/* ============================================================
+   MANAGER UI — home, schedule views, flags, people, rules
+   ============================================================ */
 function renderHome(){
   const pendSwaps=swaps.filter(s=>s.status==='pending'||s.status==='mgr').length;
   const pendTO=timeOff.filter(t=>t.status==='pending').length;
@@ -1435,7 +1549,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 28s</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 29p</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1513,7 +1627,8 @@ function renderPay(){const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const 
 function renderPeriod(){
   $('periodCard').innerHTML=
     `<div class="rule"><div class="rl"><b>Start date</b><span>First day of the schedule</span></div><input type="date" id="startDate" value="${settings.startISO}" style="padding:9px 10px;border:1px solid var(--line-strong);border-radius:9px;font-size:14px;font-family:inherit"></div>`+
-    `<div class="rule"><div class="rl"><b>Length</b><span>How many weeks long</span></div><div class="stepper"><button data-wk="-1">−</button><div class="val">${settings.weeks} wk</div><button data-wk="1">+</button></div></div>`;
+    `<div class="rule"><div class="rl"><b>Length</b><span>How many weeks long</span></div><div class="stepper"><button data-wk="-1">−</button><div class="val">${settings.weeks} wk</div><button data-wk="1">+</button></div></div>`+
+    `<div class="rule"><div class="rl"><b>Requests close</b><span>Shown to staff as a countdown (optional)</span></div><input type="date" id="reqDeadlineInp" value="${settings.reqDeadline||''}" style="padding:9px 10px;border:1px solid var(--line-strong);border-radius:9px;font-size:14px;font-family:inherit"></div>`;
 }
 const INP='padding:10px;border:1px solid var(--line-strong);border-radius:9px;font-size:14px;font-family:inherit;width:100%';
 function ruleDesc(r){if(r.note)return r.min?('Note · '+r.min):'Note';return 'At least '+r.min+' '+roleWord(r.role)+(r.line==='both'?'':' · '+r.line);}
@@ -1630,6 +1745,7 @@ function renderSched(){
   $('buildBtn').textContent=built?'↻ Build again':'✨ Build schedule';
   const ni=staff.filter(p=>p.imported).length;$('picksSrc').textContent=ni?`Using imported picks (${ni} people)`:'Using sample picks';
   const v=schedView;
+  renderBuildSteps();
   const VT={month:['Schedule','The whole month at a glance'],roster:['Roster','The whole unit, day & night'],day:['Day view','One shift at a time'],req:['Requests','Staff picks & imported requests'],today:['Today','Who\u2019s on right now'],hours:['Hours','Scheduled hours per person'],floats:['Float log','Who floated, when & where'],fair:['Fairness','Weekends, holidays & floats — shared fairly'],check:['Check','A safety & fairness review of the draft']};const _vt=VT[v]||VT.month;if($('schedTitle'))$('schedTitle').textContent=_vt[0];if($('schedSubt'))$('schedSubt').textContent=_vt[1];
   const _code=(currentUser&&currentUser.role==='manager'&&settings.useTimekeeping!==false)?activeCode():'';
   $('todayCodeBar').innerHTML=_code?`<div class="codebar">🔑 Today’s clock-in code: <b>${_code}</b><span>changes at midnight</span></div>`:'';
@@ -1820,31 +1936,8 @@ function renderRoster(){
   const a=rosterMode==='week'?w*7:0, b=rosterMode==='week'?Math.min(DAYS-1,w*7+6):DAYS-1;
   if($('rWd'))$('rWd').textContent=rosterMode==='week'?('Week '+(w+1)+' of '+(DAYS/7)):'Whole schedule';
   if($('rDt'))$('rDt').textContent=rosterMode==='week'?(fmtDate(a)+' – '+fmtDate(b)):((DAYS/7)+' weeks · swipe sideways →');
+  computeChargeSel();
   rosterGrid(a,b);
-}
-function rosterDay(){
-  const d=curDay;
-  if($('rWd'))$('rWd').textContent=WDF[wd(d)]+(isHoliday(d)?' · 🎉 '+holidayName(d):(isColWE(d)?' · weekend':''));
-  if($('rDt'))$('rDt').textContent=fmtDate(d)+' · Day '+(d+1);
-  const timeFor=p=>p.role==='HUC'?'8h day':(p.line==='night'?'7:00p–7:00a · 12h':'7:00a–7:00p · 12h');
-  const row=p=>{
-    const fl=p.float&&p.float.has(d),st=reqState(p,d);let cls='',tag='';
-    if(st==='want'){cls=' rq-ok';tag='<span class="rtag ok">asked to work ✓</span>';}
-    else if(st==='off'){cls=' rq-no';tag='<span class="rtag no">asked off ✗</span>';}
-    else if(st==='lock'){tag='<span class="rtag lk">🔒 locked</span>';}
-    return `<div class="rrow${cls}"><span class="rdot ${p.line}"></span><div class="rnm">${p.charge?'<i class="cd2"></i>':''}<b>${esc(firstName(p.name))}</b> <span class="rrole">${roleTag(p.role)}</span>${p.orientee?' <span class="rrole" style="background:#fdeede;color:#9a5d11">ORI</span>':''}${fl?' <span class="rfloat">↗ float</span>':''}${tag}</div><div class="rtime">${fl?'off 10G':timeFor(p)}</div></div>`;
-  };
-  let h='';
-  [['day','☀️ Day shift'],['night','🌙 Night shift']].forEach(([line,ttl])=>{
-    const on=staff.filter(p=>p.line===line&&(p.asn.has(d)||(p.float&&p.float.has(d))||(p.orientee&&p.oriDays&&p.oriDays.has(d)))).sort((a,b)=>a.name.localeCompare(b.name));
-    const onUnit=on.filter(p=>p.asn.has(d)).length;
-    h+=`<div class="rsec"><div class="rsec-h"><span>${ttl}</span><span class="rsec-n">${onUnit} on unit</span></div>`;
-    h+=on.length?on.map(row).join(''):'<div class="rempty">No one scheduled.</div>';
-    h+='</div>';
-  });
-  const offGot=staff.filter(p=>!p.orientee&&(reqState(p,d)==='off'||reqState(p,d)==='pto')&&!(p.asn.has(d)||(p.float&&p.float.has(d)))).map(p=>esc(firstName(p.name)));
-  if(offGot.length)h+=`<div class="roff">🟢 Asked off & got it: ${offGot.join(', ')}</div>`;
-  $('rosterBody').innerHTML=h;
 }
 function rosterGrid(a,b){
   const DOW=['Su','Mo','Tu','We','Th','Fr','Sa'];
@@ -1852,9 +1945,12 @@ function rosterGrid(a,b){
   for(let d=a;d<=b;d++){const we=isColWE(d)||isHoliday(d);head+=`<th class="rgh${we?' we':''}">${DOW[wd(d)]}<span>${dateOf(d).getDate()}</span></th>`;}
   const span=b-a+2;let body='';
   const cellOf=(p,d,line)=>{
-    const fl=p.float&&p.float.has(d),on=p.asn.has(d),pto=p.pto&&p.pto.has(d),st=reqState(p,d);
+    const fl=p.float&&p.float.has(d),on=p.asn.has(d),pto=p.pto&&p.pto.has(d),office=p.officeDays&&p.officeDays.has(d),st=reqState(p,d);
+    const isChg=on&&p.charge&&chargeSel[line+'|'+d]===p.id;
     let c='',cl='';
-    if(on){c=line==='night'?'N':'D';cl=line;}else if(fl){c='F';cl='flt';}else if(pto){c='·';cl='off';}
+    if(office){c='🏢';cl='office';}
+    else if(on){c=isChg?'C':(line==='night'?'N':'D');cl=isChg?line+' chgc':line;}
+    else if(fl){c='F';cl='flt';}else if(pto){c='·';cl='off';}
     let rq='';
     if(st==='want'&&(on||fl))rq=' rq-ok';else if(st==='off'&&(on||fl))rq=' rq-no';else if((st==='off'||st==='pto')&&!on&&!fl)rq=' rq-got';
     return `<td class="rgc ${cl}${rq}">${c}</td>`;
@@ -1870,13 +1966,15 @@ function rosterGrid(a,b){
       grp.forEach(p=>{let cells='';for(let d=a;d<=b;d++)cells+=cellOf(p,d,line);body+=`<tr><td class="rgn">${p.charge?'<i class="cd2"></i>':''}${esc(firstName(p.name))}</td>${cells}</tr>`;});
     });
   });
-  $('rosterBody').innerHTML=`<div class="rgrid-wrap ${rosterMode}"><table class="rgrid"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+  const leg='<div class="rleg"><b>D</b> day · <b>N</b> night · <b>C</b> charge · <b>F</b> float off 10G · 🏢 office · · off</div>';
+  $('rosterBody').innerHTML=leg+`<div class="rgrid-wrap ${rosterMode}"><table class="rgrid"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 function renderDay(){
   computeChargeSel();
   const d=curDay;$('dvWd').textContent=WDF[wd(d)]+(isHoliday(d)?' · 🎉 '+holidayName(d):(isColWE(d)?' · weekend':''));$('dvDt').textContent=fmtDate(d)+' · Day '+(d+1);
   let bad=0,low=0;SECTIONS.forEach(s=>{const c=shiftCount(s.role,s.line,d),rq=req(s.role,s.line);if(c<rq.min)bad++;else if(c<rq.ideal)low++;});
   const st=$('dvStat');if(bad){st.className='stat bad';st.textContent=bad+' short';}else if(low){st.className='stat warn';st.textContent=low+' below ideal';}else{st.className='stat ok';st.textContent='All good';}
+  if($('dvUndo'))$('dvUndo').innerHTML=lastEdit?'<button class="undobtn" id="undoBtn">↩ Undo last change</button>':'';
   let h='';
   for(const s of SECTIONS){const rq=req(s.role,s.line),c=shiftCount(s.role,s.line,d),status=statusOf(c,rq.ideal,rq.min);
     const members=staff.filter(p=>p.role===s.role&&p.line===s.line&&!p.orientee&&p.asn.has(d)).sort((a,b)=>a.name.localeCompare(b.name));
@@ -1928,11 +2026,24 @@ function renderHealth(){
   el.className='health '+(anyRed?'bad':'warn');
   el.innerHTML='<b>Solved, except</b> — '+parts.join(' · ');
 }
+function renderBuildSteps(){
+  const el=$('buildSteps');if(!el)return;
+  const anyReq=staff.some(p=>!p.orientee&&((p.picks&&p.picks.size)||(p.pto&&p.pto.size)));
+  const flagN=(function(){const t=$('flagCount').textContent;return t?parseInt(t,10)||0:0;})();
+  const posted=openShifts.some(o=>o.status==='open');
+  const steps=[
+    ['1','Requests in',anyReq],
+    ['2','Build',built],
+    ['3','Fix problems',built&&flagN===0],
+    ['4','Share',posted||built]
+  ];
+  el.innerHTML='<div class="bsteps">'+steps.map((s,i)=>'<div class="bstep'+(s[2]?' done':'')+'">'+'<span class="bsn">'+(s[2]?'✓':s[0])+'</span><span class="bsl">'+s[1]+'</span></div>'+(i<3?'<span class="bsarrow">›</span>':'')).join('')+'</div>';
+}
 function renderFlags(){
   const useCh=settings.useCharge!==false;
   const L={'RN|day':'Day nurses','RN|night':'Night nurses','PCT|day':'Day PCTs','PCT|night':'Night PCTs','HUC|day':'HUCs'};
   const dd=d=>dateOf(d).toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
-  const fmtDays=arr=>arr.length?arr.slice(0,8).map(dd).join(' \u00b7 ')+(arr.length>8?' \u00b7 +'+(arr.length-8)+' more':''):'';
+  const fmtDays=arr=>arr.length?arr.slice(0,8).map(d=>'<span class="fdate" data-day="'+d+'">'+dd(d)+'</span>').join(' \u00b7 ')+(arr.length>8?' \u00b7 +'+(arr.length-8)+' more':''):'';
   const grp={},chg={day:[],night:[]},bkp={day:[],night:[]};
   for(let d=0;d<DAYS;d++){const c=coverage[d];
     const look=(role,line,count)=>{const rq=reqEff(role,line,d);if(rq.off||count>=rq.ideal)return;const k=role+'|'+line;
@@ -2023,6 +2134,7 @@ $('calCard').addEventListener('pointerdown',e=>{if(calMode!=='edit')return;const
 $('calCard').addEventListener('pointermove',e=>{if(!painting||calMode!=='edit')return;const t=document.elementFromPoint(e.clientX,e.clientY);const cell=t&&t.closest&&t.closest('.calcell.edit');if(cell)calApply(+cell.dataset.d);e.preventDefault();});
 window.addEventListener('pointerup',()=>{if(painting){painting=false;computeCoverage();renderFlags();}});
 $('flags').addEventListener('click',e=>{
+  const fd=e.target.closest('.fdate');if(fd){schedView='day';curDay=+fd.dataset.day;calMode='coverage';editPersonId=null;renderSched();return;}
   const oa=e.target.closest('[data-otall]'),lo=e.target.closest('[data-lower]');
   const fsb=e.target.closest('[data-fillsmart]'),rb=e.target.closest('[data-rebal]'),gr=e.target.closest('[data-grantall]'),op=e.target.closest('[data-openpost]');
   if(op){const[role,line]=op.dataset.openpost.split('|');let posted=0;for(let d=0;d<DAYS;d++){const rq=reqEff(role,line,d);if(shiftCount(role,line,d)<rq.ideal&&!openShifts.some(o=>o.day===d&&o.line===line&&o.role===role&&(o.status==='open'||o.status==='claimed'))){openShifts.push({id:'os'+Date.now()+'_'+d,day:d,line,role,origin:'gap',fromId:null,claimedBy:null,status:'open',created:Date.now()});posted++;}}save();renderFlags();toast(posted?('Posted '+posted+' open shift'+(posted!=1?'s':'')+' — staff can pick them up'):'No new open shifts to post');return;}
@@ -2073,7 +2185,7 @@ $('addFab').addEventListener('click',()=>openPerson(null));
 $('rulesCard').addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(!b)return;const[k,dv]=b.dataset.step.split('|');stepRule(k,+dv);});
 $('rulesCard').addEventListener('click',e=>{const tg=e.target.closest('[data-roletgl]');if(!tg)return;const k=tg.dataset.roletgl;settings[k]=settings[k]===false?true:false;renderRules();rulesChanged();});
 $('periodCard').addEventListener('click',e=>{const w=e.target.closest('[data-wk]');if(!w)return;settings.weeks=Math.max(2,Math.min(8,(settings.weeks||6)+ +w.dataset.wk));periodChanged();});
-$('periodCard').addEventListener('change',e=>{if(e.target.id==='startDate'&&e.target.value){settings.startISO=e.target.value;periodChanged();}});
+$('periodCard').addEventListener('change',e=>{if(e.target.id==='startDate'&&e.target.value){settings.startISO=e.target.value;periodChanged();}if(e.target.id==='reqDeadlineInp'){settings.reqDeadline=e.target.value||'';save();toast(settings.reqDeadline?'Deadline set':'Deadline cleared');}});
 $('customCard').addEventListener('click',e=>{
   if(e.target.closest('#addRuleBtn')){addingRule=true;ruleDraft={name:'',note:false,role:'PCT',line:'night',min:3};renderCustom();return;}
   if(e.target.closest('#ruleCancel')){addingRule=false;renderCustom();return;}
@@ -2105,6 +2217,7 @@ $('advCard').addEventListener('click',e=>{const st=e.target.closest('[data-astep
   if(pr){settings.priority=pr.dataset.prio;save();renderAdvanced();}});
 $('dayBody').addEventListener('click',e=>{
   const rm=e.target.closest('[data-rm]'),add=e.target.closest('[data-add]'),asn=e.target.closest('[data-asn]'),rmo=e.target.closest('[data-rmori]');
+  if(rm||asn||rmo||e.target.closest('[data-dbl]'))snapEdit(); // snapshot for Undo before any change
   const co=e.target.closest('[data-callout]');if(co){const[role,line,dd]=co.dataset.callout.split('|');openBackfill(role,line,+dd);return;}
   if(rmo){const[id,dd]=rmo.dataset.rmori.split('|');staff.find(p=>p.id==id).oriDays.delete(+dd);computeCoverage();renderRibbon();renderDay();renderFlags();return;}
   if(rm){const[id,d]=rm.dataset.rm.split('|');unassign(staff.find(p=>p.id==id),+d);computeCoverage();renderRibbon();renderDay();renderFlags();return;}
@@ -2113,12 +2226,13 @@ $('dayBody').addEventListener('click',e=>{
   if(add){openPicker=openPicker===add.dataset.add?null:add.dataset.add;renderDay();return;}
   if(asn){const[id,d]=asn.dataset.asn.split('|');assign(staff.find(p=>p.id==id),+d);openPicker=null;computeCoverage();renderRibbon();renderDay();renderFlags();return;}
 });
+if($('dvUndo'))$('dvUndo').addEventListener('click',e=>{if(e.target.closest('#undoBtn'))undoEdit();});
 $('prevDay').onclick=()=>{curDay=(curDay-1+DAYS)%DAYS;openPicker=null;renderRibbon();renderDay();};
 $('nextDayBtn').onclick=()=>{curDay=(curDay+1)%DAYS;openPicker=null;renderRibbon();renderDay();};
 document.querySelectorAll('.tabbar [data-screen]').forEach(b=>b.onclick=()=>show(b.dataset.screen));
 $('screen-home').addEventListener('click',e=>{const gd=e.target.closest('[data-guide]');if(gd){$('guideOverlay').classList.add('show');return;}const ly=e.target.closest('[data-lay]');if(ly){settings.dashLayout=ly.dataset.lay;save();renderHome();return;}const g=e.target.closest('[data-go]');if(!g)return;if(g.dataset.sv)schedView=g.dataset.sv;show(g.dataset.go);});
 $('themeCard').addEventListener('click',e=>{const t=e.target.closest('[data-pick]');if(t){settings.theme=t.dataset.pick;applyTheme();save();renderTheme();toast(settings.theme==='premium'?'Premium look on':'Friendly look on');return;}const g=e.target.closest('[data-tone]');if(g){settings.greetTone=g.dataset.tone;save();renderTheme();toast('Greetings set to '+g.dataset.tone);return;}});
-$('buildBtn').onclick=()=>{if(!staff.length){toast('Add some people first 🙂');return;}try{staff.forEach(p=>{if(!p.imported)genPicks(p);});build();built=true;curDay=0;openPicker=null;renderSched();toast('Schedule built!');}catch(err){console.error('build failed',err);toast('Build hit a snag — '+(err&&err.message?err.message:'try again'));}};
+$('buildBtn').onclick=()=>{if(!staff.length){toast('Add some people first 🙂');return;}try{const wasBuilt=built;const _b=wasBuilt?snapAsn():null;staff.forEach(p=>{if(!p.imported)genPicks(p);});build();built=true;lastEdit=null;curDay=0;openPicker=null;renderSched();if(wasBuilt&&_b){const moved=diffAsn(_b);toast(moved?('Rebuilt — '+moved+' '+(moved===1?'person\u2019s':'people\u2019s')+' days changed'):'Rebuilt — no one\u2019s days changed');}else toast('Schedule built!');}catch(err){console.error('build failed',err);toast('Build hit a snag — '+(err&&err.message?err.message:'try again'));}};
 $('exportBtn').onclick=exportCSV;
 $('helpBtn').onclick=()=>$('guideOverlay').classList.add('show');
 $('guideClose').onclick=()=>$('guideOverlay').classList.remove('show');
@@ -2480,16 +2594,18 @@ $('fileInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)ret
 
 /* ============ staff / clock / attendance ============ */
 function byId(id){return staff.find(p=>p.id==id);}
-function applySwap(s){const A=byId(s.aId),B=byId(s.bId);if(!A||!B)return;A.asn.delete(s.aDay);A.asn.add(s.bDay);B.asn.delete(s.bDay);B.asn.add(s.aDay);}
+function recountLoad(p){p.weCount=0;p.roughCount=0;for(let d=0;d<DAYS;d++){if(!worked(p,d))continue;if(lineWEof(p.line,d))p.weCount++;if(p.line==='night'&&isRough(d))p.roughCount++;}}
+function applySwap(s){const A=byId(s.aId),B=byId(s.bId);if(!A||!B)return;A.asn.delete(s.aDay);A.asn.add(s.bDay);B.asn.delete(s.bDay);B.asn.add(s.aDay);recountLoad(A);recountLoad(B);}
 function applyApprovedSwaps(){swaps.filter(s=>s.status==='approved').forEach(applySwap);}
 function swapEligible(A,d){return staff.filter(b=>b.id!==A.id&&b.role===A.role&&b.line===A.line&&!b.asn.has(d)&&[...b.asn].some(bd=>bd!==d&&!A.asn.has(bd)&&!A.pto.has(bd)&&swapFatigueOK(A,d,bd)&&swapFatigueOK(b,bd,d)));}
 function meUser(){return currentUser&&currentUser.id!=null?staff.find(p=>p.id===currentUser.id):null;}
 function hrsBetween(a,b){if(!a||!b)return '';let m=Math.round((b-a)/60000);const h=Math.floor(m/60);m=m%60;return h+'h'+(m?' '+m+'m':'');}
-function recentStaff(){try{const r=localStorage.getItem(KEY_DEV);return r?JSON.parse(r):[];}catch(e){return [];}}
-function rememberStaff(id){let r=recentStaff().filter(x=>x!=id);r.unshift(id);r=r.slice(0,3);try{localStorage.setItem(KEY_DEV,JSON.stringify(r));}catch(e){}}
-function signInStaff(id){currentUser={role:'staff',id:+id};staffView='home';$('loginOverlay').classList.remove('show');applyRole();sayHello();}
+function signInStaff(id){currentUser={role:'staff',id:+id};staffView='home';try{localStorage.setItem('evenshift_lastuser',String(+id));}catch(e){}$('loginOverlay').classList.remove('show');applyRole();sayHello();}
 function subLine(p){return p.role+(p.role!=='HUC'?' · '+(p.line==='day'?'Day':'Night'):'');}
-function renderLoginRecent(){$('loginRecent').innerHTML='';}
+function renderLoginRecent(){let id=null;try{id=localStorage.getItem('evenshift_lastuser');}catch(e){}
+  const p=id!=null?staff.find(x=>x.id===+id):null;
+  if(!p){$('loginRecent').innerHTML='';return;}
+  $('loginRecent').innerHTML='<div class="lastuser" data-lid="'+p.id+'"><span class="ava '+p.role.toLowerCase()+'">'+(initials(p.name)||'?')+'</span><div class="lrtxt"><b>Welcome back, '+esc(firstName(p.name))+'</b><span>Tap to sign in \u2014 '+subLine(p)+'</span></div><span class="lchev">›</span></div><div class="lastuser-or">or pick your name</div>';}
 let loginOpen=new Set();
 function renderLoginList(filter){
   const f=(filter||'').toLowerCase().trim();
@@ -2526,6 +2642,10 @@ function applyRole(){
     show('home');
   }
 }
+
+/* ============================================================
+   STAFF UI — sign-in home, my schedule, requests, swaps, hours
+   ============================================================ */
 function renderStaff(){
   const p=meUser();
   if(!p){currentUser=null;openLogin(false);return;}
@@ -2555,11 +2675,17 @@ function renderStaff(){
   if(tkOn)ITEMS.push(['hours','⏱️','My Hours','']);
   ITEMS.push(['howto','🧭','How it works','']);
   const slay=settings.staffLayout||'tiles';
+  let nextB='';{const td=cycleDayToday();const from=td<0?0:td;let nd=-1;for(let d=from;d<DAYS;d++){if(p.asn.has(d)&&!p.pto.has(d)){nd=d;break;}}
+    if(nd>=0){const dt=dateOf(nd);const when=nd===td?'today':nd===td+1?'tomorrow':dt.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+      const time=p.role==='HUC'?((p.dbl&&p.dbl.has(nd))?'8:00a – 12:00a · 16h':'day · 8h'):(p.line==='night'?'7:00p – 7:00a':'7:00a – 7:00p');
+      const isChg=(typeof chargeSel!=='undefined')&&p.charge&&chargeSel[p.line+'|'+nd]===p.id;
+      nextB='<div class="nexthero"><div class="nh-lbl">Your next shift</div><div class="nh-when">'+when.charAt(0).toUpperCase()+when.slice(1)+'</div><div class="nh-time">'+time+(isChg?' · in charge':'')+'</div></div>';}
+    else nextB='<div class="nexthero none"><div class="nh-lbl">Your next shift</div><div class="nh-when">Nothing scheduled yet</div><div class="nh-time">Your manager builds the schedule</div></div>';}
   const owedB=(p.ledger||0)>=3?'<div class="owedhome">⚖️ You’re owed fairer shifts — first pick next cycle.</div>':'';
   let body='<div class="attsec" style="margin-bottom:8px"><span class="menutitle">Menu</span><span class="laytog"><button class="layb'+(slay==='tiles'?' on':'')+'" data-slay="tiles">▦ Tiles</button><button class="layb'+(slay==='cards'?' on':'')+'" data-slay="cards">▤ Cards</button></span></div>';
   if(slay==='cards'){body+=ITEMS.map(it=>'<button class="homecard" data-tile="'+it[0]+'"><span class="hc-ic">'+it[1]+'</span><div class="hc-t"><b>'+it[2]+'</b></div><span class="hc-v">'+(it[3]?it[3]:'›')+'</span></button>').join('');}
   else{body+='<div class="tilegrid">'+ITEMS.map(it=>staffTile(it[0],it[1],it[2],it[3])).join('')+'</div>';}
-  $('staffHome').innerHTML=owedB+body;
+  $('staffHome').innerHTML=nextB+owedB+body;
   applyStaffView();
   const _safe=(fn,n)=>{try{fn();}catch(e){console.error('staff section "'+n+'" failed to load',e);}};
   _safe(()=>renderMySchedule(p),'My Schedule');
@@ -2633,23 +2759,29 @@ function renderTimeoffReview(){
   h+=pend.map(t=>{const p=byId(t.sid);return '<div class="rule"><div class="rl"><b>'+(p?firstName(p.name):'?')+' — '+fmtRange(t.from,t.to)+'</b><span>'+(t.reason?esc(t.reason):'Time off')+'</span></div><div class="flagopts"><button class="optbtn" data-toyes="'+t.id+'">Approve</button><button class="optbtn ghost" data-tono="'+t.id+'">Deny</button></div></div>';}).join('');
   h+='</div>';$('timeoffReview').innerHTML=h;
 }
-function applyTimeoffPto(t){const p=byId(t.sid);if(!p)return;const fi=isoToIdx(t.from),ti=isoToIdx(t.to);for(let d=Math.max(0,fi);d<=Math.min(DAYS-1,ti);d++){p.pto.add(d);p.asn.delete(d);}}
-function reqState(p,d){return p.pto.has(d)?'pto':(p.officeDays&&p.officeDays.has(d))?'office':(p.locked&&p.locked.has(d))?'lock':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';}
-function setReqState(p,d,k){p.pto.delete(d);if(p.leaveType)delete p.leaveType[d];if(p.avoid)p.avoid.delete(d);p.picks.delete(d);if(p.locked)p.locked.delete(d);if(p.officeDays)p.officeDays.delete(d);if(k==='want')p.picks.add(d);else if(k==='off')(p.avoid=p.avoid||new Set()).add(d);else if(k==='pto'){p.pto.add(d);(p.leaveType=p.leaveType||{})[d]=mgrLeaveType;}else if(k==='lock')(p.locked=p.locked||new Set()).add(d);else if(k==='office')(p.officeDays=p.officeDays||new Set()).add(d);p.imported=true;}
+function applyTimeoffPto(t){const p=byId(t.sid);if(!p)return;const fi=isoToIdx(t.from),ti=isoToIdx(t.to);for(let d=Math.max(0,fi);d<=Math.min(DAYS-1,ti);d++){p.pto.add(d);p.asn.delete(d);if(p.float)p.float.delete(d);if(p.dbl)p.dbl.delete(d);}recountLoad(p);}
+function reqState(p,d){return p.pto.has(d)?'pto':(p.officeDays&&p.officeDays.has(d))?'office':(p.locked&&p.locked.has(d))?'lock':(p.dblReq&&p.dblReq.has(d))?'dblreq':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';}
+function setReqState(p,d,k){p.pto.delete(d);if(p.leaveType)delete p.leaveType[d];if(p.avoid)p.avoid.delete(d);p.picks.delete(d);if(p.locked)p.locked.delete(d);if(p.officeDays)p.officeDays.delete(d);if(p.dblReq)p.dblReq.delete(d);if(k==='want')p.picks.add(d);else if(k==='off')(p.avoid=p.avoid||new Set()).add(d);else if(k==='pto'){p.pto.add(d);(p.leaveType=p.leaveType||{})[d]=mgrLeaveType;}else if(k==='lock')(p.locked=p.locked||new Set()).add(d);else if(k==='office')(p.officeDays=p.officeDays||new Set()).add(d);else if(k==='dblreq'){(p.dblReq=p.dblReq||new Set()).add(d);p.picks.add(d);}p.imported=true;}
 function offDemand(p,d){return staff.filter(q=>q.id!==p.id&&q.role===p.role&&q.line===p.line&&(()=>{const s=reqState(q,d);return s==='off'||s==='pto';})()).length;}
 function renderMyReq(p){
   const WDh=['S','M','T','W','T','F','S'],head=WDh.map(w=>`<div class="calhd">${w}</div>`).join('');
   const lead=START_DOW,trail=(7-((lead+DAYS)%7))%7;
   let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
-  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(p,d);const dem=offDemand(p,d);cells+=`<div class="calcell req ${st}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':''}</div>${dem>0?`<div class="cdem ${dem>=3?'hi':dem>=2?'mid':'lo'}">${dem}</div>`:''}</div>`;}
-  const brushes=[['off','Prefer off'],['want','Want to work'],['pto','Time off'],['clear','Clear']];
+  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(p,d);const dem=offDemand(p,d);cells+=`<div class="calcell req ${st}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':st==='dblreq'?'16h':''}</div>${dem>0?`<div class="cdem ${dem>=3?'hi':dem>=2?'mid':'lo'}">${dem}</div>`:''}</div>`;}
+  const brushes=[['off','Prefer off'],['want','Want to work'],['pto','Time off']].concat(p.role==='HUC'?[['dblreq','🕐 16h double']]:[]).concat([['clear','Clear']]);
   let h='<div style="padding:12px 14px 4px">';
   h+='<div class="prefcard"><div class="sub" style="margin-bottom:2px">Your usual preferences</div><div class="prefsub">Tap a day to cycle: likes \u2192 rather not \u2192 can\u2019t \u2192 clear</div>'+prefLegendHTML()+dowChipsHTML(p)+'<div class="sub" style="margin:10px 0 4px">Shift grouping</div><div class="pickrow clurow">'+cluChipsHTML(p)+'</div></div>';
   h+='<div class="sub" style="margin-bottom:8px">Or mark specific days below — pick a tag, then tap or swipe across days.</div>';
   h+=`<div class="brushrow">${brushes.map(([k,l])=>`<button class="brush ${k}${reqBrush===k?' on':''}" data-brush="${k}">${l}</button>`).join('')}</div>`;
+  if(p.role==='HUC')h+='<div class="sub" style="padding:4px 0 0">🕐 16h double = two 8h shifts back to back that day \u2014 counts as 2 HUCs for coverage.</div>';
   h+=`<div class="quickrow"><button class="qbtn" data-quick="weoff">Weekends off</button><button class="qbtn" data-quick="clearall">Clear all</button></div></div>`;
   const owed=(p.ledger||0)>=3;
   h+=`<div style="padding:0 14px">${owed?`<div class="nudge owed">⚖️ You’re owed — your requests get first priority this cycle. Ask for what you need.</div>`:`<div class="nudge">The small number on a day shows how many teammates already asked it off. Lighter days are more likely to be granted.</div>`}</div>`;
+  if(settings.reqDeadline){const dl=new Date(settings.reqDeadline+'T23:59');const days=Math.ceil((dl-new Date())/86400000);
+    if(days>=0)h+='<div class="reqddl">🗓️ Requests close <b>'+dl.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})+'</b> \u2014 '+(days===0?'today!':days===1?'tomorrow':days+' days left')+'</div>';
+    else h+='<div class="reqddl closed">🗓️ Requests closed '+dl.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' \u2014 ask your manager if you still need a change.</div>';}
+  const _w=p.picks?p.picks.size:0,_o=p.avoid?p.avoid.size:0,_t=p.pto?p.pto.size:0,_dq=(p.role==='HUC'&&p.dblReq)?p.dblReq.size:0;
+  if(_w||_o||_t||_dq){const parts=[];if(_w)parts.push('<b>'+_w+'</b> day'+(_w>1?'s':'')+' you want to work');if(_dq)parts.push('<b>'+_dq+'</b> as a 16h double');if(_o)parts.push('<b>'+_o+'</b> you\u2019d rather have off');if(_t)parts.push('<b>'+_t+'</b> time-off day'+(_t>1?'s':''));h+='<div class="reqsum">✅ You\u2019ve asked for '+parts.join(', ').replace(/,([^,]*)$/,' and$1')+'.</div>';}
   h+=`<div class="calgrid reqgrid">${head}${pad}${cells}${padT}</div>`;
   $('myReqCard').innerHTML=h;
 }
@@ -2727,7 +2859,9 @@ function renderFloatLog(){
   let any=false;
   FLG.forEach(([r,l,ttl])=>{
     const g=staff.filter(p=>!p.orientee&&p.role===r&&p.line===l);if(!g.length)return;
-    const counts=g.map(p=>p.float?p.float.size:0);const mn=Math.min(...counts),mx=Math.max(...counts),tot=counts.reduce((a,b)=>a+b,0);
+    const exch=settings.useCharge!==false&&settings.chargeBackup!==false;
+    const rot=g.filter(p=>!p.anm&&p.fte!=='PRN'&&!(exch&&p.role==='RN'&&p.charge));
+    const counts=(rot.length?rot:g).map(p=>p.float?p.float.size:0);const mn=Math.min(...counts),mx=Math.max(...counts);const tot=g.reduce((a,p)=>a+(p.float?p.float.size:0),0);
     if(!tot){h+=`<div class="flg-h">${ttl}<span class="flg-ok">no floats</span></div>`;return;}
     any=true;const even=mx-mn<=1;
     h+=`<div class="flg-h">${ttl}<span class="${even?'flg-ok':'flg-warn'}">${even?'shared evenly ✓':'uneven ⚠'} · ${mn}\u2013${mx} each</span></div>`;
@@ -2946,6 +3080,10 @@ $('clockSetupCard').addEventListener('change',e=>{
 });
 
 /* ============ init ============ */
+
+/* ============================================================
+   INIT — load saved data, migrate, add leadership, enter app
+   ============================================================ */
 const hadData=load();loadFloatLog();
 try{if(localStorage.getItem('evenshift_roster_ver')!==ROSTER_VER){staff=seed();swaps=[];timeOff=[];openShifts=[];localStorage.setItem('evenshift_roster_ver',ROSTER_VER);save();}}catch(e){}
 try{ensureAnms();if(!settings.stacyFixed){const _s=staff.find(p=>firstName(p.name)==='Stacy');if(_s){_s.charge=false;_s.office=true;}settings.stacyFixed=true;}save();}catch(e){}

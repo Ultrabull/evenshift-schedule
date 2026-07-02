@@ -422,7 +422,9 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .swbtns .bigaction{flex:1;padding:10px;min-height:auto;font-size:14px;margin:0}
 .swapreview{margin-bottom:12px;border:2px solid var(--violet)}
 .swlbl{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:14px 0 6px}
-.loginlist{max-height:42vh;overflow-y:auto;margin-top:8px;border:1px solid var(--line);border-radius:12px}
+.loginlist{max-height:54vh;overflow-y:auto;margin-top:8px;border:1px solid var(--line);border-radius:12px}
+.loginhd{position:sticky;top:0;background:#eef3f5;color:#2b3a44;font-weight:800;font-size:12px;padding:6px 12px;border-bottom:1px solid var(--line);z-index:1}
+.loginhd .lhn{display:inline-block;background:#cdd9de;color:#4a5b65;border-radius:8px;padding:0 6px;font-size:10px;margin-left:4px}
 .loginrow{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid var(--line)}
 .loginrow:last-child{border-bottom:none}
 .loginrow:active{background:var(--teal-soft)}
@@ -521,6 +523,16 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
 .rgc.rq-ok{box-shadow:inset 0 0 0 2px var(--green)}
 .rgc.rq-no{box-shadow:inset 0 0 0 2px var(--red)}
 .rgc.rq-got{background:#dff3e7}
+.calcell.edit{position:relative}
+.creq{position:absolute;top:3px;right:3px;font-size:8px;font-weight:800;padding:1px 4px;border-radius:5px;letter-spacing:.02em;line-height:1.3}
+.creq.want{background:#cdefd9;color:#1d7a45}
+.creq.off{background:#f7e2bb;color:#8a5a12}
+.lvrow{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:2px 0 8px}
+.lvlbl{font-size:11px;color:#7c8a93;font-weight:700;margin-right:2px}
+.lvchip{padding:5px 10px;border:1px solid #d8c4a0;background:#fdf6e9;color:#8a5a12;border-radius:9px;font-size:12px;font-weight:700}
+.lvchip.on{background:#8a5a12;border-color:#8a5a12;color:#fff}
+.calcell.edit.rq-want{box-shadow:inset 0 0 0 2px #3fae6e}
+.calcell.edit.rq-off{box-shadow:inset 0 0 0 2px #d9a441}
 .rgshift td{background:var(--teal);color:#fff;font-weight:800;font-size:13px;padding:7px 9px;text-align:left!important;position:sticky;left:0}
 .rgrole td{background:#e6eef1;color:#2b3a44;font-weight:700;font-size:11px;letter-spacing:.03em;padding:3px 10px;text-align:left!important;position:sticky;left:0}
 .rgrc{display:inline-block;background:#cdd9de;color:#4a5b65;border-radius:8px;padding:0 6px;font-size:10px;margin-left:5px}
@@ -856,6 +868,7 @@ h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
       <div class="flabel" style="margin-top:6px">Time off & day requests</div>
       <div class="prefsub">Pick a tag, then tap days. Tap a day again to remove it. <b>Clear all</b> wipes this person\u2019s whole request.</div>
       <div class="brushrow" id="f_brush"></div>
+      <div id="f_leave"></div>
       <div id="f_reqcal"></div>
     </div>
     <div id="prefWrap">
@@ -1215,7 +1228,7 @@ let staff=[];let built=false;
 const ROSTER_VER='2026-06-22';
 const KEY_S='evenshift_staff_v1',KEY_C='evenshift_settings_v1',KEY_U='evenshift_user_v1',KEY_SW='evenshift_swaps_v1',KEY_DEV='evenshift_devstaff_v1',KEY_TO='evenshift_timeoff_v1',KEY_OS='evenshift_openshifts_v1';
 let currentUser=null,swaps=[],timeOff=[],openShifts=[],reqBrush='off',swapFromDay=null,reqPainting=false,backfillCtx=null;
-function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
+function blankSets(p){p.pto=new Set(p.pto||[]);p.picks=new Set(p.picks||[]);p.avoid=new Set(p.avoid||[]);p.asn=new Set();p.oriDays=new Set();if(!p.clock)p.clock={};if(!p.leaveType)p.leaveType={};if(p.imported===undefined)p.imported=false;if(p.floatCount===undefined)p.floatCount=0;if(p.ledger===undefined)p.ledger=0;if(p.senior===undefined)p.senior=false;if(!p.float)p.float=new Set();p.locked=new Set(p.locked||[]);p.workDOW=new Set(p.workDOW||[]);p.prefDOW=new Set(p.prefDOW||[]);p.avoidDOW=new Set(p.avoidDOW||[]);p.hardDOW=new Set(p.hardDOW||[]);if(!p.cluster)p.cluster='any';if(p.name)p.name=shortenName(p.name);return p;}
 function seed(){let id=0,sen=0;return REAL_ROSTER.map(r=>blankSets({id:id++,name:r.n,role:r.role,line:r.line,fte:r.fte,charge:!!r.charge,precept:!!r.precept,senior:false,wtw:false,orientee:false,preceptor:null,seniority:sen++,pto:[],picks:[],avoid:[],imported:false,floatCount:0,clock:{},ledger:0}));}
 function load(){
   try{const s=localStorage.getItem(KEY_S);const c=localStorage.getItem(KEY_C);
@@ -1228,7 +1241,7 @@ function load(){
   staff=seed();return false;
 }
 function save(){try{
-  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])],workDOW:[...(p.workDOW||[])]}))));
+  localStorage.setItem(KEY_S,JSON.stringify(staff.map(p=>({id:p.id,name:p.name,role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:p.precept,senior:p.senior,wtw:p.wtw,orientee:p.orientee,preceptor:p.preceptor,seniority:p.seniority,pto:[...p.pto],picks:[...p.picks],avoid:[...(p.avoid||[])],imported:!!p.imported,floatCount:p.floatCount||0,clock:p.clock||{},ledger:p.ledger||0,prefDOW:[...(p.prefDOW||[])],avoidDOW:[...(p.avoidDOW||[])],hardDOW:[...(p.hardDOW||[])],cluster:p.cluster||'any',locked:[...(p.locked||[])],workDOW:[...(p.workDOW||[])],leaveType:p.leaveType||{}}))));
   localStorage.setItem(KEY_C,JSON.stringify(settings));
   localStorage.setItem(KEY_SW,JSON.stringify(swaps));
   localStorage.setItem(KEY_TO,JSON.stringify(timeOff));
@@ -1280,7 +1293,7 @@ function renderHome(){
   h+='<button class="tile" data-go="sched" data-sv="fair"><span class="tile-ic">⚖️</span><span class="tile-l">Fairness</span></button>';
   h+='<button class="tile" data-go="sched" data-sv="hours"><span class="tile-ic">⏱️</span><span class="tile-l">Hours</span></button>';
   h+='</div>';
-  h+='<div class="buildtag">EvenShift · build Jun 27q</div>';
+  h+='<div class="buildtag">EvenShift · build Jun 27t</div>';
   if($('homeBody'))$('homeBody').innerHTML=h;
 }
 function applyTheme(){try{document.body.setAttribute('data-theme',settings.theme==='premium'?'premium':'friendly');}catch(e){}}
@@ -1813,10 +1826,11 @@ function renderCalendar(){
   const usePCT=settings.usePCT!==false;
   let banner,cells='';
   if(edit){
-    banner=`<div class="caledit"><div>Editing <b>${firstName(p.name)}</b> — drag across days to add or remove shifts<br><span style="color:#9a6a12;font-size:11px">FLT = floated off 10G (worked, but on another unit)</span></div><button class="ghostbtn" id="calDone">Done</button></div>`;
+    banner=`<div class="caledit"><div>Editing <b>${firstName(p.name)}</b> — drag across days to add or remove shifts<br><span style="font-size:11px">FLT = floated off 10G · <b style="color:#1d7a45">green corner</b> = asked to work · <b style="color:#8a5a12">amber corner</b> = asked off</span></div><button class="ghostbtn" id="calDone">Done</button></div>`;
     for(let d=0;d<DAYS;d++){const on=p.asn.has(d),fl=p.float&&p.float.has(d),pto=p.pto.has(d);
-      const lk=isLocked(p,d);const _c=pto?'pto':on?(p.line==='night'?'n':'d'):fl?'flt':'';const _m=(pto?'OFF':on?(p.line==='night'?'N':'D'):fl?'FLT':'')+(lk&&on?' 🔒':'');
-      cells+=`<div class="calcell edit ${_c}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${_m}</div></div>`;}
+      const lk=isLocked(p,d);const _c=pto?'pto':on?(p.line==='night'?'n':'d'):fl?'flt':'';const _m=(pto?leaveCode(p,d):on?(p.line==='night'?'N':'D'):fl?'FLT':'')+(lk&&on?' 🔒':'');
+      const rq=p.picks.has(d)?'want':(p.avoid&&p.avoid.has(d)&&!pto)?'off':'';const rqB=rq==='want'?'<div class="creq want">wants</div>':rq==='off'?'<div class="creq off">off</div>':'';
+      cells+=`<div class="calcell edit ${_c}${rq?' rq-'+rq:''}${isColWE(d)?' we':''}${isHoliday(d)?' hol':''}" data-d="${d}"><div class="cdate">${calDateLabel(d)}</div><div class="cmark">${_m}</div>${rqB}</div>`;}
   }else{
     banner=`<div class="calbar"><span>RN${usePCT?' &amp; PCT':''} per day (day·night). Tap to open.</span><select id="calPick" class="calsel"><option value="">✏️ Edit a person…</option>${[...staff].sort((a,b)=>a.name.localeCompare(b.name)).map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>`;
     const sev=s=>s<=0?'sv-ok':s===1?'sv1':s===2?'sv2':'sv3';
@@ -1973,12 +1987,16 @@ function dowLockChipsHTML(o){return '<div class="dowrow">'+[0,1,2,3,4,5,6].map(w
 function cycleLock(o,w){o.workDOW=o.workDOW||new Set();o.hardDOW=o.hardDOW||new Set();if(o.workDOW.has(w)){o.workDOW.delete(w);o.hardDOW.add(w);}else if(o.hardDOW.has(w)){o.hardDOW.delete(w);}else{o.workDOW.add(w);}}
 function prefStats(p){const w=[...p.asn,...(p.float||[])];const got=w.filter(d=>p.prefDOW&&p.prefDOW.has(wd(d))).length;const against=w.filter(d=>p.avoidDOW&&p.avoidDOW.has(wd(d))).length;return {got,against,hasPref:!!(p.prefDOW&&p.prefDOW.size),hasAvoid:!!(p.avoidDOW&&p.avoidDOW.size)};}
 let mgrReqBrush='pto';
+let mgrLeaveType='PTO';
+const LEAVE=[['PTO','PTO'],['FMLA','FMLA'],['sick','Sick'],['hol','Holiday'],['other','Other']];
+const LCODE={PTO:'PTO',FMLA:'FMLA',sick:'SICK',hol:'HOL',other:'OFF'};
+function leaveCode(p,d){return LCODE[(p.leaveType&&p.leaveType[d])||'PTO']||'PTO';}
 const MBRUSHES=[['pto','Time off'],['off','Prefer off'],['want','Want to work'],['lock','🔒 Lock'],['clear','Clear all']];
 function reqGridHTML(o){
   const WDh=['S','M','T','W','T','F','S'],head=WDh.map(w=>'<div class="calhd">'+w+'</div>').join('');
   const lead=START_DOW,trail=(7-((lead+DAYS)%7))%7;
   let pad='';for(let i=0;i<lead;i++)pad+='<div class="calblank"></div>';let padT='';for(let i=0;i<trail;i++)padT+='<div class="calblank"></div>';
-  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(o,d);cells+='<div class="calcell req '+st+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+'" data-rd="'+d+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+(st==='want'?'WORK':st==='off'?'OFF':st==='pto'?'PTO':st==='lock'?'🔒':'')+'</div></div>';}
+  let cells='';for(let d=0;d<DAYS;d++){const st=reqState(o,d);cells+='<div class="calcell req '+st+(isColWE(d)?' we':'')+(isHoliday(d)?' hol':'')+'" data-rd="'+d+'"><div class="cdate">'+calDateLabel(d)+'</div><div class="cmark">'+(st==='want'?'WORK':st==='off'?'OFF':st==='pto'?leaveCode(o,d):st==='lock'?'🔒':'')+'</div></div>';}
   return '<div class="calgrid reqgrid">'+head+pad+cells+padT+'</div>';
 }
 function splitCSV(line,delim){const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(q){if(c==='"'){if(line[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}else{if(c==='"')q=true;else if(c===delim){out.push(cur);cur='';}else cur+=c;}}out.push(cur);return out;}
@@ -2050,12 +2068,13 @@ function paintDraft(){
   $('f_dow').innerHTML=dowLockChipsHTML(draft);
   $('f_clu').innerHTML=cluChipsHTML(draft);
   $('f_brush').innerHTML=MBRUSHES.map(([k,l])=>'<button type="button" class="brush '+k+(mgrReqBrush===k?' on':'')+'" data-mbrush="'+k+'">'+l+'</button>').join('');
+  if($('f_leave'))$('f_leave').innerHTML=mgrReqBrush==='pto'?'<div class="lvrow"><span class="lvlbl">Type of time off:</span>'+LEAVE.map(([k,l])=>'<button type="button" class="lvchip'+(mgrLeaveType===k?' on':'')+'" data-lv="'+k+'">'+l+'</button>').join('')+'</div>':'';
   $('f_reqcal').innerHTML=reqGridHTML(draft);
 }
 function openPerson(id){
   editId=id;
-  if(id==null){draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,senior:false,wtw:false,orientee:false,preceptor:null,prefDOW:new Set(),avoidDOW:new Set(),hardDOW:new Set(),cluster:'any',pto:new Set(),picks:new Set(),avoid:new Set(),locked:new Set(),workDOW:new Set()};$('personTitle').textContent='Add a person';$('f_name').value='';$('personDelete').classList.add('hide');}
-  else{const p=staff.find(x=>x.id===id);draft={role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:!!p.precept,senior:!!p.senior,wtw:!!p.wtw,orientee:!!p.orientee,preceptor:p.preceptor??null,prefDOW:new Set(p.prefDOW||[]),avoidDOW:new Set(p.avoidDOW||[]),hardDOW:new Set(p.hardDOW||[]),cluster:p.cluster||'any',pto:new Set(p.pto||[]),picks:new Set(p.picks||[]),avoid:new Set(p.avoid||[]),locked:new Set(p.locked||[]),workDOW:new Set(p.workDOW||[])};$('personTitle').textContent='Edit person';$('f_name').value=p.name;$('personDelete').classList.remove('hide');}
+  if(id==null){draft={role:'RN',line:'day',fte:'FT',charge:false,precept:false,senior:false,wtw:false,orientee:false,preceptor:null,prefDOW:new Set(),avoidDOW:new Set(),hardDOW:new Set(),cluster:'any',pto:new Set(),picks:new Set(),avoid:new Set(),locked:new Set(),workDOW:new Set(),leaveType:{}};$('personTitle').textContent='Add a person';$('f_name').value='';$('personDelete').classList.add('hide');}
+  else{const p=staff.find(x=>x.id===id);draft={role:p.role,line:p.line,fte:p.fte,charge:p.charge,precept:!!p.precept,senior:!!p.senior,wtw:!!p.wtw,orientee:!!p.orientee,preceptor:p.preceptor??null,prefDOW:new Set(p.prefDOW||[]),avoidDOW:new Set(p.avoidDOW||[]),hardDOW:new Set(p.hardDOW||[]),cluster:p.cluster||'any',pto:new Set(p.pto||[]),picks:new Set(p.picks||[]),avoid:new Set(p.avoid||[]),locked:new Set(p.locked||[]),workDOW:new Set(p.workDOW||[]),leaveType:Object.assign({},p.leaveType||{})};$('personTitle').textContent='Edit person';$('f_name').value=p.name;$('personDelete').classList.remove('hide');}
   paintDraft();$('personOverlay').classList.add('show');
 }
 $('personOverlay').addEventListener('click',e=>{
@@ -2071,7 +2090,8 @@ $('personOverlay').addEventListener('click',e=>{
   if(e.target.closest('#f_orientee')){draft.orientee=!draft.orientee;if(draft.orientee)draft.charge=false;paintDraft();}
   const _dw=e.target.closest('[data-lock]');if(_dw){cycleLock(draft,+_dw.dataset.lock);paintDraft();}
   const _cl=e.target.closest('[data-clu]');if(_cl){draft.cluster=_cl.dataset.clu;paintDraft();}
-  const _mb=e.target.closest('[data-mbrush]');if(_mb){if(_mb.dataset.mbrush==='clear'){if(draft.pto)draft.pto.clear();if(draft.picks)draft.picks.clear();if(draft.avoid)draft.avoid.clear();if(draft.locked)draft.locked.clear();toast('Cleared all requests for this person');paintDraft();return;}mgrReqBrush=_mb.dataset.mbrush;paintDraft();return;}
+  const _lv=e.target.closest('[data-lv]');if(_lv){mgrLeaveType=_lv.dataset.lv;paintDraft();return;}
+  const _mb=e.target.closest('[data-mbrush]');if(_mb){if(_mb.dataset.mbrush==='clear'){if(draft.pto)draft.pto.clear();if(draft.picks)draft.picks.clear();if(draft.avoid)draft.avoid.clear();if(draft.locked)draft.locked.clear();draft.leaveType={};toast('Cleared all requests for this person');paintDraft();return;}mgrReqBrush=_mb.dataset.mbrush;paintDraft();return;}
   const _rd=e.target.closest('[data-rd]');if(_rd){const _d=+_rd.dataset.rd;setReqState(draft,_d,reqState(draft,_d)===mgrReqBrush?'':mgrReqBrush);paintDraft();return;}
 });
 $('f_precsel').addEventListener('change',e=>{draft.preceptor=e.target.value?+e.target.value:null;});
@@ -2079,8 +2099,8 @@ $('personCancel').onclick=()=>$('personOverlay').classList.remove('show');
 $('personSave').onclick=()=>{
   const name=$('f_name').value.trim();if(!name){toast('Please type a name');return;}
   if(editId==null){const id=staff.length?Math.max(...staff.map(p=>p.id))+1:0;
-    staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0,prefDOW:[...draft.prefDOW],avoidDOW:[...draft.avoidDOW],hardDOW:[...draft.hardDOW],cluster:draft.cluster,pto:[...draft.pto],picks:[...draft.picks],avoid:[...draft.avoid],locked:[...draft.locked],workDOW:[...draft.workDOW]}));toast('Added '+firstName(name));}
-  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,prefDOW:new Set(draft.prefDOW),avoidDOW:new Set(draft.avoidDOW),hardDOW:new Set(draft.hardDOW),cluster:draft.cluster,pto:new Set(draft.pto),picks:new Set(draft.picks),avoid:new Set(draft.avoid),locked:new Set(draft.locked),workDOW:new Set(draft.workDOW)});toast('Saved');}
+    staff.push(blankSets({id,name,role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,seniority:staff.length,pto:[],floatCount:0,prefDOW:[...draft.prefDOW],avoidDOW:[...draft.avoidDOW],hardDOW:[...draft.hardDOW],cluster:draft.cluster,pto:[...draft.pto],picks:[...draft.picks],avoid:[...draft.avoid],locked:[...draft.locked],workDOW:[...draft.workDOW],leaveType:Object.assign({},draft.leaveType||{})}));toast('Added '+firstName(name));}
+  else{const p=staff.find(x=>x.id===editId);Object.assign(p,{name:shortenName(name),role:draft.role,line:draft.line,fte:draft.fte,charge:draft.charge,precept:draft.precept,senior:draft.senior,wtw:draft.wtw,orientee:draft.orientee,preceptor:draft.preceptor,prefDOW:new Set(draft.prefDOW),avoidDOW:new Set(draft.avoidDOW),hardDOW:new Set(draft.hardDOW),cluster:draft.cluster,pto:new Set(draft.pto),picks:new Set(draft.picks),avoid:new Set(draft.avoid),locked:new Set(draft.locked),workDOW:new Set(draft.workDOW),leaveType:Object.assign({},draft.leaveType||{})});toast('Saved');}
   $('personOverlay').classList.remove('show');rosterChanged();
 };
 $('personDelete').onclick=()=>{if(editId==null)return;if(!confirm('Remove this person? Their shifts will be reassigned.'))return;staff=staff.filter(p=>p.id!==editId);$('personOverlay').classList.remove('show');rosterChanged();toast('Removed — schedule updated');};
@@ -2302,10 +2322,20 @@ function subLine(p){return p.role+(p.role!=='HUC'?' · '+(p.line==='day'?'Day':'
 function renderLoginRecent(){$('loginRecent').innerHTML='';}
 function renderLoginList(filter){
   const f=(filter||'').toLowerCase().trim();
-  let list=staff.slice().sort((a,b)=>a.name.localeCompare(b.name));
-  if(f)list=list.filter(p=>p.name.toLowerCase().includes(f));
-  list=list.slice(0,40);
-  $('loginList').innerHTML=list.map(p=>`<div class="loginrow" data-lid="${p.id}"><span class="ava ${p.role.toLowerCase()}">${initials(p.name)||'?'}</span><div class="lrtxt"><b>${p.name}</b><span>${subLine(p)}</span></div></div>`).join('')||`<div style="padding:16px;color:var(--muted)">No match — check spelling or ask your manager.</div>`;
+  const row=p=>`<div class="loginrow" data-lid="${p.id}"><span class="ava ${p.role.toLowerCase()}">${initials(p.name)||'?'}</span><div class="lrtxt"><b>${esc(p.name)}</b><span>${subLine(p)}</span></div></div>`;
+  if(f){
+    const list=staff.filter(p=>p.name.toLowerCase().includes(f)).sort((a,b)=>a.name.localeCompare(b.name));
+    $('loginList').innerHTML=list.map(row).join('')||`<div style="padding:16px;color:var(--muted)">No match — check spelling or ask your manager.</div>`;
+    return;
+  }
+  const groups=[['day','☀️ Day',[['RN','Nurses'],['PCT','PCTs'],['HUC','HUCs']]],['night','🌙 Night',[['RN','Nurses'],['PCT','PCTs']]]];
+  let h='';
+  groups.forEach(([line,ttl,roles])=>{roles.forEach(([role,rl])=>{
+    const g=staff.filter(p=>p.line===line&&p.role===role).sort((a,b)=>a.name.localeCompare(b.name));
+    if(!g.length)return;
+    h+=`<div class="loginhd">${ttl} · ${rl} <span class="lhn">${g.length}</span></div>`+g.map(row).join('');
+  });});
+  $('loginList').innerHTML=h||`<div style="padding:16px;color:var(--muted)">No staff yet.</div>`;
 }
 function openLogin(staffOnly){renderLoginRecent();renderLoginList('');if($('loginSearch'))$('loginSearch').value='';$('loginMgr').classList.toggle('hide',!!staffOnly);$('loginOverlay').classList.add('show');}
 function applyRole(){
@@ -2432,7 +2462,7 @@ function renderTimeoffReview(){
 }
 function applyTimeoffPto(t){const p=byId(t.sid);if(!p)return;const fi=isoToIdx(t.from),ti=isoToIdx(t.to);for(let d=Math.max(0,fi);d<=Math.min(DAYS-1,ti);d++){p.pto.add(d);p.asn.delete(d);}}
 function reqState(p,d){return p.pto.has(d)?'pto':(p.locked&&p.locked.has(d))?'lock':(p.avoid&&p.avoid.has(d))?'off':p.picks.has(d)?'want':'';}
-function setReqState(p,d,k){p.pto.delete(d);if(p.avoid)p.avoid.delete(d);p.picks.delete(d);if(p.locked)p.locked.delete(d);if(k==='want')p.picks.add(d);else if(k==='off')(p.avoid=p.avoid||new Set()).add(d);else if(k==='pto')p.pto.add(d);else if(k==='lock')(p.locked=p.locked||new Set()).add(d);p.imported=true;}
+function setReqState(p,d,k){p.pto.delete(d);if(p.leaveType)delete p.leaveType[d];if(p.avoid)p.avoid.delete(d);p.picks.delete(d);if(p.locked)p.locked.delete(d);if(k==='want')p.picks.add(d);else if(k==='off')(p.avoid=p.avoid||new Set()).add(d);else if(k==='pto'){p.pto.add(d);(p.leaveType=p.leaveType||{})[d]=mgrLeaveType;}else if(k==='lock')(p.locked=p.locked||new Set()).add(d);p.imported=true;}
 function offDemand(p,d){return staff.filter(q=>q.id!==p.id&&q.role===p.role&&q.line===p.line&&(()=>{const s=reqState(q,d);return s==='off'||s==='pto';})()).length;}
 function renderMyReq(p){
   const WDh=['S','M','T','W','T','F','S'],head=WDh.map(w=>`<div class="calhd">${w}</div>`).join('');
